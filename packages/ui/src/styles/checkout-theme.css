@@ -1,0 +1,151 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@source "../../../apps/web-app/src/**/*.{ts,tsx}";
+@source "../**/*.{ts,tsx}";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), var(--font-figtree), ui-sans-serif, sans-serif;
+
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Palette: mustard (primary), charcoal + paper neutrals, ketchup red for sold out / destructive. */
+:root {
+  color-scheme: light;
+  --background: oklch(0.975 0.006 95);
+  --foreground: oklch(0.2 0.012 60);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.012 60);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.012 60);
+  --primary: oklch(0.85 0.16 88);
+  --primary-foreground: oklch(0.2 0.012 60);
+  --secondary: oklch(0.2 0.012 60);
+  --secondary-foreground: oklch(0.975 0.006 95);
+  --muted: oklch(0.935 0.008 90);
+  --muted-foreground: oklch(0.45 0.012 60);
+  --accent: oklch(0.935 0.008 90);
+  --accent-foreground: oklch(0.2 0.012 60);
+  --destructive: oklch(0.56 0.2 28);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.85 0.16 88);
+  --success-foreground: oklch(0.2 0.012 60);
+  --border: oklch(0.88 0.01 90);
+  --input: oklch(0.88 0.01 90);
+  --ring: oklch(0.2 0.012 60);
+  --radius: 1rem;
+}
+
+.dark {
+  color-scheme: dark;
+  --background: oklch(0.17 0.008 60);
+  --foreground: oklch(0.96 0.006 95);
+  --card: oklch(0.22 0.009 60);
+  --card-foreground: oklch(0.96 0.006 95);
+  --popover: oklch(0.22 0.009 60);
+  --popover-foreground: oklch(0.96 0.006 95);
+  --primary: oklch(0.85 0.16 88);
+  --primary-foreground: oklch(0.2 0.012 60);
+  --secondary: oklch(0.96 0.006 95);
+  --secondary-foreground: oklch(0.17 0.008 60);
+  --muted: oklch(0.27 0.009 60);
+  --muted-foreground: oklch(0.72 0.01 80);
+  --accent: oklch(0.27 0.009 60);
+  --accent-foreground: oklch(0.96 0.006 95);
+  --destructive: oklch(0.66 0.19 28);
+  --destructive-foreground: oklch(0.99 0 0);
+  --success: oklch(0.85 0.16 88);
+  --success-foreground: oklch(0.2 0.012 60);
+  --border: oklch(0.32 0.01 60);
+  --input: oklch(0.32 0.01 60);
+  --ring: oklch(0.85 0.16 88);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    overscroll-behavior: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+  }
+  img {
+    -webkit-user-drag: none;
+  }
+}
+
+@keyframes kiosk-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--primary) 70%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 28px color-mix(in oklch, var(--primary) 0%, transparent);
+  }
+}
+
+@keyframes kiosk-bump {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.18);
+  }
+}
+
+@utility animate-kiosk-pulse {
+  animation: kiosk-pulse 1.8s ease-out infinite;
+}
+
+@utility animate-kiosk-bump {
+  animation: kiosk-bump 320ms ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
