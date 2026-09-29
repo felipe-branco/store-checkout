@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "f3f308bc-81f3-41cc-ab8b-1f9fcd723345"
+    ],
+    "columnIds": [
+      "9e5af177-ea2f-4e93-829c-78c759bd960f"
+    ]
+  },
+  "sliceTitle": "Cart Details",
+  "sliceType": "STATE_VIEW",
+  "sliceStatus": "Planned"
+}

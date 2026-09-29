@@ -1,11 +1,30 @@
 # Event model
 
-Checkout slices are **not in the repo yet**. The pinned snapshot is still the EM tutorial (`packages/em-manager/migrations/`).
+**Board:** MashginCheckout  
+**Snapshot:** `20260929200131_store` (`packages/em-manager/migrations/`, `manifest.json` → `currentSnapshot`)
 
-After you import the checkout board:
+Planned slices (prefix = EM type: SC state change, SV state view, AUT automation, TR translator):
 
-1. `pnpm em:migration:add <export.json>` and update `manifest.json`
-2. Document slices, streams, and routes **here** (names from the board, not guessed upfront)
-3. Implement via [TEMPLATE.md](../TEMPLATE.md) and [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md)
+| Slice |
+|-------|
+| [SC] Create Cart |
+| [SC] Add Item to Cart |
+| [SC] Remove Item from Cart |
+| [SC] Clear Cart |
+| [SC] Reserve Stock Item |
+| [SC] Dereserve Stock Item |
+| [SC] Create Order |
+| [SC] Pay Order |
+| [SC] Fail Order Payment |
+| [SC] Sell Stock Item |
+| [SC] Finish Order |
+| [SV] Cart Details |
+| [SV] Payment Failed Order |
+| [SV] Order Finished Details |
+| [AUT] Cart Cleared Automator |
+| [AUT] Webhook Simulator Automator |
+| [AUT] Order Paid Automator |
+| [AUT] Sold Items Order Automator |
+| [TR] External Payment Simulator Translator |
 
-Until then, use the framework docs above; no product EM map to maintain.
+Implement in dependency order per [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Slice refs: `packages/slices/src/<SliceDir>/slice.ref.json` after `pnpm em:slice:init --all-planned`.

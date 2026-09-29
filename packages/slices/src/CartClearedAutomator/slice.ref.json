@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "a3ecbe0a-e2d1-44a9-961e-475b71f3447c"
+    ],
+    "columnIds": [
+      "2438c06e-2b0a-45cf-9d7d-5e5a52e5f4f2"
+    ]
+  },
+  "sliceTitle": "Cart Cleared Automator",
+  "sliceType": "AUTOMATION",
+  "sliceStatus": "Planned"
+}

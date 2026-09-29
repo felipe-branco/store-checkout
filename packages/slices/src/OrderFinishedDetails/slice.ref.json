@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "9720bc80-64bb-49c0-aa21-0322fb6a44c2"
+    ],
+    "columnIds": [
+      "b0eabd14-b3af-4c41-873e-eba48d6509c1"
+    ]
+  },
+  "sliceTitle": "Order Finished Details",
+  "sliceType": "STATE_VIEW",
+  "sliceStatus": "Planned"
+}

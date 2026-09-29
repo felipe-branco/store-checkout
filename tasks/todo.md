@@ -3,13 +3,12 @@
 ## Done
 
 - [x] Monorepo (`store-checkout`, `@store-checkout/*`, en-US shell)
-- [x] Minimal project docs in `docs/project/`
+- [x] EM snapshot `20260929200131_store` + 19 `slice.ref.json` ([EVENT_MODEL.md](../docs/project/EVENT_MODEL.md))
 
 ## Next
 
-- [ ] Import checkout EM export → fill in [EVENT_MODEL.md](../docs/project/EVENT_MODEL.md)
-- [ ] Generate and implement slices; wire API + kiosk UI
-- [ ] Theme / full-width checkout flow (`@store-checkout/ui`)
+- [ ] Resolve → generate → implement slices (dependency order)
+- [ ] Wire API + kiosk UI; theme (`@store-checkout/ui`)
 
 ## Later
 

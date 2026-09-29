@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "65dcc3e1-6396-4897-8006-469dae19b1b1"
+    ],
+    "columnIds": [
+      "ba95f047-0e9e-4711-b265-2fcd45e0ae9a"
+    ]
+  },
+  "sliceTitle": "Sold Items Order Automator",
+  "sliceType": "AUTOMATION",
+  "sliceStatus": "Planned"
+}

@@ -7,6 +7,6 @@
 | Doc | Purpose |
 |-----|---------|
 | [DECISIONS.md](./DECISIONS.md) | Few product/stack choices |
-| [EVENT_MODEL.md](./EVENT_MODEL.md) | EM → code (fill in after board import) |
+| [EVENT_MODEL.md](./EVENT_MODEL.md) | MashginCheckout slices (snapshot `20260929200131_store`) |
 
 Framework: [TEMPLATE.md](../TEMPLATE.md), [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Tasks: [tasks/todo.md](../../tasks/todo.md).

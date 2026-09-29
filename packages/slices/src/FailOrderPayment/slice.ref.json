@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "ef437701-9b30-4a04-9ba5-37363aabbe61"
+    ],
+    "columnIds": [
+      "6c313841-bb6c-4b87-82aa-74e4064118ad"
+    ]
+  },
+  "sliceTitle": "Fail Order Payment",
+  "sliceType": "STATE_CHANGE",
+  "sliceStatus": "Planned"
+}

@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "a6f1d409-6150-444f-b7f4-e135ca0e34dd"
+    ],
+    "columnIds": [
+      "b822d3ea-f511-465d-ab22-0c581c36dbc9"
+    ]
+  },
+  "sliceTitle": "Clear Cart",
+  "sliceType": "STATE_CHANGE",
+  "sliceStatus": "Planned"
+}
