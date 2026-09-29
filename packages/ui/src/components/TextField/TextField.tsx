@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Input } from '../Input/Input';
+import { cn } from '../../lib/utils';
 
 export interface TextFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label?: string;
@@ -24,12 +25,15 @@ export function TextField({
   ...rest
 }: TextFieldProps) {
   const fieldId = id ?? rest.name;
-  const inputClass = [className].filter(Boolean).join(' ');
+  const inputClass = cn(
+    error && 'border-destructive focus-visible:ring-destructive/30',
+    className
+  );
 
   return (
-    <div className={`ui-textfield ${fullWidth ? 'ui-full-width' : ''}`.trim()}>
+    <div className={cn('flex flex-col gap-1.5', fullWidth !== false && 'w-full')}>
       {label ? (
-        <label className="ui-textfield__label" htmlFor={fieldId}>
+        <label className="text-sm font-medium text-foreground" htmlFor={fieldId}>
           {label}
         </label>
       ) : null}
@@ -44,7 +48,7 @@ export function TextField({
         <Input id={fieldId} className={inputClass} aria-invalid={error || undefined} {...rest} />
       )}
       {helperText ? (
-        <span className="ui-textfield__error" style={{ color: error ? undefined : 'var(--muted-foreground)' }}>
+        <span className={cn('text-sm', error ? 'text-destructive' : 'text-muted-foreground')}>
           {helperText}
         </span>
       ) : null}
