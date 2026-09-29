@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "2beaf773-d70f-4db2-8ad1-acf2705fb17f"
+    ],
+    "columnIds": [
+      "75e68a8f-b98f-4709-bc6e-6eb6550f10e7"
+    ]
+  },
+  "sliceTitle": "Pay Order",
+  "sliceType": "STATE_CHANGE",
+  "sliceStatus": "Planned"
+}

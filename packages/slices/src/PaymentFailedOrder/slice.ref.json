@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "06af0d78-0747-432f-9a69-a35a0e190fc3"
+    ],
+    "columnIds": [
+      "3d66d5a8-84cb-4148-b8d1-ba43ac9c95fd"
+    ]
+  },
+  "sliceTitle": "Payment Failed Order",
+  "sliceType": "STATE_VIEW",
+  "sliceStatus": "Planned"
+}

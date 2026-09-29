@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "d81d97c0-8d77-4037-bf99-32f04f446428"
+    ],
+    "columnIds": [
+      "ea954b6e-fc0d-4293-9a47-7bf99d092ea1"
+    ]
+  },
+  "sliceTitle": "External Payment Simulator Translator",
+  "sliceType": "TRANSLATOR",
+  "sliceStatus": "Planned"
+}

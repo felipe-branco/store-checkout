@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "9752d5aa-cd45-4164-abb8-8cfe145eae7a"
+    ],
+    "columnIds": [
+      "5ab6c83c-b6c9-46ea-9aa2-7b8234df7559"
+    ]
+  },
+  "sliceTitle": "Create Order",
+  "sliceType": "STATE_CHANGE",
+  "sliceStatus": "Planned"
+}

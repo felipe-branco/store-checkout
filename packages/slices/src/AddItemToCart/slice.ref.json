@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "80c2b529-c3e8-46f1-a3e7-4e93d4ef4b6e"
+    ],
+    "columnIds": [
+      "48adfa03-4a63-4a30-8c47-39387526b238"
+    ]
+  },
+  "sliceTitle": "Add Item to Cart",
+  "sliceType": "STATE_CHANGE",
+  "sliceStatus": "Planned"
+}

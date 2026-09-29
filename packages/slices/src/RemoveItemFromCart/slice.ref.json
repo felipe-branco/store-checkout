@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "8cc2c288-2ae6-402b-8a17-5ae03123ca3e"
+    ],
+    "columnIds": [
+      "381d4c7c-66f5-4de0-acdc-dd3ec540227f"
+    ]
+  },
+  "sliceTitle": "Remove Item from Cart",
+  "sliceType": "STATE_CHANGE",
+  "sliceStatus": "Planned"
+}

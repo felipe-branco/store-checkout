@@ -1,0 +1,18 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
+  "pinnedSnapshot": "20260929200131_store",
+  "sourceRefs": {
+    "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
+    "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
+    "sliceBorderIds": [
+      "831370d2-c881-4eca-8060-36b666c3b77b"
+    ],
+    "columnIds": [
+      "da6966bf-31be-4ea0-9752-a47fe09847bf"
+    ]
+  },
+  "sliceTitle": "Order Paid Automator",
+  "sliceType": "AUTOMATION",
+  "sliceStatus": "Planned"
+}
