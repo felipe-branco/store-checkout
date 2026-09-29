@@ -1,0 +1,122 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "boards": {
+    "11111111-1111-4111-8111-111111111111": {
+      "name": "EM Slices Tutorial"
+    }
+  },
+  "nodes": {},
+  "metadata": {
+    "11111111-1111-4111-8111-111111111111": {
+      "22222222-2222-4222-8222-222222222222": {
+        "meta": {
+          "type": "CHAPTER",
+          "title": "Tutorial chapter",
+          "timelineData": {
+            "cells": [
+              {
+                "nodeId": "77777777-7777-4777-8777-777777777777",
+                "colId": "55555555-5555-4555-8555-555555555555"
+              },
+              {
+                "nodeId": "88888888-8888-4888-8888-888888888888",
+                "colId": "55555555-5555-4555-8555-555555555555"
+              },
+              {
+                "nodeId": "99999999-9999-4999-8999-999999999999",
+                "colId": "55555555-5555-4555-8555-555555555555"
+              },
+              {
+                "nodeId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+                "colId": "66666666-6666-4666-8666-666666666666"
+              },
+              {
+                "nodeId": "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+                "colId": "66666666-6666-4666-8666-666666666666"
+              }
+            ]
+          }
+        }
+      },
+      "33333333-3333-4333-8333-333333333333": {
+        "meta": {
+          "type": "SLICE_BORDER",
+          "title": "[SC] Add item",
+          "sliceStatus": "Planned"
+        }
+      },
+      "44444444-4444-4444-8444-444444444444": {
+        "meta": {
+          "type": "SLICE_BORDER",
+          "title": "[SV] Item list",
+          "sliceStatus": "Planned"
+        }
+      },
+      "77777777-7777-4777-8777-777777777777": {
+        "meta": {
+          "type": "COMMAND",
+          "title": "Add Item",
+          "aggregate": "Item",
+          "fields": [
+            { "name": "item_id", "type": "UUID", "idAttribute": true, "optional": false },
+            { "name": "name", "type": "String", "optional": false }
+          ]
+        }
+      },
+      "88888888-8888-4888-8888-888888888888": {
+        "meta": {
+          "type": "EVENT",
+          "title": "Item Added",
+          "aggregate": "Item",
+          "fields": [
+            { "name": "item_id", "type": "UUID", "idAttribute": true, "optional": false },
+            { "name": "name", "type": "String", "optional": false }
+          ]
+        }
+      },
+      "99999999-9999-4999-8999-999999999999": {
+        "meta": {
+          "type": "SCENARIO",
+          "title": "Add item happy path",
+          "givenWhenThenScenario": {
+            "scenarios": [
+              {
+                "id": "scenario-add-item-1",
+                "title": "Add item",
+                "when": [
+                  {
+                    "id": "77777777-7777-4777-8777-777777777777",
+                    "title": "Add Item",
+                    "type": "COMMAND"
+                  }
+                ],
+                "then": [
+                  {
+                    "id": "88888888-8888-4888-8888-888888888888",
+                    "title": "Item Added",
+                    "type": "EVENT"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa": {
+        "meta": {
+          "type": "READMODEL",
+          "title": "Item list",
+          "aggregate": "Item",
+          "fields": [{ "name": "name", "type": "String", "optional": false }]
+        }
+      },
+      "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb": {
+        "meta": {
+          "type": "SCREEN",
+          "title": "Item list",
+          "fields": [{ "name": "name", "type": "String", "optional": false }]
+        }
+      }
+    }
+  }
+}

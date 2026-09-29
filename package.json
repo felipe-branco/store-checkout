@@ -1,0 +1,59 @@
+{
+  "name": "em-slices-starter",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "rebuild:projections": "tsx scripts/rebuild-projections.ts",
+    "read:stream-events": "tsx scripts/read-stream-events.ts",
+    "remove:stream": "tsx scripts/remove-stream.ts",
+    "remove:stream-tail": "tsx scripts/remove-tail-events-from-stream.ts",
+    "update:stream-event": "tsx scripts/update-stream-event-payload.ts",
+    "diagnose:rebuild": "tsx scripts/diagnose-rebuild.ts",
+    "dev": "pnpm --filter web-app dev",
+    "build": "turbo run build",
+    "build:clear": "rm -rf .turbo && rm -rf apps/web-app/.next && rm -rf apps/web-app/.turbo",
+    "test": "turbo run test",
+    "test:unit": "CI= turbo run test",
+    "lint": "turbo run lint",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "clean": "turbo run clean",
+    "em:migration:add": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts migration:add",
+    "em:migration:diff": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts migration:diff",
+    "em:slice:init": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts slice:init",
+    "em:slice:resolve": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts slice:resolve",
+    "em:slice:bump": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts slice:bump",
+    "em:slice:check-drift": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts slice:check-drift",
+    "em:slice:mark-status": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts slice:mark-status",
+    "em:export:merge-status": "pnpm --filter @em-slices/em-manager exec tsx src/cli.ts export:merge-status",
+    "em:slice:generate": "pnpm --filter @em-slices/em-slice-generator exec tsx src/cli.ts em:slice:generate",
+    "em:slice:implement": "pnpm --filter @em-slices/em-slice-generator exec tsx src/cli.ts em:slice:implement"
+  },
+  "devDependencies": {
+    "@em-slices/core": "workspace:*",
+    "@em-slices/event-store": "workspace:*",
+    "@em-slices/slices": "workspace:*",
+    "@eslint/js": "^9.39.2",
+    "@types/node": "^20.19.30",
+    "eslint": "^9.0.0",
+    "pg": "^8.17.2",
+    "prettier": "^3.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.0.0",
+    "turbo": "^2.0.0",
+    "typescript": "^5.6.0",
+    "typescript-eslint": "^8.53.0",
+    "uuid": "^13.0.0",
+    "vitest": "^2.0.0"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "engines": {
+    "node": ">=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "pnpm": {
+    "overrides": {
+      "import-in-the-middle": "3.0.1"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+name: Rebuild Projections
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Environment"
+        required: true
+        type: choice
+        options:
+          - preview
+          - prod
+      projections:
+        description: "Comma-separated projection names (or all)"
+        required: true
+        type: string
+        default: "all"
+
+# Guarantee only one rebuild runs at a time per environment.
+# New runs wait (cancel-in-progress: false) until the current one finishes.
+concurrency:
+  group: rebuild-projections-${{ github.event.inputs.environment }}
+  cancel-in-progress: false
+
+jobs:
+  rebuild:
+    name: Rebuild Projections (${{ github.event.inputs.environment }})
+    runs-on: ubuntu-latest
+    # Optional: add "environment: ${{ github.event.inputs.environment }}" for approval gates (e.g. prod)
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: "24"
+          cache: "pnpm"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Rebuild projections
+        run: |
+          PROJS="${{ github.event.inputs.projections }}"
+          if [ "$PROJS" = "all" ]; then
+            pnpm rebuild:projections --all
+          else
+            pnpm rebuild:projections $(echo "$PROJS" | tr ',' ' ')
+          fi
+        env:
+          DATABASE_URL: ${{ github.event.inputs.environment == 'prod' && secrets.DATABASE_URL_PROD || secrets.DATABASE_URL_PREVIEW }}

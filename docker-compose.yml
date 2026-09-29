@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: em-slices-postgres
+    environment:
+      POSTGRES_USER: em_slices
+      POSTGRES_PASSWORD: em_slices
+      POSTGRES_DB: em_slices
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h localhost -p 5432 -U em_slices -d em_slices"]
+      interval: 5s
+      timeout: 5s
+      retries: 60
+      start_period: 300s
+
+volumes:
+  postgres_data:

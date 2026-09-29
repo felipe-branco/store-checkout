@@ -1,0 +1,37 @@
+---
+description: When implementing a slice, follow the EM workflow and post-generation plan
+globs: packages/slices/src/**/*.ts
+alwaysApply: false
+---
+
+# Slice Implementation
+
+When the user asks to implement a slice or you are completing a generated slice:
+
+1. Read **[docs/TEMPLATE.md](../../docs/TEMPLATE.md)** for the full first-slice walkthrough
+2. Identify slice type from `packages/slices/src/<SliceName>/slice.json` → `sliceType`
+3. Read the plan: `packages/em-slice-generator/<SLICE_TYPE>_POST_GENERATION_PLAN.md`
+4. Execute steps in order: decide/evolve, tests, registration in `commands.ts`, `INLINE_PROJECTIONS`, route under `apps/web-app/src/app/api/`, verify
+
+## EM CLI
+
+- `pnpm em:slice:init <Title>`
+- `pnpm em:slice:resolve`
+- `pnpm em:slice:generate`
+- `pnpm em:slice:implement`
+- `pnpm em:slice:check-drift --all`
+
+## Plan paths by type
+
+- STATE_CHANGE → `STATE_CHANGE_POST_GENERATION_PLAN.md`
+- TRANSLATOR → `TRANSLATOR_POST_GENERATION_PLAN.md`
+- AUTOMATION → `AUTOMATION_POST_GENERATION_PLAN.md`
+- STATE_VIEW → `STATE_VIEW_POST_GENERATION_PLAN.md`
+
+## Key conventions
+
+- `decide` and `evolve` are pure — no I/O
+- Register command handlers in `packages/slices/src/commands.ts`
+- Register inline projections in `packages/slices/src/projections-inline.ts`
+- Translators use `dispatcher.sendCommand()`, not eventStore directly
+- See `docs/SLICE_IMPLEMENTATION_WORKFLOW.md` for full workflow

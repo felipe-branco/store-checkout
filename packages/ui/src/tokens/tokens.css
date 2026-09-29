@@ -1,0 +1,75 @@
+/**
+ * Stack-agnostic design tokens for @em-slices/ui skeleton.
+ * Map these to MUI createTheme or shadcn CSS variables when adopting a UI stack.
+ * See packages/ui/UI_STACK.md
+ */
+
+:root {
+  --background: #fafbfc;
+  --foreground: #1a1f2e;
+  --card: #ffffff;
+  --card-foreground: #1a1f2e;
+  --primary: #0d9488;
+  --primary-foreground: #fafafa;
+  --secondary: #f1f3f6;
+  --secondary-foreground: #3d4659;
+  --muted: #f1f3f6;
+  --muted-foreground: #6b7280;
+  --accent: #f1f3f6;
+  --accent-foreground: #3d4659;
+  --destructive: #dc2626;
+  --destructive-foreground: #fafafa;
+  --border: #e2e5eb;
+  --input: #e2e5eb;
+  --ring: #0d9488;
+  --success: #16a34a;
+  --success-foreground: #fafafa;
+  --warning: #d97706;
+  --warning-foreground: #422006;
+  --info: #2563eb;
+  --info-foreground: #fafafa;
+  --sidebar: #1e293b;
+  --sidebar-foreground: #e8eaed;
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: #e8eaed;
+  --sidebar-border: #475569;
+  --radius: 0.5rem;
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-6: 1.5rem;
+  --font-sans: var(--font-inter, ui-sans-serif, system-ui, sans-serif);
+  --font-mono: var(--font-jetbrains-mono, ui-monospace, monospace);
+}
+
+.dark {
+  --background: #0f1419;
+  --foreground: #f0f1f3;
+  --card: #1a1f2e;
+  --card-foreground: #f0f1f3;
+  --primary: #2dd4bf;
+  --primary-foreground: #fafafa;
+  --secondary: #334155;
+  --secondary-foreground: #e8eaed;
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+  --accent: #334155;
+  --accent-foreground: #e8eaed;
+  --destructive: #991b1b;
+  --destructive-foreground: #fecaca;
+  --border: #334155;
+  --input: #334155;
+  --ring: #2dd4bf;
+  --success: #22c55e;
+  --success-foreground: #fafafa;
+  --warning: #f59e0b;
+  --warning-foreground: #fef3c7;
+  --info: #3b82f6;
+  --info-foreground: #fafafa;
+  --sidebar: #0f1419;
+  --sidebar-foreground: #e8eaed;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #e8eaed;
+  --sidebar-border: #334155;
+}

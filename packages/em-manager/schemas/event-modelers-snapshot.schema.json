@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://em-slices.dev/schemas/event-modelers-snapshot.schema.json",
+  "title": "EventModelersSnapshot",
+  "type": "object",
+  "required": ["boards", "nodes", "metadata"],
+  "properties": {
+    "snapshotFormatVersion": { "type": "string" },
+    "boards": { "type": "object" },
+    "nodes": { "type": "object" },
+    "metadata": { "type": "object" }
+  }
+}

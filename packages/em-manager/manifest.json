@@ -1,0 +1,13 @@
+{
+  "snapshotFormatVersion": "1.0.0",
+  "currentSnapshot": "20260701000000_tutorial",
+  "slices": {
+    "_StatusMergeFixture": {
+      "pinnedSnapshot": "20260701000000_tutorial",
+      "sliceBorderIds": [
+        "33333333-3333-4333-8333-333333333333"
+      ],
+      "sliceStatus": "Done"
+    }
+  }
+}

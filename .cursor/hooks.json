@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "matcher": "packages/em-manager/migrations/.*\\.json$|slice\\.ref\\.json$",
+        "command": "bash .cursor/hooks/em-migration-check.sh"
+      }
+    ]
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "name": "@em-slices/slices",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "vitest run --passWithNoTests",
+    "test:unit": "CI= vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage --passWithNoTests"
+  },
+  "peerDependencies": {
+    "next": "^15.0.0"
+  },
+  "dependencies": {
+    "@em-slices/core": "workspace:*",
+    "@em-slices/event-store": "workspace:*",
+    "@em-slices/ui": "workspace:*",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "uuid": "^13.0.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@em-slices/tsconfig": "workspace:*",
+    "@eslint/js": "^9.0.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/uuid": "^11.0.0",
+    "eslint": "^9.0.0",
+    "next": "15.5.9",
+    "typescript": "^5",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^2.0.0"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "name": "@em-slices/web-app",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest --watch",
+    "test:coverage": "vitest --coverage",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@em-slices/core": "workspace:*",
+    "@em-slices/event-store": "workspace:*",
+    "@em-slices/slices": "workspace:*",
+    "@em-slices/ui": "workspace:*",
+    "@axiomhq/js": "^1.6.0",
+    "@axiomhq/logging": "^0.2.0",
+    "@axiomhq/nextjs": "^0.2.0",
+    "@sentry/nextjs": "^10.50.0",
+    "@vercel/analytics": "^1.6.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "import-in-the-middle": "^3.0.1",
+    "next": "15.5.9",
+    "pg": "^8.17.2",
+    "pino": "^10.3.1",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "require-in-the-middle": "^8.0.1",
+    "server-only": "^0.0.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@em-slices/tsconfig": "workspace:*",
+    "@eslint/eslintrc": "^3",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@vitest/ui": "^4.0.17",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.9",
+    "typescript": "^5",
+    "vitest": "^2.0.0"
+  }
+}

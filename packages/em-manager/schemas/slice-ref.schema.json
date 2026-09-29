@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://em-slices.dev/schemas/slice-ref.schema.json",
+  "title": "SliceRef",
+  "type": "object",
+  "required": [
+    "snapshotFormatVersion",
+    "snapshot",
+    "pinnedSnapshot",
+    "sourceRefs",
+    "sliceTitle",
+    "sliceType",
+    "sliceStatus"
+  ],
+  "properties": {
+    "snapshotFormatVersion": { "type": "string" },
+    "snapshot": { "type": "string" },
+    "pinnedSnapshot": { "type": "string" },
+    "sourceRefs": {
+      "type": "object",
+      "required": ["boardId", "chapterId", "sliceBorderIds", "columnIds"],
+      "properties": {
+        "boardId": { "type": "string", "format": "uuid" },
+        "chapterId": { "type": "string", "format": "uuid" },
+        "sliceBorderIds": { "type": "array", "items": { "type": "string", "format": "uuid" } },
+        "columnIds": { "type": "array", "items": { "type": "string", "format": "uuid" } }
+      }
+    },
+    "sliceTitle": { "type": "string" },
+    "sliceType": {
+      "enum": ["STATE_CHANGE", "STATE_VIEW", "AUTOMATION", "TRANSLATOR"]
+    },
+    "sliceStatus": {
+      "enum": [
+        "Created",
+        "Planned",
+        "InProgress",
+        "Review",
+        "Done",
+        "Blocked",
+        "Assigned",
+        "Informational"
+      ]
+    },
+    "permission": { "type": "string" },
+    "apiEndpoint": { "type": "string" }
+  }
+}
