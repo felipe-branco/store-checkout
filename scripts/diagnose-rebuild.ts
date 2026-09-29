@@ -13,7 +13,7 @@ import {
   createEventStoreFromEnv,
   normalizePostgresUrlForPgSsl,
   pongoClient,
-} from "@em-slices/event-store";
+} from "@store-checkout/event-store";
 import pg from "pg";
 
 const streamId = process.argv[2];

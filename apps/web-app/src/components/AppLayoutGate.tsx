@@ -2,7 +2,7 @@
 
 import type { ReactNode } from "react";
 import { usePathname } from "next/navigation";
-import { AppLayout, AppSidebar, Box } from "@em-slices/ui";
+import { AppLayout, AppSidebar, Box } from "@store-checkout/ui";
 
 const PLAIN_FULL_WIDTH_PREFIXES = ["/maintenance", "/system-error"];
 
@@ -25,8 +25,8 @@ export function AppLayoutGate({ children }: { children: ReactNode }) {
     <AppLayout
       sidebar={<AppSidebar />}
       header={{
-        title: "EM Slices Starter",
-        description: "Vertical slices com event sourcing",
+        title: "Store Checkout",
+        description: "Event-sourced self-service checkout",
       }}
     >
       {children}

@@ -16,7 +16,7 @@ export function generateAutomationTestFile(slice: Slice, processor: Processor): 
 
   const allTriggerEvents = [...new Set([...triggerEvents, ...dependencyEvents])];
   const eventImports = allTriggerEvents
-    .map((eventName) => `import type { ${eventName} } from "@em-slices/core";`)
+    .map((eventName) => `import type { ${eventName} } from "@store-checkout/core";`)
     .join("\n");
   const firstTriggerEvent = allTriggerEvents[0] || "Event";
 
@@ -27,7 +27,7 @@ export function generateAutomationTestFile(slice: Slice, processor: Processor): 
   const firstOutboundCommand = outboundCommands[0] || "InternalCommand";
 
   return `import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { MessageBus } from "@em-slices/core";
+import type { MessageBus } from "@store-checkout/core";
 ${eventImports}
 import { handle${processorName}Automation } from "./${sliceNamePascal}Automation";
 

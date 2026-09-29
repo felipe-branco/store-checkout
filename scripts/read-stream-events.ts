@@ -14,7 +14,7 @@
  *   pnpm read:stream-events 29dee274-6677-5745-9a55-3abd2efca9be
  */
 
-import { createEventStoreFromEnv } from "@em-slices/event-store";
+import { createEventStoreFromEnv } from "@store-checkout/event-store";
 
 /** Postgres rejects connections while WAL recovery runs (Docker restart / crash recovery). */
 function isPgStartingUp(error: unknown): boolean {

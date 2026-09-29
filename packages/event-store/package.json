@@ -1,5 +1,5 @@
 {
-  "name": "@em-slices/event-store",
+  "name": "@store-checkout/event-store",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -21,7 +21,7 @@
     "@testcontainers/postgresql": "^10.0.0"
   },
   "devDependencies": {
-    "@em-slices/tsconfig": "workspace:*",
+    "@store-checkout/tsconfig": "workspace:*",
     "typescript": "^5",
    "vitest": "^2.0.0",
     "eslint": "^9.0.0",

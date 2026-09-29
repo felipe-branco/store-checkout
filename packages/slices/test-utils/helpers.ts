@@ -1,5 +1,5 @@
-import type { PostgresEventStore, PongoDb } from "@em-slices/event-store";
-import type { Event } from "@em-slices/event-store";
+import type { PostgresEventStore, PongoDb } from "@store-checkout/event-store";
+import type { Event } from "@store-checkout/event-store";
 import { expect } from "vitest";
 
 /**

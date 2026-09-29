@@ -9,7 +9,7 @@ import {
   createEventStoreFromEnv,
   normalizePostgresUrlForPgSsl,
   pongoClient,
-} from "@em-slices/event-store";
+} from "@store-checkout/event-store";
 import pg from "pg";
 import type { ManualRebuildConfig } from "./manual-rebuild-config";
 

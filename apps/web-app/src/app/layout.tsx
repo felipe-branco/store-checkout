@@ -5,8 +5,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { getInitialResolvedMode } from "@/lib/theme-server";
 import { Providers } from "./providers";
 import "./globals.css";
-import "@em-slices/ui/tokens.css";
-import "@em-slices/ui/skeleton.css";
+import "@store-checkout/ui/tokens.css";
+import "@store-checkout/ui/skeleton.css";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -21,8 +21,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "EM Slices Starter",
-  description: "Template de aplicação com vertical slices e event sourcing",
+  title: "Store Checkout",
+  description: "Self-service snack bar checkout with event-sourced orders",
 };
 
 export default async function RootLayout({
@@ -33,7 +33,7 @@ export default async function RootLayout({
   const initialResolvedMode = await getInitialResolvedMode();
 
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en-US" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
         <meta httpEquiv="Accept-CH" content="sec-ch-prefers-color-scheme" />
       </head>

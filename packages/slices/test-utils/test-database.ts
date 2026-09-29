@@ -1,7 +1,7 @@
-import type { StartedPostgreSqlContainer } from "@em-slices/event-store/test-utils";
-import { PostgreSqlContainer } from "@em-slices/event-store/test-utils";
-import type { PostgresEventStore, PongoDb } from "@em-slices/event-store";
-import { createEmmettEventStore, pongoClient, projections } from "@em-slices/event-store";
+import type { StartedPostgreSqlContainer } from "@store-checkout/event-store/test-utils";
+import { PostgreSqlContainer } from "@store-checkout/event-store/test-utils";
+import type { PostgresEventStore, PongoDb } from "@store-checkout/event-store";
+import { createEmmettEventStore, pongoClient, projections } from "@store-checkout/event-store";
 import { INLINE_PROJECTIONS } from "../src/projections-inline";
 
 export interface TestDatabase {

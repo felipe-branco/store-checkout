@@ -22,7 +22,7 @@ export function generateEventType(event: Event): string {
           .join("\n")
       : "    // No additional fields";
 
-  return `import type { Event } from "@em-slices/event-store";
+  return `import type { Event } from "@store-checkout/event-store";
 import type { EventMetadata } from "../eventMetadata";
 
 /**

@@ -1,5 +1,5 @@
 {
-  "name": "@em-slices/em-manager",
+  "name": "@store-checkout/em-manager",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -24,7 +24,7 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@em-slices/tsconfig": "workspace:*",
+    "@store-checkout/tsconfig": "workspace:*",
     "@eslint/js": "^9.0.0",
     "eslint": "^9.0.0",
     "tsx": "^4.0.0",

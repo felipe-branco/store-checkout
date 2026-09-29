@@ -1,5 +1,5 @@
 {
-  "name": "@em-slices/ui",
+  "name": "@store-checkout/ui",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -18,7 +18,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "@em-slices/tsconfig": "workspace:*",
+    "@store-checkout/tsconfig": "workspace:*",
     "next": "^15.0.0",
     "typescript": "^5",
     "vitest": "^2.0.0",

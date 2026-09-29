@@ -53,7 +53,7 @@ describe("generateEmmettCommandHandler", () => {
     const code = generateEmmettCommandHandler(fixtureSlice, command);
 
     expect(code).toContain("DeciderCommandHandler");
-    expect(code).toContain('from "@em-slices/event-store"');
+    expect(code).toContain('from "@store-checkout/event-store"');
     expect(code).not.toContain('@event-driven-io/emmett');
     expect(code).toContain("eventStore: PostgresEventStore");
     expect(code).toContain("Promise<CommandResult<ItemAdded>>");

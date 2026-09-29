@@ -1,5 +1,5 @@
-import type { MessageBus, EventStore } from "@em-slices/event-store";
-import type { ICommandDispatcher } from "@em-slices/core";
+import type { MessageBus, EventStore } from "@store-checkout/event-store";
+import type { ICommandDispatcher } from "@store-checkout/core";
 
 export function registerAllCommandHandlers(
   _dispatcher: ICommandDispatcher,

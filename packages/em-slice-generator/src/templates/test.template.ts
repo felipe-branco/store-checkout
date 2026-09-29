@@ -80,10 +80,10 @@ export function generateTestFile(slice: Slice, command: Command): string {
     : "              // TODO: expected event data";
 
   return `import { describe, it, beforeAll } from "vitest";
-import { DeciderSpecification } from "@em-slices/event-store";
+import { DeciderSpecification } from "@store-checkout/event-store";
 import { randomUUID } from "crypto";
 import { decide, evolve, initialState, handle${commandName}, type ${commandName}Command } from "./${sliceName}Command";
-import type { ${eventName || "Event"} } from "@em-slices/core";
+import type { ${eventName || "Event"} } from "@store-checkout/core";
 import { CommandHandlerSpec, existingStream } from "../../test-utils/command-handler-spec";
 import { expectNewEvents } from "../../test-utils/helpers";
 import { setupTestDatabase } from "../../test-utils/test-database";

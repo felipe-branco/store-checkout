@@ -84,7 +84,7 @@ export function parseExternalPayload(payload: ExternalPayload): ExternalEventNam
 
 ### Important
 - The external event type uses `EventMetadata` — include `metadata: {}` for external events (no streamName)
-- Zod is already a dependency of `@em-slices/slices`
+- Zod is already a dependency of `@store-checkout/slices`
 - Remove the `throw new Error(...)` and `void payload;` lines from the generated stub
 
 ---
@@ -110,8 +110,8 @@ Replace the `translate<SliceName>` stub with field mapping and business rules. T
 ### Template
 ```typescript
 import { randomUUID } from "crypto";
-import type { ICommandDispatcher, SendResult } from "@em-slices/core";
-import type { ExternalItemRegistered } from "@em-slices/core";
+import type { ICommandDispatcher, SendResult } from "@store-checkout/core";
+import type { ExternalItemRegistered } from "@store-checkout/core";
 import type { AddItemCommand } from "../AddItem/AddItemCommand";
 
 export async function translateSliceName(
@@ -175,7 +175,7 @@ Replace the test scaffold TODOs with real assertions.
 ### Mock Setup Pattern
 ```typescript
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { ICommandDispatcher } from "@em-slices/core";
+import type { ICommandDispatcher } from "@store-checkout/core";
 
 let dispatcher: ICommandDispatcher;
 
@@ -240,7 +240,7 @@ Create a thin Next.js adapter at the webhook endpoint defined in `slice.json →
 ```typescript
 import { NextResponse } from "next/server";
 import { getCommandDispatcher } from "@/lib/messageBus";
-import { handleTranslatorRoute } from "@em-slices/slices/src/<SliceName>/routes";
+import { handleTranslatorRoute } from "@store-checkout/slices/src/<SliceName>/routes";
 
 export async function POST(request: Request) {
   try {
@@ -285,8 +285,8 @@ export async function POST(request: Request) {
 ## Step 6: Verify
 
 1. **TypeScript**: `pnpm exec tsc --noEmit --project packages/slices/tsconfig.json`
-2. **Tests**: `pnpm --filter @em-slices/slices exec vitest run src/<SliceName>/`
-3. **All tests**: `pnpm --filter @em-slices/slices exec vitest run` (note: tinypool may cause exit code 1 even when all tests pass — check test results, not exit code)
+2. **Tests**: `pnpm --filter @store-checkout/slices exec vitest run src/<SliceName>/`
+3. **All tests**: `pnpm --filter @store-checkout/slices exec vitest run` (note: tinypool may cause exit code 1 even when all tests pass — check test results, not exit code)
 
 ---
 
@@ -307,7 +307,7 @@ export async function POST(request: Request) {
 
 - External events are prefixed with `External` (e.g., `ItemRegistered` → `ExternalItemRegistered`)
 - Events use emmett's `Event<Type, Data, Record<string, unknown>>` — always include `metadata: {}`
-- Command types live in their STATE_CHANGE slice folder, NOT in `@em-slices/core`
+- Command types live in their STATE_CHANGE slice folder, NOT in `@store-checkout/core`
 - Commands use shape `{ type, data, metadata: { now } }` — set `now: new Date()` (Date object, not number)
 - Timestamp fields ending with `At` are typed as `number`
 - The translator only imports the command **type** — NOT the handler function

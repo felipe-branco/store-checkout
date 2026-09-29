@@ -1,5 +1,5 @@
 {
-  "extends": "@em-slices/tsconfig/nextjs.json",
+  "extends": "@store-checkout/tsconfig/nextjs.json",
   "compilerOptions": {
     "paths": {
       "@/*": [

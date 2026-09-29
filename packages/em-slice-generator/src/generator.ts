@@ -1,7 +1,7 @@
 import { writeFileSync, mkdirSync, existsSync, readFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
-import type { ResolvedSliceView } from "@em-slices/em-manager";
+import type { ResolvedSliceView } from "@store-checkout/em-manager";
 import type { Slice } from "./types/codegen-slice.js";
 import { resolvedViewToSlice } from "./resolved-view-to-slice.js";
 import { toPascalCase, toKebabCase, toEventName } from "./utils/naming.js";
@@ -412,7 +412,7 @@ function generateStateViewPage(
       ? `\n  return <${sliceNamePascal} apiEndpoint="${readModel.apiEndpoint}" />;\n`
       : `\n  return <${sliceNamePascal} />;\n`;
 
-    const pageCode = `import { ${sliceNamePascal} } from "@em-slices/slices";
+    const pageCode = `import { ${sliceNamePascal} } from "@store-checkout/slices";
 
 export default function Page() {${apiEndpointProp}}
 `;

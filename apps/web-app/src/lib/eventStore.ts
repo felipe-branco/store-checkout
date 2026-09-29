@@ -5,8 +5,8 @@ import {
   projections,
   type PongoDb,
   type PostgresEventStore,
-} from "@em-slices/event-store";
-import { INLINE_PROJECTIONS } from "@em-slices/slices/src/projections-inline";
+} from "@store-checkout/event-store";
+import { INLINE_PROJECTIONS } from "@store-checkout/slices/src/projections-inline";
 
 let eventStoreInstance: PostgresEventStore | null = null;
 let pongoDbInstance: PongoDb | null = null;

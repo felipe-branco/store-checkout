@@ -4,11 +4,11 @@ Guidelines for AI agents working on this codebase.
 
 ## Overview
 
-- Event sourcing with [@event-driven-io/emmett](https://github.com/event-driven-io/emmett) via `@em-slices/event-store`
+- Event sourcing with [@event-driven-io/emmett](https://github.com/event-driven-io/emmett) via `@store-checkout/event-store`
 - Vertical slice architecture in `packages/slices/src/`
 - Next.js 15.5.9 web app (`apps/web-app`)
 - Turbo monorepo with pnpm
-- **Default UI locale: pt-BR** (`lang="pt-BR"` in root layout). Sample pages use Portuguese copy; change when you fork — see [docs/TEMPLATE.md](docs/TEMPLATE.md).
+- **Default UI locale: en-US** (`lang="en-US"` in root layout). No i18n framework; user-facing copy is English — see [docs/project/README.md](docs/project/README.md).
 - **No shipped example slices** — see [docs/TEMPLATE.md](docs/TEMPLATE.md)
 - Timestamps and money: [docs/EVENT_SOURCING_BEST_PRACTICES.md](docs/EVENT_SOURCING_BEST_PRACTICES.md)
 
@@ -28,7 +28,7 @@ Guidelines for AI agents working on this codebase.
 - UI components in `packages/ui/src/` — stack-agnostic skeleton; see [packages/ui/UI_STACK.md](packages/ui/UI_STACK.md)
 - Event store in `packages/event-store/src/`
 - Slices in `packages/slices/src/{slice-name}/`
-- Use `@em-slices/ui` for all UI; do not add MUI or Tailwind to slices until a stack is chosen in `packages/ui`
+- Use `@store-checkout/ui` for all UI; do not add MUI or Tailwind to slices until a stack is chosen in `packages/ui`
 
 ## Slice workflow
 

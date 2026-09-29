@@ -16,7 +16,7 @@ export default function GlobalError({
   }, [error]);
 
   return (
-    <html lang="pt-BR">
+    <html lang="en-US">
       <body
         style={{
           fontFamily:
@@ -25,10 +25,10 @@ export default function GlobalError({
           textAlign: "center",
         }}
       >
-        <h1>Algo deu errado</h1>
-        <p>Por favor, tente novamente.</p>
+        <h1>Something went wrong</h1>
+        <p>Please try again.</p>
         <button type="button" onClick={() => reset()}>
-          Tentar de novo
+          Try again
         </button>
       </body>
     </html>

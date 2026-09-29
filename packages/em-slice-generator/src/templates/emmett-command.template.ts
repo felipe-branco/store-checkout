@@ -62,8 +62,8 @@ export function generateEmmettCommandHandler(slice: Slice, command: Command): st
   DeciderCommandHandler,
   type Command,
   type PostgresEventStore,
-} from "@em-slices/event-store";
-import type { CommandResult, ${eventName ?? "Event"} } from "@em-slices/core";
+} from "@store-checkout/event-store";
+import type { CommandResult, ${eventName ?? "Event"} } from "@store-checkout/core";
 ${needsCrypto ? `import { randomUUID as cryptoRandomUUID } from "crypto";\nconst crypto = { randomUUID: cryptoRandomUUID };\n` : ""}
 
 export type ${aggregateName}State = {

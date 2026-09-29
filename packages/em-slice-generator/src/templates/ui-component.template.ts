@@ -68,7 +68,7 @@ import {
   Paper,
   Alert,
   CircularProgress,
-} from '@em-slices/ui';
+} from '@store-checkout/ui';
 
 interface FormData ${formStateInterface}
 
@@ -260,7 +260,7 @@ import {
   Paper,
   CircularProgress,
   Alert,
-} from '@em-slices/ui';
+} from '@store-checkout/ui';
 import type { ${readModelName}ReadModel } from '../${projectionName}Projection';
 
 interface ApiResponse {
@@ -407,7 +407,7 @@ import {
   Alert,
   Button,
   TextField,
-} from '@em-slices/ui';
+} from '@store-checkout/ui';
 import type { ${readModelName}ReadModel } from '../${projectionName}Projection';
 
 interface ApiResponse {

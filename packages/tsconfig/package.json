@@ -1,5 +1,5 @@
 {
-  "name": "@em-slices/tsconfig",
+  "name": "@store-checkout/tsconfig",
   "version": "0.1.0",
   "private": true,
   "files": [

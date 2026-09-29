@@ -22,7 +22,7 @@ After generating a STATE_VIEW slice using the slice generator, follow these step
   - `apps/web-app/src/app/<kebab-case-slice-title>/page.tsx` — Next.js page that renders the slice UI
   - Event types are NOT re-generated (skipped if they already exist)
 
-> **Important:** The projection subscribes to events produced by STATE_CHANGE slices. Those slices must be generated first so the event types exist in `@em-slices/core`.
+> **Important:** The projection subscribes to events produced by STATE_CHANGE slices. Those slices must be generated first so the event types exist in `@store-checkout/core`.
 
 ---
 
@@ -114,7 +114,7 @@ The generator now automatically generates route handlers that:
 
 ### Template
 ```typescript
-import type { PongoDb } from "@em-slices/event-store";
+import type { PongoDb } from "@store-checkout/event-store";
 import { getAllItems, getItemById, type ReadModelType } from "./SliceNameProjection";
 
 export async function handleReadModelRoute(
@@ -164,8 +164,8 @@ The generated test file includes both unit tests (for the `evolve` function) and
 ### Pattern
 ```typescript
 import { describe, it, expect } from "vitest";
-import type { EventType } from "@em-slices/core";
-import type { ReadEvent, PostgresReadEventMetadata } from "@em-slices/event-store";
+import type { EventType } from "@store-checkout/core";
+import type { ReadEvent, PostgresReadEventMetadata } from "@store-checkout/event-store";
 import { evolve } from "./SliceNameProjection";
 
 describe("evolve", () => {
@@ -242,7 +242,7 @@ const eventStore = createEmmettEventStore(connectionString, {
 Update `apps/web-app/src/lib/eventStore.ts`:
 
 ```typescript
-import { ${projectionName}Projection } from "@em-slices/slices/src/${SliceName}/${SliceName}Projection";
+import { ${projectionName}Projection } from "@store-checkout/slices/src/${SliceName}/${SliceName}Projection";
 
 // In initializeEventStore():
 eventStoreInstance = createEmmettEventStoreFromEnv({
@@ -271,7 +271,7 @@ export const PROJECTION_REGISTRY = {
 
 Update `scripts/manual-rebuild-config.ts`:
 
-1. Add import: `import { evolve as yourSliceNameEvolve } from "@em-slices/slices/src/YourSliceName/YourSliceNameProjection";`
+1. Add import: `import { evolve as yourSliceNameEvolve } from "@store-checkout/slices/src/YourSliceName/YourSliceNameProjection";`
 2. Add to MANUAL_REBUILD_CONFIG:
 
 ```typescript
@@ -307,7 +307,7 @@ The generator automatically creates a Next.js page at `apps/web-app/src/app/<keb
 2. **If the page was skipped** (exists, no `--overwrite`): Manually create it using this template:
 
 ```tsx
-import { <SliceNamePascal> } from "@em-slices/slices";
+import { <SliceNamePascal> } from "@store-checkout/slices";
 
 export default function Page() {
   return <SliceNamePascal />;
@@ -331,7 +331,7 @@ export default async function SliceLayout({ children }: { children: React.ReactN
 
 ### Important
 
-- The page imports the slice UI from `@em-slices/slices`
+- The page imports the slice UI from `@store-checkout/slices`
 - Form slices (no readmodel `apiEndpoint`) render `<SliceName />` with no props — the component uses its own defaults
 - List/detail slices (readmodel has `apiEndpoint`) render `<SliceName apiEndpoint="/api/..." />`
 - Slices with `permission` should use a layout (or middleware) that enforces authorization when you add auth
@@ -341,7 +341,7 @@ export default async function SliceLayout({ children }: { children: React.ReactN
 ## Step 8: Verify
 
 1. **TypeScript**: `pnpm exec tsc --noEmit --project packages/slices/tsconfig.json`
-2. **Tests**: `pnpm --filter @em-slices/slices exec vitest run src/<SliceName>/`
+2. **Tests**: `pnpm --filter @store-checkout/slices exec vitest run src/<SliceName>/`
 3. **All tests**: check all tests still pass after changes
 4. **Projection registration**: Verify the projection is registered in both `test-database.ts` and `eventStore.ts`
 5. **Web app page**: Visit `/{kebab-case-slice-title}` and verify the slice UI renders
@@ -368,7 +368,7 @@ export default async function SliceLayout({ children }: { children: React.ReactN
 
 - Projections use emmett's `pongoSingleStreamProjection` — one document per aggregate stream
 - The `evolve` function is **automatically exported** by the generator for unit testing
-- Read model types are defined in the projection file, not in `@em-slices/core`
+- Read model types are defined in the projection file, not in `@store-checkout/core`
 - Query functions use Pongo's `collection.find()` and `collection.findOne()`
 - Pongo's `find({})` returns `Promise<WithIdAndVersion<T>[]>` — cast to your type
 - Route handlers use `PongoDb`, NOT `IEventStore` or `EventStore`
@@ -383,7 +383,7 @@ export default async function SliceLayout({ children }: { children: React.ReactN
 - Route handlers are automatically configured to use the correct query functions and response types based on `listElement`
 - **Projections must be registered** in both `test-database.ts` (for tests) and `eventStore.ts` (for application) to process events
 - When creating a new STATE_VIEW slice, remember to add the projection to both registration locations
-- **Web app page**: The generator creates `apps/web-app/src/app/<kebab-case-slice-title>/page.tsx`. Path = `toKebabCase(slice.title)`. The page imports and renders the slice UI from `@em-slices/slices`
+- **Web app page**: The generator creates `apps/web-app/src/app/<kebab-case-slice-title>/page.tsx`. Path = `toKebabCase(slice.title)`. The page imports and renders the slice UI from `@store-checkout/slices`
 - **Slice permission**: When you add auth later, protect routes in middleware or route handlers. Optionally add nav items in `AppSidebar`.
 - **API validation errors**: Do not include which fields are missing in 400 responses. Use general messages like "Campos obrigatórios não preenchidos".
 

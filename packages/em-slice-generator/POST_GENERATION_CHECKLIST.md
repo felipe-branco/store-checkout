@@ -11,7 +11,7 @@ After `pnpm em:slice:generate` or `pnpm em:slice:implement`. See [docs/TEMPLATE.
 - [ ] Routes: `initializeEventStore()` + `initializeMessageBus()`; wrap with `withAxiomRouteHandler`
 - [ ] Query via slice-local projections, not ad-hoc `readStream` in routes
 - [ ] No cross-slice imports
-- [ ] Slice UI imports **`@em-slices/ui` only** (see [UI_STACK.md](../../packages/ui/UI_STACK.md))
+- [ ] Slice UI imports **`@store-checkout/ui` only** (see [UI_STACK.md](../../packages/ui/UI_STACK.md))
 
 ## STATE_CHANGE
 
@@ -37,6 +37,6 @@ After `pnpm em:slice:generate` or `pnpm em:slice:implement`. See [docs/TEMPLATE.
 
 ## Completion
 
-- [ ] Run slice tests: `pnpm --filter @em-slices/slices exec vitest run <SliceDir>`
+- [ ] Run slice tests: `pnpm --filter @store-checkout/slices exec vitest run <SliceDir>`
 - [ ] `pnpm em:slice:check-drift --all`
 - [ ] `pnpm em:slice:mark-status <dir> Done` then `pnpm em:export:merge-status`

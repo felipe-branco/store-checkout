@@ -18,7 +18,7 @@
  *   pnpm remove:stream-tail <stream_id> 3 4
  */
 
-import { normalizePostgresUrlForPgSsl } from "@em-slices/event-store";
+import { normalizePostgresUrlForPgSsl } from "@store-checkout/event-store";
 import pg from "pg";
 
 const PARTITION = "emt:default";

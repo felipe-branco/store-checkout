@@ -13,7 +13,7 @@
  *   pnpm remove:stream 29dee274-6677-5745-9a55-3abd2efca9be
  */
 
-import { normalizePostgresUrlForPgSsl } from "@em-slices/event-store";
+import { normalizePostgresUrlForPgSsl } from "@store-checkout/event-store";
 import pg from "pg";
 
 const PARTITION = "emt:default";

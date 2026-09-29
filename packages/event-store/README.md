@@ -10,7 +10,7 @@ Event store implementation using `@event-driven-io/emmett` with PostgreSQL.
 import {
   createEmmettEventStore,
   createEmmettEventStoreFromEnv,
-} from "@em-slices/event-store";
+} from "@store-checkout/event-store";
 
 // Option 1: Create from connection string
 const eventStore = createEmmettEventStore(
@@ -29,7 +29,7 @@ const eventStore = createEmmettEventStoreFromEnv();
 STATE_CHANGE slices use Emmett's `DeciderCommandHandler` with `PostgresEventStore`:
 
 ```typescript
-import { DeciderCommandHandler, type PostgresEventStore } from "@em-slices/event-store";
+import { DeciderCommandHandler, type PostgresEventStore } from "@store-checkout/event-store";
 
 const run = DeciderCommandHandler({ decide, evolve, initialState });
 

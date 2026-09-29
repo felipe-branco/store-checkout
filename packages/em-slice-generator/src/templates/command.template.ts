@@ -26,8 +26,8 @@ export function generateCommandHandler(slice: Slice, command: Command): string {
   // Events produced by this command
   const eventName = event ? toEventName(event.title, event.context) : null;
   const eventImport = eventName
-    ? `import type { ${eventName}, CommandResult } from "@em-slices/core";`
-    : `import type { CommandResult } from "@em-slices/core";`;
+    ? `import type { ${eventName}, CommandResult } from "@store-checkout/core";`
+    : `import type { CommandResult } from "@store-checkout/core";`;
   const eventUnion = eventName || "Event";
 
   // All events for the aggregate (for evolve)
@@ -96,7 +96,7 @@ export function generateCommandHandler(slice: Slice, command: Command): string {
   return `${needsRandomUUID ? `import { randomUUID } from "crypto";\n` : ""}import {
   DeciderCommandHandler,
   type PostgresEventStore,
-} from "@em-slices/event-store";
+} from "@store-checkout/event-store";
 ${eventImport}
 
 // ---------------------------------------------------------------------------

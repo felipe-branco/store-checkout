@@ -1,5 +1,5 @@
 {
-  "extends": "@em-slices/tsconfig/base.json",
+  "extends": "@store-checkout/tsconfig/base.json",
   "compilerOptions": {
     "outDir": "./dist",
     "rootDir": "./src",

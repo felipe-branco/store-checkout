@@ -37,7 +37,7 @@ export function generateTranslatorHandler(slice: Slice, processor: Processor): s
 
   // Build imports for external events
   const externalEventImports = allExternalEvents
-    .map((eventName) => `import type { ${eventName} } from "@em-slices/core";`)
+    .map((eventName) => `import type { ${eventName} } from "@store-checkout/core";`)
     .join("\n");
 
   const externalEventUnion = allExternalEvents.length > 0
@@ -47,7 +47,7 @@ export function generateTranslatorHandler(slice: Slice, processor: Processor): s
   // Build field mapping comments from the external events and internal commands
   const fieldMappingComments = generateFieldMappingComments(slice, allExternalEvents, allInternalCommands);
 
-  return `import type { SendResult, ICommandDispatcher } from "@em-slices/core";
+  return `import type { SendResult, ICommandDispatcher } from "@store-checkout/core";
 ${externalEventImports}
 
 /**

@@ -3,9 +3,9 @@ import {
   type MessageBus,
   type EventSubscription,
   type CommandProcessor,
-} from "@em-slices/event-store";
-import { registerAllCommandHandlers } from "@em-slices/slices/src/commands";
-import { registerAllAutomations } from "@em-slices/slices/src/automations";
+} from "@store-checkout/event-store";
+import { registerAllCommandHandlers } from "@store-checkout/slices/src/commands";
+import { registerAllAutomations } from "@store-checkout/slices/src/automations";
 import { getEventStore, getPongoDb } from "./eventStore";
 import { CommandDispatcher } from "./commandDispatcher";
 

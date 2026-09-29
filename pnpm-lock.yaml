@@ -11,18 +11,18 @@ importers:
 
   .:
     devDependencies:
-      '@em-slices/core':
-        specifier: workspace:*
-        version: link:packages/core
-      '@em-slices/event-store':
-        specifier: workspace:*
-        version: link:packages/event-store
-      '@em-slices/slices':
-        specifier: workspace:*
-        version: link:packages/slices
       '@eslint/js':
         specifier: ^9.39.2
         version: 9.39.2
+      '@store-checkout/core':
+        specifier: workspace:*
+        version: link:packages/core
+      '@store-checkout/event-store':
+        specifier: workspace:*
+        version: link:packages/event-store
+      '@store-checkout/slices':
+        specifier: workspace:*
+        version: link:packages/slices
       '@types/node':
         specifier: ^20.19.30
         version: 20.19.30
@@ -68,21 +68,21 @@ importers:
       '@axiomhq/nextjs':
         specifier: ^0.2.0
         version: 0.2.0(@axiomhq/logging@0.2.0(@axiomhq/js@1.6.0))(next@15.5.9(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))
-      '@em-slices/core':
-        specifier: workspace:*
-        version: link:../../packages/core
-      '@em-slices/event-store':
-        specifier: workspace:*
-        version: link:../../packages/event-store
-      '@em-slices/slices':
-        specifier: workspace:*
-        version: link:../../packages/slices
-      '@em-slices/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@sentry/nextjs':
         specifier: ^10.50.0
         version: 10.50.0(@opentelemetry/core@2.7.0(@opentelemetry/api@1.9.1))(@opentelemetry/sdk-trace-base@2.7.0(@opentelemetry/api@1.9.1))(next@15.5.9(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)(webpack@5.106.2)
+      '@store-checkout/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@store-checkout/event-store':
+        specifier: workspace:*
+        version: link:../../packages/event-store
+      '@store-checkout/slices':
+        specifier: workspace:*
+        version: link:../../packages/slices
+      '@store-checkout/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@vercel/analytics':
         specifier: ^1.6.1
         version: 1.6.1(next@15.5.9(@babel/core@7.29.0)(@opentelemetry/api@1.9.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
@@ -117,12 +117,12 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
       '@eslint/eslintrc':
         specifier: ^3
         version: 3.3.3
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       '@types/node':
         specifier: ^20
         version: 20.19.30
@@ -150,19 +150,19 @@ importers:
 
   packages/core:
     dependencies:
-      '@em-slices/event-store':
+      '@store-checkout/event-store':
         specifier: workspace:*
         version: link:../event-store
       zod:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       '@eslint/js':
         specifier: ^9.0.0
         version: 9.39.2
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       eslint:
         specifier: ^9.0.0
         version: 9.39.2(jiti@2.6.1)
@@ -182,12 +182,12 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       '@eslint/js':
         specifier: ^9.0.0
         version: 9.39.2
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       eslint:
         specifier: ^9.0.0
         version: 9.39.2(jiti@2.6.1)
@@ -206,19 +206,19 @@ importers:
 
   packages/em-slice-generator:
     dependencies:
-      '@em-slices/em-manager':
+      '@store-checkout/em-manager':
         specifier: workspace:*
         version: link:../em-manager
       zod:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       '@eslint/js':
         specifier: ^9.0.0
         version: 9.39.2
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       eslint:
         specifier: ^9.0.0
         version: 9.39.2(jiti@2.6.1)
@@ -250,12 +250,12 @@ importers:
         specifier: ^10.0.0
         version: 10.28.0
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       '@eslint/js':
         specifier: ^9.0.0
         version: 9.39.2
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       eslint:
         specifier: ^9.0.0
         version: 9.39.2(jiti@2.6.1)
@@ -271,13 +271,13 @@ importers:
 
   packages/slices:
     dependencies:
-      '@em-slices/core':
+      '@store-checkout/core':
         specifier: workspace:*
         version: link:../core
-      '@em-slices/event-store':
+      '@store-checkout/event-store':
         specifier: workspace:*
         version: link:../event-store
-      '@em-slices/ui':
+      '@store-checkout/ui':
         specifier: workspace:*
         version: link:../ui
       react:
@@ -293,12 +293,12 @@ importers:
         specifier: ^4.3.6
         version: 4.3.6
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       '@eslint/js':
         specifier: ^9.0.0
         version: 9.39.2
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.8
@@ -335,12 +335,12 @@ importers:
         specifier: ^19.0.0
         version: 19.1.0(react@19.1.0)
     devDependencies:
-      '@em-slices/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
       '@eslint/js':
         specifier: ^9.0.0
         version: 9.39.2
+      '@store-checkout/tsconfig':
+        specifier: workspace:*
+        version: link:../tsconfig
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.8
@@ -6704,8 +6704,8 @@ snapshots:
       '@typescript-eslint/parser': 8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.2(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-jsx-a11y: 6.10.2(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react: 7.37.5(eslint@9.39.2(jiti@2.6.1))
       eslint-plugin-react-hooks: 5.2.0(eslint@9.39.2(jiti@2.6.1))
@@ -6724,7 +6724,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)):
+  eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       '@nolyfill/is-core-module': 1.0.39
       debug: 4.4.3
@@ -6735,22 +6735,22 @@ snapshots:
       tinyglobby: 0.2.15
       unrs-resolver: 1.11.1
     optionalDependencies:
-      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
+      eslint-plugin-import: 2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)):
+  eslint-module-utils@2.12.1(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       debug: 3.2.7
     optionalDependencies:
       '@typescript-eslint/parser': 8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       eslint: 9.39.2(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
+      eslint-import-resolver-typescript: 3.10.1(eslint-plugin-import@2.32.0)(eslint@9.39.2(jiti@2.6.1))
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)):
+  eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1)):
     dependencies:
       '@rtsao/scc': 1.1.0
       array-includes: 3.1.9
@@ -6761,7 +6761,7 @@ snapshots:
       doctrine: 2.1.0
       eslint: 9.39.2(jiti@2.6.1)
       eslint-import-resolver-node: 0.3.9
-      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1(eslint-plugin-import@2.32.0(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1)))(eslint@9.39.2(jiti@2.6.1))
+      eslint-module-utils: 2.12.1(@typescript-eslint/parser@8.53.0(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3))(eslint-import-resolver-node@0.3.9)(eslint-import-resolver-typescript@3.10.1)(eslint@9.39.2(jiti@2.6.1))
       hasown: 2.0.2
       is-core-module: 2.16.1
       is-glob: 4.0.3

@@ -1,5 +1,5 @@
 #!/usr/bin/env tsx
-import { normalizePostgresUrlForPgSsl, pongoClient } from "@em-slices/event-store";
+import { normalizePostgresUrlForPgSsl, pongoClient } from "@store-checkout/event-store";
 import pg from "pg";
 
 async function main() {

@@ -16,13 +16,13 @@ export function generateAutomationHandler(_slice: Slice, processor: Processor): 
 
   const allTriggerEvents = [...new Set([...triggerEvents, ...dependencyEvents])];
   const eventImports = allTriggerEvents
-    .map((eventName) => `import type { ${eventName} } from "@em-slices/core";`)
+    .map((eventName) => `import type { ${eventName} } from "@store-checkout/core";`)
     .join("\n");
   const eventUnionType = allTriggerEvents.length > 0
     ? allTriggerEvents.join(" | ")
     : "never";
 
-  return `import type { MessageBus } from "@em-slices/core";
+  return `import type { MessageBus } from "@store-checkout/core";
 ${eventImports}
 
 /**

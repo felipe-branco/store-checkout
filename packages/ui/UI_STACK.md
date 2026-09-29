@@ -1,8 +1,8 @@
 # UI stack adoption guide
 
-`@em-slices/ui` ships as a **stack-agnostic skeleton**: layout shell, CSS design tokens, and minimal components so the monorepo compiles without MUI or Tailwind. Pick **one** stack below and implement components under the documented folders.
+`@store-checkout/ui` ships as a **stack-agnostic skeleton**: layout shell, CSS design tokens, and minimal components so the monorepo compiles without MUI or Tailwind. Pick **one** stack below and implement components under the documented folders.
 
-**Rule:** Slices and the web app import **`@em-slices/ui` only**. Do not import `@mui/*`, `lucide-react`, or app-local shadcn paths (`@/components/ui`) from slice UI code.
+**Rule:** Slices and the web app import **`@store-checkout/ui` only**. Do not import `@mui/*`, `lucide-react`, or app-local shadcn paths (`@/components/ui`) from slice UI code.
 
 ## Folder conventions (both paths)
 
@@ -20,8 +20,8 @@ packages/ui/src/
 Import styles in the app root layout:
 
 ```ts
-import "@em-slices/ui/tokens.css";
-import "@em-slices/ui/skeleton.css"; // remove when Tailwind/MUI styles replace it
+import "@store-checkout/ui/tokens.css";
+import "@store-checkout/ui/skeleton.css"; // remove when Tailwind/MUI styles replace it
 ```
 
 ---
@@ -129,7 +129,7 @@ Update `packages/em-slice-generator/src/templates/ui-component.template.ts` to u
 After choosing a stack:
 
 1. Update generated UI to match (MUI `sx` vs Tailwind classes).
-2. Add to [`POST_GENERATION_CHECKLIST.md`](../em-slice-generator/POST_GENERATION_CHECKLIST.md): slice UI imports `@em-slices/ui` only.
+2. Add to [`POST_GENERATION_CHECKLIST.md`](../em-slice-generator/POST_GENERATION_CHECKLIST.md): slice UI imports `@store-checkout/ui` only.
 3. Prefer **custom components** (`Button`, `Card`, `Input`) over raw primitives in slice UI.
 
 ---
@@ -142,7 +142,7 @@ After choosing a stack:
 | `ThemeProvider`, `useThemeMode` | Light/dark via `.dark` on `<html>` |
 | `Box`, `Stack`, `Typography`, `Container` | Layout primitives |
 | `Button`, `Card`, `Alert`, `TextField`, `Paper`, `Table*` | Minimal styled stubs |
-| `@em-slices/ui/tokens.css` | Design tokens |
-| `@em-slices/ui/skeleton.css` | Skeleton component styles |
+| `@store-checkout/ui/tokens.css` | Design tokens |
+| `@store-checkout/ui/skeleton.css` | Skeleton component styles |
 
 Replace stubs when following Path A or Path B above.

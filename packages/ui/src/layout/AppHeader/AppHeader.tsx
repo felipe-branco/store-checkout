@@ -16,7 +16,7 @@ export function AppHeader({ title, description, onToggleSidebar }: AppHeaderProp
           type="button"
           className="ui-app-header__toggle"
           onClick={onToggleSidebar}
-          aria-label="Alternar menu lateral"
+          aria-label="Toggle sidebar menu"
         >
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden>
             <path

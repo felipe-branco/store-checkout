@@ -6,8 +6,8 @@ import type {
   CommandResult,
   CommandFailure,
   ICommandDispatcher,
-} from "@em-slices/core";
-import type { Event } from "@em-slices/event-store";
+} from "@store-checkout/core";
+import type { Event } from "@store-checkout/event-store";
 
 type CommandHandler<C> = (
   command: C

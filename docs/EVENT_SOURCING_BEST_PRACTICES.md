@@ -20,7 +20,7 @@ Use one minor unit per major unit for your currency (typically `100` for two-dec
 Field names vary (`amount`, `paid_amount`, `price`, …) but the **unit is always minor units**. Document the currency in slice or API docs when it matters for adopters.
 
 ```typescript
-import { majorUnitsToMinorUnits } from "@em-slices/core";
+import { majorUnitsToMinorUnits } from "@store-checkout/core";
 
 // ✅ Persist minor units in decide / translator output
 const amount = majorUnitsToMinorUnits(checkoutTotalMajor);

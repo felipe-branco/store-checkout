@@ -31,14 +31,14 @@ export function generateTranslatorTestFile(slice: Slice, processor: Processor): 
   const allInternalCommands = [...new Set([...outboundCommands, ...internalSliceCommands])];
 
   const eventImports = allExternalEvents
-    .map((eventName) => `import type { ${eventName} } from "@em-slices/core";`)
+    .map((eventName) => `import type { ${eventName} } from "@store-checkout/core";`)
     .join("\n");
 
   const firstExternalEvent = allExternalEvents[0] || "ExternalEvent";
   const firstInternalCommand = allInternalCommands[0] || "InternalCommand";
 
   return `import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { ICommandDispatcher } from "@em-slices/core";
+import type { ICommandDispatcher } from "@store-checkout/core";
 ${eventImports}
 import { translate${translatorName}, parseExternalPayload } from "./${sliceNamePascal}Translator";
 

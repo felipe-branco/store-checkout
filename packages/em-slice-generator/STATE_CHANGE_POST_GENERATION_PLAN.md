@@ -58,7 +58,7 @@ The generated `evolve(state, event) → state` applies events to aggregate state
 The generated test uses `DeciderSpecification.for({ decide, evolve, initialState })` with a first test case already wired up using example data from `slice.json`.
 
 ### Actions
-1. Verify the first test passes as-is: `pnpm --filter @em-slices/slices exec vitest run src/<SliceName>/`
+1. Verify the first test passes as-is: `pnpm --filter @store-checkout/slices exec vitest run src/<SliceName>/`
 2. **Integration Tests (required)** — The generator produces integration tests by default. Verify they pass to ensure events are persisted to PostgreSQL:
    - Use `CommandHandlerSpec.for()` with `setupTestDatabase()` from `test-utils`
    - Use `expectNewEvents()` helper to verify events are stored correctly
@@ -146,7 +146,7 @@ The generated `routes.ts` is framework-agnostic. Create a thin Next.js adapter.
 ```typescript
 import { NextResponse } from "next/server";
 import { getCommandDispatcher } from "@/lib/messageBus";
-import { handleCommandRoute } from "@em-slices/slices/src/<SliceName>/routes";
+import { handleCommandRoute } from "@store-checkout/slices/src/<SliceName>/routes";
 
 export async function POST(request: Request) {
   try {
@@ -189,8 +189,8 @@ Remove temporary planning files (local notes, draft `slice.json` outside `packag
 ## Step 7: Verify
 
 1. **TypeScript**: `pnpm exec tsc --noEmit --project packages/slices/tsconfig.json`
-2. **Tests**: `pnpm --filter @em-slices/slices exec vitest run src/<SliceName>/`
-3. **Lint**: `pnpm --filter @em-slices/slices lint`
+2. **Tests**: `pnpm --filter @store-checkout/slices exec vitest run src/<SliceName>/`
+3. **Lint**: `pnpm --filter @store-checkout/slices lint`
 
 ---
 
@@ -208,7 +208,7 @@ Remove temporary planning files (local notes, draft `slice.json` outside `packag
 
 ## Key Conventions
 
-- Events use emmett's `Event<Type, Data, EventMetadata>` — `EventMetadata` from `@em-slices/core` includes `correlation_id`, `causation_id`, `streamName`
+- Events use emmett's `Event<Type, Data, EventMetadata>` — `EventMetadata` from `@store-checkout/core` includes `correlation_id`, `causation_id`, `streamName`
 - Event shape is `{ type: "EventName", data: {...}, metadata: { now, causation_id, streamName } }` — propagate metadata for projections and audit
 - Command shape is `{ type: "CommandName", data: {...}, metadata: { now, correlation_id?, causation_id? } }`
 - Timestamp fields ending with `At` (e.g., `registeredAt`) are typed as `number` (from `Date.now()`)

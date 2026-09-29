@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { ThemeProvider } from "@em-slices/ui";
+import { ThemeProvider } from "@store-checkout/ui";
 import { AppLayoutGate } from "@/components/AppLayoutGate";
 import type { ResolvedThemeMode } from "@/lib/theme-server";
 

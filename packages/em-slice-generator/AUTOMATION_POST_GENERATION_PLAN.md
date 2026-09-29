@@ -39,8 +39,8 @@ Replace the TODO stub in `<SliceName>Automation.ts` with the business logic.
 ### Template
 ```typescript
 import { randomUUID } from "crypto";
-import type { MessageBus } from "@em-slices/core";
-import type { ItemAdded } from "@em-slices/core";
+import type { MessageBus } from "@store-checkout/core";
+import type { ItemAdded } from "@store-checkout/core";
 import type { ScheduleAssessmentCommand } from "../ScheduleAssessment/ScheduleAssessmentCommand";
 
 export async function handleAutomation(
@@ -90,7 +90,7 @@ Replace the test scaffold TODOs with real assertions.
 ### Mock Setup Pattern
 ```typescript
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import type { MessageBus } from "@em-slices/core";
+import type { MessageBus } from "@store-checkout/core";
 
 let messageBus: MessageBus;
 
@@ -132,8 +132,8 @@ Add the event subscription to `packages/slices/src/automations.ts` so the automa
 
 ### Template
 ```typescript
-import type { MessageBus, EventSubscription } from "@em-slices/core";
-import type { ItemAdded } from "@em-slices/core";
+import type { MessageBus, EventSubscription } from "@store-checkout/core";
+import type { ItemAdded } from "@store-checkout/core";
 import { handleNotifyItemAddedAutomation } from "./NotifyItemAddedAutomator/NotifyItemAddedAutomation";
 
 export function registerAllAutomations(
@@ -178,7 +178,7 @@ If it's missing, add the registration following the existing pattern.
 ## Step 5: Verify
 
 1. **TypeScript**: `pnpm exec tsc --noEmit --project packages/slices/tsconfig.json`
-2. **Tests**: `pnpm --filter @em-slices/slices exec vitest run src/<SliceName>/`
+2. **Tests**: `pnpm --filter @store-checkout/slices exec vitest run src/<SliceName>/`
 3. **All tests**: check all tests still pass after changes
 
 ---
@@ -204,7 +204,7 @@ If it's missing, add the registration following the existing pattern.
 - Commands are dispatched via `messageBus.send(command)` — command handlers are registered in `commands.ts`
 - Commands use shape `{ type, data, metadata: { now } }` — set `now: new Date()` (Date object, not number)
 - `registerAllAutomations` no longer receives `eventStore`
-- Import both the event type (from `@em-slices/core`) and command type (from STATE_CHANGE slice)
+- Import both the event type (from `@store-checkout/core`) and command type (from STATE_CHANGE slice)
 - Business rules come from `slice.json → specifications[].comments`
 - Use `randomUUID()` for new aggregate IDs
 - Use `!` non-null assertions when accessing array elements from mock calls (strict TS)

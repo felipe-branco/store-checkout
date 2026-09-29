@@ -8,8 +8,8 @@ This repository uses **[Zod](https://zod.dev)** (v4, e.g. `^4.3.6`) as the defau
 ## Conventions
 
 - **UUIDs:** use `z.uuid()`, not deprecated `z.string().uuid()` (see `tasks/lessons.md`).
-- **Country-specific IDs (CPF, SSN, etc.):** not shipped in `@em-slices/core`. Add validators in your app or slice package when you need them.
-- **Version alignment:** prefer the same `zod` range as `@em-slices/slices` (and other packages that already depend on Zod) so the workspace does not resolve multiple majors; use root `pnpm` overrides if needed.
+- **Country-specific IDs (CPF, SSN, etc.):** not shipped in `@store-checkout/core`. Add validators in your app or slice package when you need them.
+- **Version alignment:** prefer the same `zod` range as `@store-checkout/slices` (and other packages that already depend on Zod) so the workspace does not resolve multiple majors; use root `pnpm` overrides if needed.
 - **New packages:** if a package needs validation or schema-derived types, add `zod` to that package’s `package.json`—do not rely on transitive Zod unless the package only re-exports types.
 
 ## Slice boundaries

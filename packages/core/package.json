@@ -1,5 +1,5 @@
 {
-  "name": "@em-slices/core",
+  "name": "@store-checkout/core",
   "version": "0.1.0",
   "private": true,
   "main": "./src/index.ts",
@@ -21,11 +21,11 @@
     "test:coverage": "vitest run --coverage --passWithNoTests"
   },
   "dependencies": {
-    "@em-slices/event-store": "workspace:*",
+    "@store-checkout/event-store": "workspace:*",
     "zod": "^4.3.6"
   },
   "devDependencies": {
-    "@em-slices/tsconfig": "workspace:*",
+    "@store-checkout/tsconfig": "workspace:*",
     "typescript": "^5",
     "vitest": "^2.0.0",
     "eslint": "^9.0.0",

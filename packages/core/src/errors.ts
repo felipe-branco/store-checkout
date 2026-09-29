@@ -40,7 +40,7 @@ export type SendResult =
 export interface ICommandDispatcher {
   register<C extends { type: string }>(
     commandType: C["type"],
-    handler: (command: C) => Promise<CommandResult<import("@em-slices/event-store").Event>>
+    handler: (command: C) => Promise<CommandResult<import("@store-checkout/event-store").Event>>
   ): void;
   sendCommand(
     command: { type: string },

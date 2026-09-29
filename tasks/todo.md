@@ -1,11 +1,16 @@
-# EM Slices Starter — tasks
+# Store Checkout — tasks
 
-## Template extraction (complete)
-- [x] Tutorial migration snapshot
-- [x] Thin web-app shell (pt-BR)
-- [x] docs/TEMPLATE.md
+## Done
 
-## Review
+- [x] Monorepo (`store-checkout`, `@store-checkout/*`, en-US shell)
+- [x] Minimal project docs in `docs/project/`
 
-- [ ] Add first real slice via EM workflow
-- [ ] Add authentication when needed
+## Next
+
+- [ ] Import checkout EM export → fill in [EVENT_MODEL.md](../docs/project/EVENT_MODEL.md)
+- [ ] Generate and implement slices; wire API + kiosk UI
+- [ ] Theme / full-width checkout flow (`@store-checkout/ui`)
+
+## Later
+
+- [ ] Auth (if needed)

@@ -1,6 +1,6 @@
 # Lessons learned
 
-Framework-only notes for the EM Slices Starter template.
+Framework and product notes for **store-checkout**.
 
 ## Event sourcing
 
@@ -21,12 +21,12 @@ Framework-only notes for the EM Slices Starter template.
 
 ## UI
 
-- Default locale **pt-BR** in the sample web shell (`lang="pt-BR"`, Portuguese copy on home/maintenance pages). Change `lang` and user-facing strings when you fork; the template does not ship i18n infrastructure.
-- UI skeleton via `@em-slices/ui`; pick MUI or Tailwind + shadcn in `packages/ui` (see `UI_STACK.md`)
+- Default locale **en-US** in the web shell (`lang="en-US"`, English copy on home/maintenance pages). No i18n framework.
+- UI skeleton via `@store-checkout/ui`; pick MUI or Tailwind + shadcn in `packages/ui` (see `UI_STACK.md`)
 - No em dashes in user-facing copy
 
 ## Verification
 
 - Run `pnpm test`, `pnpm lint`, and `pnpm build` before merging template changes
 - Keep legacy product brand strings out of the repo (grep gate in CI or local checks)
-- Keep old npm scope out of imports (use `@em-slices/*` only)
+- Keep old npm scope out of imports (use `@store-checkout/*` only)

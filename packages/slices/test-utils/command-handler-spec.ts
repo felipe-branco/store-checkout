@@ -1,7 +1,7 @@
-import type { PostgresEventStore } from "@em-slices/event-store";
-import { createEmmettEventStore, projections } from "@em-slices/event-store";
-import type { Event } from "@em-slices/event-store";
-import type { CommandResult } from "@em-slices/core";
+import type { PostgresEventStore } from "@store-checkout/event-store";
+import { createEmmettEventStore, projections } from "@store-checkout/event-store";
+import type { Event } from "@store-checkout/event-store";
+import type { CommandResult } from "@store-checkout/core";
 
 /**
  * Stream state for setting up initial events in a stream

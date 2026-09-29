@@ -16,10 +16,10 @@ const nextConfig: NextConfig = {
     root: monorepoRoot,
   },
   transpilePackages: [
-    "@em-slices/ui",
-    "@em-slices/slices",
-    "@em-slices/event-store",
-    "@em-slices/core",
+    "@store-checkout/ui",
+    "@store-checkout/slices",
+    "@store-checkout/event-store",
+    "@store-checkout/core",
   ],
   serverExternalPackages: [
     "pg",

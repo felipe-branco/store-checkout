@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { loadMigrationById } from "@em-slices/em-manager";
-import { resolveSliceRef } from "@em-slices/em-manager";
+import { loadMigrationById } from "@store-checkout/em-manager";
+import { resolveSliceRef } from "@store-checkout/em-manager";
 import { resolvedViewToSlice } from "./resolved-view-to-slice.js";
 
 const addItemRef = {

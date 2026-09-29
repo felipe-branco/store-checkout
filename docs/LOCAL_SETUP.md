@@ -45,8 +45,8 @@ pnpm dev
 
 ## SSL / hosted Postgres
 
-For Neon or other hosted providers, use `sslmode=require` in the URI. See `@em-slices/event-store` URL normalization for details.
+For Neon or other hosted providers, use `sslmode=require` in the URI. See `@store-checkout/event-store` URL normalization for details.
 
 ## Next steps
 
-Follow [TEMPLATE.md](./TEMPLATE.md) to add your first slice.
+[docs/project/README.md](./project/README.md) · [TEMPLATE.md](./TEMPLATE.md)

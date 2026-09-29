@@ -1,13 +1,16 @@
-# EM Slices Starter
+# Store Checkout
 
-Neutral **event-sourced vertical slice** template: PostgreSQL ([Emmett](https://github.com/event-driven-io/emmett) via `@em-slices/event-store`), **Next.js 15** (React 19, App Router, Turbopack), **pnpm** monorepo with **Turborepo**. The sample web shell uses **pt-BR** locale and Portuguese copy; change `lang` and strings when you fork (see [docs/TEMPLATE.md](docs/TEMPLATE.md)). Runtime validation uses **Zod 4**.
+**Web Checkout take-home:** self-service snack bar checkout on a kiosk tablet (menu, order, simulated payment, persistence). Spec: [docs/project/web_checkout_v0.1.pdf](docs/project/web_checkout_v0.1.pdf). Product and modeling notes: **[docs/project/README.md](docs/project/README.md)**.
 
-No product slices are shipped. Follow **[docs/TEMPLATE.md](docs/TEMPLATE.md)** to add your first slice.
+Built on an **event-sourced vertical slice** stack: PostgreSQL ([Emmett](https://github.com/event-driven-io/emmett) via `@store-checkout/event-store`), **Next.js 15** (React 19, App Router, Turbopack), **pnpm** monorepo with **Turborepo**. UI locale **en-US**. Runtime validation uses **Zod 4**.
+
+Checkout product slices are not shipped yet. See [docs/project/README.md](docs/project/README.md) and [docs/TEMPLATE.md](docs/TEMPLATE.md).
 
 ## Monorepo
 
 | Item | Value |
 |------|-------|
+| Root package | `store-checkout` |
 | Package manager | pnpm 10 |
 | Node | 24+ (`.nvmrc`) |
 | Tasks | `turbo` — `pnpm dev`, `build`, `test`, `lint` |
@@ -27,14 +30,14 @@ Open [http://localhost:3000](http://localhost:3000). Health check: `GET /api/hea
 ## Workspace packages (8)
 
 ```
-apps/web-app/           @em-slices/web-app — Next.js shell
-packages/core/          @em-slices/core — primitives (errors, money, metadata)
-packages/event-store/   @em-slices/event-store — PostgreSQL / Emmett
-packages/slices/        @em-slices/slices — vertical slices (empty registries)
-packages/ui/            @em-slices/ui — UI skeleton (see packages/ui/UI_STACK.md)
-packages/em-manager/    @em-slices/em-manager — EM migrations CLI
-packages/em-slice-generator/  @em-slices/em-slice-generator — codegen
-packages/tsconfig/      @em-slices/tsconfig — shared TS configs
+apps/web-app/           @store-checkout/web-app — Next.js shell
+packages/core/          @store-checkout/core — primitives (errors, money, metadata)
+packages/event-store/   @store-checkout/event-store — PostgreSQL / Emmett
+packages/slices/        @store-checkout/slices — vertical slices (empty registries)
+packages/ui/            @store-checkout/ui — UI skeleton (see packages/ui/UI_STACK.md)
+packages/em-manager/    @store-checkout/em-manager — EM migrations CLI
+packages/em-slice-generator/  @store-checkout/em-slice-generator — codegen
+packages/tsconfig/      @store-checkout/tsconfig — shared TS configs
 ```
 
 ## EM workflow
@@ -67,6 +70,7 @@ If you previously used different local Postgres credentials, run `docker compose
 
 ## Documentation
 
+- [docs/project/README.md](docs/project/README.md) — take-home spec and project notes
 - [docs/TEMPLATE.md](docs/TEMPLATE.md) — first slice walkthrough
 - [docs/SLICE_IMPLEMENTATION_WORKFLOW.md](docs/SLICE_IMPLEMENTATION_WORKFLOW.md)
 - [docs/EVENT_SOURCING_BEST_PRACTICES.md](docs/EVENT_SOURCING_BEST_PRACTICES.md)

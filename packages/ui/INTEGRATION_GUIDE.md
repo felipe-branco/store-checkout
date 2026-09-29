@@ -1,4 +1,4 @@
-# @em-slices/ui integration
+# @store-checkout/ui integration
 
 This package is a **UI skeleton**. It is not tied to MUI or Tailwind.
 
@@ -9,14 +9,14 @@ This package is a **UI skeleton**. It is not tied to MUI or Tailwind.
 The web app imports design tokens and skeleton styles in `apps/web-app/src/app/layout.tsx`:
 
 ```ts
-import "@em-slices/ui/tokens.css";
-import "@em-slices/ui/skeleton.css";
+import "@store-checkout/ui/tokens.css";
+import "@store-checkout/ui/skeleton.css";
 ```
 
-Slice and app code import components from `@em-slices/ui` only:
+Slice and app code import components from `@store-checkout/ui` only:
 
 ```tsx
-import { Button, Card, Typography, AppLayout } from "@em-slices/ui";
+import { Button, Card, Typography, AppLayout } from "@store-checkout/ui";
 ```
 
 ## Fonts

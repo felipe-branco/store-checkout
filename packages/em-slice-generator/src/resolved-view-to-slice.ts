@@ -1,4 +1,4 @@
-import type { ResolvedElement, ResolvedSliceView, ResolvedSpecification } from "@em-slices/em-manager";
+import type { ResolvedElement, ResolvedSliceView, ResolvedSpecification } from "@store-checkout/em-manager";
 import type {
   Slice,
   SliceStatus,

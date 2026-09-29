@@ -1,4 +1,4 @@
-import type { MessageBus } from "@em-slices/event-store";
+import type { MessageBus } from "@store-checkout/event-store";
 
 export type AutomationContext = Record<string, never>;
 

@@ -1,4 +1,4 @@
-# EM Slices Starter — First Slice Walkthrough
+# Store Checkout — First slice walkthrough
 
 This guide walks through adding your first vertical slice to the template. The repo ships with a hand-crafted tutorial snapshot (`packages/em-manager/migrations/20260701000000_tutorial.json`) containing a toy **Add Item** state change and **Item List** state view.
 
@@ -91,7 +91,7 @@ Use this in route handlers until you add edge authentication (see below).
 ## 7. Test and drift check
 
 ```bash
-pnpm --filter @em-slices/slices exec vitest run AddItem
+pnpm --filter @store-checkout/slices exec vitest run AddItem
 pnpm em:slice:check-drift --all
 ```
 
@@ -118,7 +118,7 @@ See `docs/SLICE_IMPLEMENTATION_WORKFLOW.md` for ongoing slice conventions.
 
 ## 10. Slice UI
 
-Generated and hand-written slice UI must import **`@em-slices/ui` only** (no `@mui/*`, no app-local shadcn paths).
+Generated and hand-written slice UI must import **`@store-checkout/ui` only** (no `@mui/*`, no app-local shadcn paths).
 
 The UI package is a **skeleton** until you adopt a stack. Read [packages/ui/UI_STACK.md](../packages/ui/UI_STACK.md) for:
 
@@ -129,7 +129,7 @@ Prefer custom components (`Button`, `Card`, `Input`) over layout primitives in s
 
 ## 11. Locale and sample copy
 
-The starter ships **pt-BR** in `apps/web-app` (`lang="pt-BR"` on `<html>`, Portuguese strings on the home, maintenance, and system-error pages). There is no i18n framework in the template. When you fork, update `layout.tsx`, page copy, and sidebar labels in `@em-slices/ui` to match your locale.
+The web app uses **en-US** (`lang="en-US"` on `<html>`, English strings on the home, maintenance, and system-error pages). There is no i18n framework. Update `layout.tsx`, page copy, and sidebar labels in `@store-checkout/ui` if you change locale.
 
 ## Related docs
 

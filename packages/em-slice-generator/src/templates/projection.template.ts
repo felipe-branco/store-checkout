@@ -34,7 +34,7 @@ export function generateProjectionHandler(slice: Slice, readModel: ReadModel): s
   // For STATE_VIEW, typically all events in the slice
   const eventNames = slice.events.map((e) => toPascalCase(e.title));
   const eventImports = eventNames
-    .map((name) => `import type { ${name} } from "@em-slices/core";`)
+    .map((name) => `import type { ${name} } from "@store-checkout/core";`)
     .join("\n");
   const eventUnionType = eventNames.join(" | ");
 
@@ -50,8 +50,8 @@ export function generateProjectionHandler(slice: Slice, readModel: ReadModel): s
 
   const canHandleArray = eventNames.map((n) => `"${n}"`).join(", ");
 
-  return `import { pongoSingleStreamProjection } from "@em-slices/event-store";
-import type { ReadEvent, PostgresReadEventMetadata, PongoDb } from "@em-slices/event-store";
+  return `import { pongoSingleStreamProjection } from "@store-checkout/event-store";
+import type { ReadEvent, PostgresReadEventMetadata, PongoDb } from "@store-checkout/event-store";
 ${eventImports}
 
 /**

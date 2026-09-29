@@ -3,7 +3,7 @@
 import { existsSync } from "fs";
 import { join, resolve, dirname } from "path";
 import { fileURLToPath } from "url";
-import { resolveSliceDir } from "@em-slices/em-manager";
+import { resolveSliceDir } from "@store-checkout/em-manager";
 import { generateFromResolvedView, getSlicesOutputDir } from "./generator.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -69,7 +69,7 @@ Summary for agent:
   2. Follow all steps in order (decide, evolve, tests, registration, routes, etc.)
   3. Complete POST_GENERATION_CHECKLIST.md items for ${sliceType}
   4. Verify: pnpm exec tsc --noEmit --project packages/slices/tsconfig.json
-  5. Run tests: pnpm --filter @em-slices/slices exec vitest run
+  5. Run tests: pnpm --filter @store-checkout/slices exec vitest run
 
 `);
 }

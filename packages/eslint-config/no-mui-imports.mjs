@@ -9,15 +9,15 @@ export const noMuiImportsRule = {
       paths: [
         {
           name: '@mui/material',
-          message: 'Import UI from @em-slices/ui instead. See packages/ui/UI_STACK.md.',
+          message: 'Import UI from @store-checkout/ui instead. See packages/ui/UI_STACK.md.',
         },
         {
           name: '@mui/icons-material',
-          message: 'Icons belong inside @em-slices/ui. See packages/ui/UI_STACK.md.',
+          message: 'Icons belong inside @store-checkout/ui. See packages/ui/UI_STACK.md.',
         },
         {
           name: '@mui/system',
-          message: 'Import UI from @em-slices/ui instead.',
+          message: 'Import UI from @store-checkout/ui instead.',
         },
       ],
       patterns: [
@@ -42,7 +42,7 @@ export const noEmotionImportsRule = {
         },
         {
           name: '@emotion/styled',
-          message: 'Use @em-slices/ui components instead.',
+          message: 'Use @store-checkout/ui components instead.',
         },
         {
           name: '@emotion/cache',

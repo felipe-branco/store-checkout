@@ -16,7 +16,7 @@ export function generateProjectionTestFile(slice: Slice, readModel: ReadModel): 
   // Build event imports
   const eventNames = slice.events.map((e) => toEventName(e.title, e.context));
   const eventImports = eventNames
-    .map((name) => `import type { ${name} } from "@em-slices/core";`)
+    .map((name) => `import type { ${name} } from "@store-checkout/core";`)
     .join("\n");
 
   const firstEvent = slice.events[0];
@@ -107,7 +107,7 @@ export function generateProjectionTestFile(slice: Slice, readModel: ReadModel): 
   return `import { describe, it, expect, beforeAll, afterAll } from "vitest";
 import { randomUUID } from "crypto";
 ${eventImports}
-import type { ReadEvent, PostgresReadEventMetadata } from "@em-slices/event-store";
+import type { ReadEvent, PostgresReadEventMetadata } from "@store-checkout/event-store";
 import { evolve${queryFunctionImport}, type ${readModelName}ReadModel } from "./${projectionName}Projection";
 import { setupTestDatabase, cleanupTestDatabase } from "../../test-utils/test-database";
 import { expectProjectionDocument${hasGetAll ? `, expectProjectionDocuments` : ""} } from "../../test-utils/helpers";

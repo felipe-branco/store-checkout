@@ -31,7 +31,7 @@ export function generateCommandRoute(slice: Slice, command: Command): string {
   return `import { randomUUID } from "crypto";
 import { z } from "zod";
 import type { ${commandName}Command } from "./${sliceName}Command";
-import type { ICommandDispatcher } from "@em-slices/core";
+import type { ICommandDispatcher } from "@store-checkout/core";
 
 // ---------------------------------------------------------------------------
 // Zod schema — validates incoming request params before creating the command
@@ -163,7 +163,7 @@ export function generateProjectionRoute(slice: Slice, readModel: ReadModel): str
     ? `getAll${readModelName}, get${readModelName}ById`
     : `get${readModelName}ById`;
 
-  return `import type { EventStore, PongoDb } from "@em-slices/event-store";
+  return `import type { EventStore, PongoDb } from "@store-checkout/event-store";
 import { ${queryFunctionImports}, type ${readModelName}ReadModel } from "./${projectionName}Projection";
 
 /**
@@ -250,7 +250,7 @@ export function generateTranslatorRoute(slice: Slice, processor: Processor): str
   const sliceName = toPascalCase(slice.title);
   const translatorName = toPascalCase(processor.title);
 
-  return `import type { ICommandDispatcher } from "@em-slices/core";
+  return `import type { ICommandDispatcher } from "@store-checkout/core";
 import {
   translate${translatorName},
   parseExternalPayload,
