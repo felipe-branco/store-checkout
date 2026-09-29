@@ -4,7 +4,7 @@
 
 Built on an **event-sourced vertical slice** stack: PostgreSQL ([Emmett](https://github.com/event-driven-io/emmett) via `@store-checkout/event-store`), **Next.js 15** (React 19, App Router, Turbopack), **pnpm** monorepo with **Turborepo**. UI locale **en-US**. Runtime validation uses **Zod 4**.
 
-Checkout slices are scaffolded (`slice.ref.json` only). See [docs/project/EVENT_MODEL.md](docs/project/EVENT_MODEL.md).
+Checkout kiosk UI runs at `/` with theme from `@store-checkout/ui` (`checkout-theme.css`). EM slices still in progress — see [docs/project/README.md](docs/project/README.md).
 
 ## Monorepo
 

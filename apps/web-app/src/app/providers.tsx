@@ -1,20 +1,18 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { ThemeProvider } from "@store-checkout/ui";
+import { CheckoutThemeProvider } from "@store-checkout/ui";
 import { AppLayoutGate } from "@/components/AppLayoutGate";
-import type { ResolvedThemeMode } from "@/lib/theme-server";
 
-export function Providers({
-  children,
-  initialResolvedMode,
-}: {
-  children: ReactNode;
-  initialResolvedMode: ResolvedThemeMode;
-}) {
+export function Providers({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider initialResolvedMode={initialResolvedMode}>
+    <CheckoutThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      enableSystem={false}
+      disableTransitionOnChange
+    >
       <AppLayoutGate>{children}</AppLayoutGate>
-    </ThemeProvider>
+    </CheckoutThemeProvider>
   );
 }

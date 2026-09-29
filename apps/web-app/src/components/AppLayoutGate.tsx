@@ -7,7 +7,10 @@ import { AppLayout, AppSidebar, Box } from "@store-checkout/ui";
 const PLAIN_FULL_WIDTH_PREFIXES = ["/maintenance", "/system-error"];
 
 function isPlainFullWidthPath(pathname: string): boolean {
-  return PLAIN_FULL_WIDTH_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+  if (pathname === "/") return true;
+  return PLAIN_FULL_WIDTH_PREFIXES.some(
+    (prefix) => prefix !== "/" && pathname.startsWith(prefix)
+  );
 }
 
 export function AppLayoutGate({ children }: { children: ReactNode }) {

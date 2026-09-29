@@ -40,4 +40,22 @@ export {
   type ResolvedThemeMode,
 } from './ThemeProvider';
 
+export { CheckoutThemeProvider, type CheckoutThemeProviderProps } from './CheckoutThemeProvider';
+export { ThemeToggle } from './ThemeToggle';
+
+export { Kiosk } from './kiosk/kiosk';
+export { cn } from './lib/utils';
+export { formatPrice, pluralize } from './lib/format';
+export type {
+  Category,
+  Product,
+  PaymentMethod,
+  OrderItemInput,
+  CreateOrderInput,
+  StockConflict,
+  OrderResult,
+  CreateOrderResponse,
+} from './lib/kiosk-types';
+export { CATEGORIES, MAX_QTY_PER_ITEM } from './lib/kiosk-types';
+
 export { tokenNames, type TokenName } from './tokens/tokens';

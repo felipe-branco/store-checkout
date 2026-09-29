@@ -7,7 +7,8 @@
   "exports": {
     ".": "./src/index.ts",
     "./tokens.css": "./src/tokens/tokens.css",
-    "./skeleton.css": "./src/styles/skeleton.css"
+    "./skeleton.css": "./src/styles/skeleton.css",
+    "./checkout-theme.css": "./src/styles/checkout-theme.css"
   },
   "typeScriptVersion": "5.0.0",
   "scripts": {
@@ -16,7 +17,15 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage --passWithNoTests"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@base-ui/react": "^1.5.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.563.0",
+    "next-themes": "^0.4.6",
+    "swr": "^2.5.1",
+    "tailwind-merge": "^3.3.1"
+  },
   "devDependencies": {
     "@store-checkout/tsconfig": "workspace:*",
     "next": "^15.0.0",
