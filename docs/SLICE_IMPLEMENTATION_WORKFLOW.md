@@ -1,6 +1,6 @@
 # Slice Implementation Workflow
 
-Flow from Event Modelers board → slice pointers → generated code → implemented slice.
+Flow from [Event Modelers](https://app.eventmodelers.ai/) board → slice pointers → generated code → implemented slice. Visual board export: [EVENT_MODEL.md](project/EVENT_MODEL.md#board-diagram-event-modelers-export) (PNG in `docs/project/assets/`).
 
 Start with [docs/TEMPLATE.md](TEMPLATE.md) for the tutorial **Add item** / **Item list** slices.
 

@@ -26,6 +26,8 @@ make dev
 
 Open [http://localhost:3000](http://localhost:3000). With the dev server running, `make health` checks `GET /api/health`.
 
+**Production:** [docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md).
+
 ## Workspace packages (8)
 
 ```
@@ -70,6 +72,7 @@ If you previously used different local Postgres credentials, run `docker compose
 ## Documentation
 
 - [docs/project/README.md](docs/project/README.md) — take-home spec and project notes
+- [docs/project/EVENT_MODEL.md](docs/project/EVENT_MODEL.md) — slices, API map, [Event Modelers board image](docs/project/assets/mashgin-checkout-event-board-2026-09-30.png)
 - [docs/TEMPLATE.md](docs/TEMPLATE.md) — first slice walkthrough
 - [docs/SLICE_IMPLEMENTATION_WORKFLOW.md](docs/SLICE_IMPLEMENTATION_WORKFLOW.md)
 - [docs/EVENT_SOURCING_BEST_PRACTICES.md](docs/EVENT_SOURCING_BEST_PRACTICES.md)

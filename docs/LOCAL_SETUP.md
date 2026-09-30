@@ -51,6 +51,8 @@ make health
 | `make health` | `curl` `/api/health` (dev server must be running) |
 | `make test` / `lint` / `build` | Same as pnpm scripts |
 
+**Deploy:** [DEPLOY_VERCEL.md](./DEPLOY_VERCEL.md) — Vercel monorepo root `apps/web-app`, hosted `DATABASE_URL`, kiosk env vars.
+
 ## Environment
 
 **Required for event store / health:** `DATABASE_URL` in `apps/web-app/.env.local`.

@@ -18,7 +18,7 @@ Keep these aligned when behavior or EM exports change (Phase 2 of the implementa
 |----------|---------|
 | [EVENT_MODEL.md](./EVENT_MODEL.md) | Slice list, dependency order, HTTP API map, automations, Stock Products List |
 | [DECISIONS.md](./DECISIONS.md) | Stack, catalog, cart/stock orchestration, payment sim, logging, production kiosk gate |
-| [../LOCAL_SETUP.md](../LOCAL_SETUP.md) | Makefile, Docker Postgres, env vars, health check, optional observability |
+| [../DEPLOY_VERCEL.md](../DEPLOY_VERCEL.md) | Vercel deploy (Postgres, env, monorepo root `apps/web-app`) |
 | [../../apps/web-app/src/app/api/README.md](../../apps/web-app/src/app/api/README.md) | Route → slice handler map, kiosk session cookie, registration checklist |
 | [../PROJECTION_REBUILD_PLAN.md](../PROJECTION_REBUILD_PLAN.md) | `pnpm rebuild:projections`, `manual-rebuild-config.ts` |
 | [../SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md) | `pnpm em:slice:*`, drift, mark-status |
@@ -31,6 +31,7 @@ Keep these aligned when behavior or EM exports change (Phase 2 of the implementa
 
 ## Other assets
 
-| Doc | Purpose |
-|-----|---------|
+| Asset | Purpose |
+|-------|---------|
+| [EVENT_MODEL.md](./EVENT_MODEL.md) — [board PNG](./assets/mashgin-checkout-event-board-2026-09-30.png) | Event Modelers ([app.eventmodelers.ai](https://app.eventmodelers.ai/)) export of **MashginCheckout** / Self-service checkout (2026-09-30) |
 | [vercel-v0-self-service-store-theme-source.zip](./vercel-v0-self-service-store-theme-source.zip) | v0 export reference |
