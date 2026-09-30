@@ -6,8 +6,8 @@
 
 | Doc | Purpose |
 |-----|---------|
-| [DECISIONS.md](./DECISIONS.md) | Stack, EM, v0 theme choices |
-| [EVENT_MODEL.md](./EVENT_MODEL.md) | MashginCheckout slices |
+| [DECISIONS.md](./DECISIONS.md) | Stack, EM, v0 theme, cart/stock API orchestration |
+| [EVENT_MODEL.md](./EVENT_MODEL.md) | MashginCheckout slices, HTTP cart/products API |
 | [vercel-v0-self-service-store-theme-source.zip](./vercel-v0-self-service-store-theme-source.zip) | v0 export reference |
 
 Framework: [TEMPLATE.md](../TEMPLATE.md), [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Tasks: [tasks/todo.md](../../tasks/todo.md).

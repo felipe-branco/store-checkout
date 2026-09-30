@@ -8,8 +8,7 @@ import {
   handleAddItemToCart,
   type AddItemToCartCommand,
 } from "./AddItemToCartCommand";
-import type { Event } from "@store-checkout/event-store";
-import type { CartCreated, ItemAddedToCart, ItemRemovedFromCart, CartCleared } from "@store-checkout/core";
+import type { CartCreated, ItemAddedToCart } from "@store-checkout/core";
 import { CommandHandlerSpec } from "../../test-utils/command-handler-spec";
 import { expectNewEvents } from "../../test-utils/helpers";
 import { setupTestDatabase } from "../../test-utils/test-database";
@@ -39,7 +38,8 @@ describe("AddItemToCart", () => {
   };
 
   it("emits ItemAddedToCart when cart exists", () => {
-    given([cartCreated] as Event[])
+    // DeciderSpecification types `given` from this slice's output event; stream replay includes CartCreated.
+    given([cartCreated] as unknown as ItemAddedToCart[])
       .when({
         type: "AddItemToCart",
         data: {
@@ -125,28 +125,26 @@ describe("AddItemToCart", () => {
           metadata: { now: nowIntegration },
         };
 
+        const expectedEvent: ItemAddedToCart = {
+          type: "ItemAddedToCart",
+          data: {
+            cart_id: streamId,
+            stock_id: stock,
+            item_id: item,
+            price_in_cents: priceInCents,
+            quantity: 1,
+            added_at: nowIntegration.getTime(),
+          },
+          metadata: {
+            now: nowIntegration,
+            causation_id: streamId,
+            streamName: streamId,
+          },
+        };
+
         await integrationGiven([{ streamId, events: [created] }])
           .when(command)
-          .then(
-            expectNewEvents(streamId, [
-              {
-                type: "ItemAddedToCart",
-                data: {
-                  cart_id: streamId,
-                  stock_id: stock,
-                  item_id: item,
-                  price_in_cents: priceInCents,
-                  quantity: 1,
-                  added_at: nowIntegration.getTime(),
-                },
-                metadata: {
-                  now: nowIntegration,
-                  causation_id: streamId,
-                  streamName: streamId,
-                },
-              },
-            ])
-          );
+          .then(expectNewEvents(streamId, [expectedEvent]));
       });
     });
   }

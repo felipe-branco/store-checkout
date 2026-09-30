@@ -4,20 +4,34 @@ import type { CartCreated, ItemAddedToCart, CartCleared } from "@store-checkout/
 import { evolve } from "./CartDetailsProjection";
 import { buildStockProductsList } from "./buildStockProductsList";
 
+function cartReadEvent<E extends CartCreated | ItemAddedToCart | CartCleared>(
+  event: E,
+  streamName: string
+): ReadEvent<E, PostgresReadEventMetadata> {
+  return {
+    kind: "Event",
+    ...event,
+    metadata: { streamName, ...event.metadata },
+  } as ReadEvent<E, PostgresReadEventMetadata>;
+}
+
 describe("CartDetailsProjection", () => {
   const cartId = "cart-123";
   const now = new Date();
 
   it("projects CartCreated", () => {
-    const event: ReadEvent<CartCreated, PostgresReadEventMetadata> = {
-      type: "CartCreated",
-      data: {
-        cart_id: cartId,
-        items: [],
-        created_at: now.getTime(),
+    const event = cartReadEvent<CartCreated>(
+      {
+        type: "CartCreated",
+        data: {
+          cart_id: cartId,
+          items: [],
+          created_at: now.getTime(),
+        },
+        metadata: { now, causation_id: cartId, streamName: cartId },
       },
-      metadata: { streamName: cartId } as ReadEvent<CartCreated, PostgresReadEventMetadata>["metadata"],
-    };
+      cartId
+    );
 
     const result = evolve(null, event);
     expect(result).toEqual({
@@ -28,29 +42,35 @@ describe("CartDetailsProjection", () => {
   });
 
   it("merges ItemAddedToCart lines by item_id", () => {
-    const created: ReadEvent<CartCreated, PostgresReadEventMetadata> = {
-      type: "CartCreated",
-      data: {
-        cart_id: cartId,
-        items: [],
-        created_at: now.getTime(),
+    const created = cartReadEvent<CartCreated>(
+      {
+        type: "CartCreated",
+        data: {
+          cart_id: cartId,
+          items: [],
+          created_at: now.getTime(),
+        },
+        metadata: { now, causation_id: cartId, streamName: cartId },
       },
-      metadata: { streamName: cartId } as ReadEvent<CartCreated, PostgresReadEventMetadata>["metadata"],
-    };
+      cartId
+    );
     const doc = evolve(null, created);
 
-    const added: ReadEvent<ItemAddedToCart, PostgresReadEventMetadata> = {
-      type: "ItemAddedToCart",
-      data: {
-        cart_id: cartId,
-        stock_id: "stock-1",
-        item_id: "item-a",
-        price_in_cents: 250,
-        quantity: 2,
-        added_at: now.getTime(),
+    const added = cartReadEvent<ItemAddedToCart>(
+      {
+        type: "ItemAddedToCart",
+        data: {
+          cart_id: cartId,
+          stock_id: "stock-1",
+          item_id: "item-a",
+          price_in_cents: 250,
+          quantity: 2,
+          added_at: now.getTime(),
+        },
+        metadata: { now, causation_id: cartId, streamName: cartId },
       },
-      metadata: { streamName: cartId } as ReadEvent<CartCreated, PostgresReadEventMetadata>["metadata"],
-    };
+      cartId
+    );
 
     const afterFirst = evolve(doc, added);
     const afterSecond = evolve(afterFirst, {
@@ -62,37 +82,49 @@ describe("CartDetailsProjection", () => {
   });
 
   it("clears items on CartCleared", () => {
-    const created: ReadEvent<CartCreated, PostgresReadEventMetadata> = {
-      type: "CartCreated",
-      data: {
-        cart_id: cartId,
-        items: [],
-        created_at: now.getTime(),
+    const created = cartReadEvent<CartCreated>(
+      {
+        type: "CartCreated",
+        data: {
+          cart_id: cartId,
+          items: [],
+          created_at: now.getTime(),
+        },
+        metadata: { now, causation_id: cartId, streamName: cartId },
       },
-      metadata: { streamName: cartId } as ReadEvent<CartCreated, PostgresReadEventMetadata>["metadata"],
-    };
+      cartId
+    );
     let doc = evolve(null, created);
-    doc = evolve(doc, {
-      type: "ItemAddedToCart",
-      data: {
-        cart_id: cartId,
-        stock_id: "stock-1",
-        item_id: "item-a",
-        price_in_cents: 250,
-        quantity: 1,
-        added_at: now.getTime(),
-      },
-      metadata: { streamName: cartId } as ReadEvent<CartCreated, PostgresReadEventMetadata>["metadata"],
-    });
+    doc = evolve(
+      doc,
+      cartReadEvent<ItemAddedToCart>(
+        {
+          type: "ItemAddedToCart",
+          data: {
+            cart_id: cartId,
+            stock_id: "stock-1",
+            item_id: "item-a",
+            price_in_cents: 250,
+            quantity: 1,
+            added_at: now.getTime(),
+          },
+          metadata: { now, causation_id: cartId, streamName: cartId },
+        },
+        cartId
+      )
+    );
 
-    const cleared: ReadEvent<CartCleared, PostgresReadEventMetadata> = {
-      type: "CartCleared",
-      data: {
-        cart_id: cartId,
-        cleared_at: now.getTime(),
+    const cleared = cartReadEvent<CartCleared>(
+      {
+        type: "CartCleared",
+        data: {
+          cart_id: cartId,
+          cleared_at: now.getTime(),
+        },
+        metadata: { now, causation_id: cartId, streamName: cartId },
       },
-      metadata: { streamName: cartId } as ReadEvent<CartCreated, PostgresReadEventMetadata>["metadata"],
-    };
+      cartId
+    );
 
     expect(evolve(doc, cleared)?.items).toEqual([]);
   });

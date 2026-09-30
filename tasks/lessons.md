@@ -13,27 +13,29 @@ Framework and product notes for **store-checkout**.
 - Register inline projections in `projections-inline.ts`
 - **Do not add code under `packages/slices/src/` outside an EM slice directory** (no shared `stock/`, `stockProductsList/`, etc.) unless the user explicitly asks for it
 - **Slices are self-contained units** — keep state, `evolve`, and `decide` inside each slice folder; prefer **duplication over cross-slice shared modules**
+- **Cross-slice sequencing at the route layer:** when the EM board chains commands (e.g. reserve then add to cart), orchestrate in `{Slice}/routes.ts` via multiple `dispatcher.sendCommand()` calls — do **not** import another slice’s command handler into a decider. Roll back the stock step if the cart step fails after a successful reserve/dereserve.
 - **Next.js client vs server:** `@store-checkout/slices` exports **UI only** (`CreateCart`, `CartDetails`). Routes, projections, `commands`, and `INLINE_PROJECTIONS` live on `@store-checkout/slices/server` — never import the barrel from Client Components or you pull `pg` into the browser bundle
-- API routes go under `apps/web-app/src/app/api/`
-- Use `pnpm em:slice:*` CLI, not legacy Miro generators
 - API routes go under `apps/web-app/src/app/api/`
 - Use `pnpm em:slice:*` CLI, not legacy Miro generators
 
 ## Error handling
 
-- Command handlers return `CommandResult`
-- Routes use `ICommandDispatcher.sendCommand()` with `correlationId`
+- Command handlers return `CommandResult` (`success` + `newEvents`, or structured `error`)
+- Routes use `ICommandDispatcher.sendCommand()` with `correlationId`; **`SendResult`** includes **`eventsPublished`** — treat `success: true` with `eventsPublished === 0` as failure when the EM flow requires an event (e.g. `DereserveStockItem` before remove from cart)
+- Slice route errors can expose `code` (`STOCK_RESERVE_FAILED`, …) and **`failedCommandType`** so API `enrich` logs name the failing step, not only the top-level route command
 
 ## API logging
 
 - Wrap `apps/web-app/src/app/api/**/route.ts` handlers with `withLoggedApiRoute` from `@/lib/api-log`
 - Pass `commandType` / `aggregateId` via the `enrich` callback when dispatching commands; never log payment card fields
+- Cart item routes: use an enricher that reads JSON `{ failedCommandType, code, error }` on **4xx/409** so reserve/dereserve failures show up in structured logs (see `apps/web-app/src/app/api/cart/items/route.ts`)
 - Generate correlation IDs with global `crypto.randomUUID()` — not `node:crypto` — so helpers stay valid on Node, Edge, and other Vercel runtimes
 
 ## UI
 
 - **Kiosk polling:** product catalog via SWR **15s** + focus revalidate (`packages/ui/src/hooks/use-products.ts`); cart is **not** polled — refetch after commands only (`CartDetails`)
 - **Cart `price_in_cents`:** EM snapshot `20260929231730_store`; set from catalog in `/api/cart/items`, stored on cart stream events; slice refs and `manifest.json` must stay on the same snapshot id
+- **Cart ↔ stock:** `AddItemToCart/routes.ts` and `RemoveItemFromCart/routes.ts` require **`on_hand_quantity`** (catalog `quantity`) for `ReserveStockItem` / rollback re-reserve; web-app passes it from `getCatalogRowByProductId`
 - Default locale **en-US** in the web shell (`lang="en-US"`, English copy on home/maintenance pages). No i18n framework.
 - UI skeleton via `@store-checkout/ui`; pick MUI or Tailwind + shadcn in `packages/ui` (see `UI_STACK.md`)
 - No em dashes in user-facing copy

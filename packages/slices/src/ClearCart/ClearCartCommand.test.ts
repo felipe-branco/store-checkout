@@ -8,7 +8,6 @@ import {
   handleClearCart,
   type ClearCartCommand,
 } from "./ClearCartCommand";
-import type { Event } from "@store-checkout/event-store";
 import type { CartCreated, CartCleared, ItemAddedToCart } from "@store-checkout/core";
 import { CommandHandlerSpec } from "../../test-utils/command-handler-spec";
 import { expectNewEvents } from "../../test-utils/helpers";
@@ -36,7 +35,7 @@ describe("ClearCart", () => {
   };
 
   it("emits CartCleared when cart exists", () => {
-    given([cartCreated] as Event[])
+    given([cartCreated] as unknown as CartCleared[])
       .when({
         type: "ClearCart",
         data: { cart_id: cartId },
@@ -86,7 +85,7 @@ describe("ClearCart", () => {
       metadata: { now, causation_id: cartId, streamName: cartId },
     };
 
-    given([cartCreated, itemAdded, cleared, itemAdded] as Event[])
+    given([cartCreated, itemAdded, cleared, itemAdded] as unknown as CartCleared[])
       .when({
         type: "ClearCart",
         data: { cart_id: cartId },
@@ -138,24 +137,22 @@ describe("ClearCart", () => {
           metadata: { now: nowIntegration },
         };
 
+        const expectedEvent: CartCleared = {
+          type: "CartCleared",
+          data: {
+            cart_id: streamId,
+            cleared_at: nowIntegration.getTime(),
+          },
+          metadata: {
+            now: nowIntegration,
+            causation_id: streamId,
+            streamName: streamId,
+          },
+        };
+
         await integrationGiven([{ streamId, events: [created] }])
           .when(command)
-          .then(
-            expectNewEvents(streamId, [
-              {
-                type: "CartCleared",
-                data: {
-                  cart_id: streamId,
-                  cleared_at: nowIntegration.getTime(),
-                },
-                metadata: {
-                  now: nowIntegration,
-                  causation_id: streamId,
-                  streamName: streamId,
-                },
-              },
-            ])
-          );
+          .then(expectNewEvents(streamId, [expectedEvent]));
       });
     });
   }

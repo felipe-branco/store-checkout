@@ -8,7 +8,6 @@ import {
   handleRemoveItemFromCart,
   type RemoveItemFromCartCommand,
 } from "./RemoveItemFromCartCommand";
-import type { Event } from "@store-checkout/event-store";
 import type { CartCreated, ItemAddedToCart, ItemRemovedFromCart } from "@store-checkout/core";
 import { CommandHandlerSpec } from "../../test-utils/command-handler-spec";
 import { expectNewEvents } from "../../test-utils/helpers";
@@ -52,7 +51,7 @@ describe("RemoveItemFromCart", () => {
   };
 
   it("emits ItemRemovedFromCart when line has enough quantity", () => {
-    given([cartCreated, itemAdded] as Event[])
+    given([cartCreated, itemAdded] as unknown as ItemRemovedFromCart[])
       .when({
         type: "RemoveItemFromCart",
         data: {
@@ -81,7 +80,7 @@ describe("RemoveItemFromCart", () => {
   });
 
   it("does nothing when line quantity is insufficient", () => {
-    given([cartCreated, itemAdded] as Event[])
+    given([cartCreated, itemAdded] as unknown as ItemRemovedFromCart[])
       .when({
         type: "RemoveItemFromCart",
         data: {
@@ -150,28 +149,26 @@ describe("RemoveItemFromCart", () => {
           metadata: { now: nowIntegration },
         };
 
+        const expectedEvent: ItemRemovedFromCart = {
+          type: "ItemRemovedFromCart",
+          data: {
+            cart_id: streamId,
+            stock_id: stock,
+            item_id: item,
+            price_in_cents: priceInCents,
+            quantity: 1,
+            removed_at: nowIntegration.getTime(),
+          },
+          metadata: {
+            now: nowIntegration,
+            causation_id: streamId,
+            streamName: streamId,
+          },
+        };
+
         await integrationGiven([{ streamId, events: [created, added] }])
           .when(command)
-          .then(
-            expectNewEvents(streamId, [
-              {
-                type: "ItemRemovedFromCart",
-                data: {
-                  cart_id: streamId,
-                  stock_id: stock,
-                  item_id: item,
-                  price_in_cents: priceInCents,
-                  quantity: 1,
-                  removed_at: nowIntegration.getTime(),
-                },
-                metadata: {
-                  now: nowIntegration,
-                  causation_id: streamId,
-                  streamName: streamId,
-                },
-              },
-            ])
-          );
+          .then(expectNewEvents(streamId, [expectedEvent]));
       });
     });
   }

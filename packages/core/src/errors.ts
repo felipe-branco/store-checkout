@@ -30,7 +30,7 @@ export type CommandResult<T> = CommandSuccess<T> | CommandFailure;
 // ---------------------------------------------------------------------------
 
 export type SendResult =
-  | { success: true }
+  | { success: true; eventsPublished: number }
   | { success: false; error: CommandFailure["error"] };
 
 /**

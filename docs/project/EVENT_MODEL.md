@@ -58,3 +58,19 @@ Rationale: shared stock read model can change without this kiosk issuing command
 | `ItemRemovedFromCart` | `cart_id`, `stock_id`, `item_id`, **`price_in_cents`**, `quantity`, `removed_at` |
 
 Commands **Add Item to Cart** and **Remove Item from Cart** include **`price_in_cents`** (from static catalog at dispatch in `POST`/`DELETE` `/api/cart/items`).
+
+**API orchestration:** those routes dispatch **`ReserveStockItem` then `AddItemToCart`**, or **`DereserveStockItem` then `RemoveItemFromCart`**, with rollback if the cart step fails after stock succeeds. See [DECISIONS.md](./DECISIONS.md).
+
+## HTTP API (kiosk cart)
+
+| Method | Path | Commands (order) | Notes |
+|--------|------|------------------|--------|
+| `POST` | `/api/cart` | `CreateCart` | Sets HttpOnly `cart_id` cookie |
+| `GET` | `/api/cart` | — | Cart Details projection → kiosk cart map |
+| `DELETE` | `/api/cart` | end session | Clears cookie (see route) |
+| `POST` | `/api/cart/items` | `ReserveStockItem` → `AddItemToCart` | Body: `productId`, optional `quantity`; catalog supplies `stock_id`, `item_id`, `price_in_cents`, `on_hand_quantity` |
+| `DELETE` | `/api/cart/items` | `DereserveStockItem` → `RemoveItemFromCart` | Same body shape as POST |
+| `POST` | `/api/cart/clear` | `ClearCart` | Does not bulk-dereserve stock yet (automator planned) |
+| `GET` | `/api/products` | — | Stock Products List projection + static catalog |
+
+Orchestration lives in `packages/slices/src/AddItemToCart/routes.ts` and `RemoveItemFromCart/routes.ts`; thin handlers in `apps/web-app/src/app/api/cart/**`.

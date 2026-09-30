@@ -131,7 +131,7 @@ describe("CreateCart", () => {
 
         await integrationGiven([existingStream(streamId, [pastEvent])])
           .when(command)
-          .then(expectNewEvents(streamId, []));
+          .then(expectNewEvents(streamId, [] as CartCreated[]));
       });
     });
   }

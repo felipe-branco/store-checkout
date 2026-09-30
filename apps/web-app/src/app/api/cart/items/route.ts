@@ -7,6 +7,7 @@ import {
   handleRemoveItemFromCartRoute,
 } from "@store-checkout/slices/server";
 import { getCatalogRowByProductId } from "@/lib/kiosk/stock-products-list";
+import type { ApiLogEnricher } from "@/lib/api-log";
 import { z } from "zod";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +21,30 @@ async function ensureBackendReady(): Promise<void> {
   await initializeEventStore();
   await initializeMessageBus();
 }
+
+const cartItemRouteLogEnrich =
+  (primaryCommandType: string): ApiLogEnricher =>
+  async ({ response }) => {
+    try {
+      const body = (await response.clone().json()) as {
+        success?: boolean;
+        error?: string;
+        code?: string;
+        failedCommandType?: string;
+      };
+      if (body.success === false) {
+        return {
+          commandType: body.failedCommandType ?? primaryCommandType,
+          error: body.error,
+          errorCode: body.code,
+          success: false,
+        };
+      }
+    } catch {
+      // non-JSON body
+    }
+    return { commandType: primaryCommandType };
+  };
 
 export const POST = withLoggedApiRoute(
   "POST",
@@ -57,19 +82,22 @@ export const POST = withLoggedApiRoute(
         item_id: catalogRow.itemId,
         price_in_cents: catalogRow.priceInCents,
         quantity: parsed.data.quantity,
+        on_hand_quantity: catalogRow.quantity,
       },
       dispatcher,
       correlationId
     );
 
     if (!result.success) {
-      return Response.json(result, { status: 400 });
+      const status =
+        result.code === "STOCK_RESERVE_FAILED" ? 409 : 400;
+      return Response.json(result, { status });
     }
 
     return Response.json({ success: true }, { status: 200 });
   },
   {
-    enrich: () => ({ commandType: "AddItemToCart" }),
+    enrich: cartItemRouteLogEnrich("AddItemToCart"),
   }
 );
 
@@ -109,18 +137,21 @@ export const DELETE = withLoggedApiRoute(
         item_id: catalogRow.itemId,
         price_in_cents: catalogRow.priceInCents,
         quantity: parsed.data.quantity,
+        on_hand_quantity: catalogRow.quantity,
       },
       dispatcher,
       correlationId
     );
 
     if (!result.success) {
-      return Response.json(result, { status: 400 });
+      const status =
+        result.code === "STOCK_DERESERVE_FAILED" ? 409 : 400;
+      return Response.json(result, { status });
     }
 
     return Response.json({ success: true }, { status: 200 });
   },
   {
-    enrich: () => ({ commandType: "RemoveItemFromCart" }),
+    enrich: cartItemRouteLogEnrich("RemoveItemFromCart"),
   }
 );
