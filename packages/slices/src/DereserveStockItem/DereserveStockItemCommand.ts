@@ -18,6 +18,7 @@ export type StockState = {
   reservedByItem: Record<string, number>;
   soldByItem: Record<string, number>;
   reservedByCartItem: Record<string, number>;
+  soldByCartItem: Record<string, number>;
   soldDedupKeys: Record<string, true>;
 };
 
@@ -26,6 +27,7 @@ export const initialState = (): StockState => ({
   reservedByItem: {},
   soldByItem: {},
   reservedByCartItem: {},
+  soldByCartItem: {},
   soldDedupKeys: {},
 });
 
@@ -72,14 +74,29 @@ export function evolve(state: StockState, event: StockStreamEvent): StockState {
       };
     }
     case "StockItemSold": {
-      const { item_id, order_id, quantity } = event.data;
+      const { item_id, cart_id, order_id, quantity } = event.data;
       const dedup = sellDedupKey(order_id, item_id);
+      const ciKey = cartItemKey(cart_id, item_id);
+      const reservedForCart = state.reservedByCartItem[ciKey] ?? 0;
+      const reservationConsumed = Math.min(quantity, reservedForCart);
       return {
         ...state,
         exists: true,
         soldByItem: {
           ...state.soldByItem,
           [item_id]: (state.soldByItem[item_id] ?? 0) + quantity,
+        },
+        soldByCartItem: {
+          ...state.soldByCartItem,
+          [ciKey]: (state.soldByCartItem[ciKey] ?? 0) + quantity,
+        },
+        reservedByItem: {
+          ...state.reservedByItem,
+          [item_id]: (state.reservedByItem[item_id] ?? 0) - reservationConsumed,
+        },
+        reservedByCartItem: {
+          ...state.reservedByCartItem,
+          [ciKey]: reservedForCart - reservationConsumed,
         },
         soldDedupKeys: { ...state.soldDedupKeys, [dedup]: true },
       };
@@ -110,8 +127,12 @@ export function decide(
     return [];
   }
 
-  const reservedForCart =
-    state.reservedByCartItem[cartItemKey(cart_id, item_id)] ?? 0;
+  const ciKey = cartItemKey(cart_id, item_id);
+  if ((state.soldByCartItem[ciKey] ?? 0) > 0) {
+    return [];
+  }
+
+  const reservedForCart = state.reservedByCartItem[ciKey] ?? 0;
   if (reservedForCart <= 0 || quantity > reservedForCart) {
     return [];
   }

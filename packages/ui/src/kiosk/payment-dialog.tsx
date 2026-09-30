@@ -17,10 +17,6 @@ import { useOrderCheckoutStatus } from '../hooks/use-order-checkout-status'
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { cn } from '../lib/utils'
 
-function randomWebhookDelayMs(): number {
-  return 300 + Math.floor(Math.random() * 1701)
-}
-
 const METHODS: { id: PaymentMethod; label: string; hint: string; icon: LucideIcon; instruction: string }[] = [
   {
     id: 'credit',
@@ -113,6 +109,7 @@ export function PaymentDialog({
           items: lines.map((l) => ({ productId: l.product.id, quantity: l.quantity })),
           paymentMethod: method,
           idempotencyKey: idempotencyKey.current,
+          simulationStatus: paymentOutcome,
         }),
       })
       const orderData = (await orderRes.json()) as CreateOrderResponse
@@ -126,36 +123,6 @@ export function PaymentDialog({
           name: 'failed',
           method,
           message: 'message' in orderData ? orderData.message : 'Could not create order.',
-        })
-        return
-      }
-
-      await new Promise((resolve) => setTimeout(resolve, randomWebhookDelayMs()))
-
-      const webhookRes = await fetch('/api/webhooks/payment', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cart_id: orderData.cartId,
-          order_id: orderData.orderId,
-          items: orderData.webhookItems,
-          value_paid: orderData.order.total,
-          currency: orderData.currency,
-          payment_method: orderData.paymentMethod,
-          status: paymentOutcome,
-        }),
-      })
-      const webhookData = (await webhookRes.json()) as {
-        success?: boolean
-        error?: string
-        paymentStatus?: 'success' | 'fail'
-      }
-
-      if (!webhookRes.ok || webhookData.success !== true) {
-        setPhase({
-          name: 'failed',
-          method,
-          message: webhookData.error ?? 'Payment simulation failed.',
         })
         return
       }
@@ -347,7 +314,7 @@ function SimulatorPhase({
           {info.label} · <span className="text-foreground tabular-nums">{formatPrice(total)}</span>
         </p>
         <p className="max-w-lg text-lg text-muted-foreground">
-          Creates the order, waits like an external provider, then posts the payment webhook.
+          Creates the order; the payment simulator webhook runs on the server, then the screen updates from your order status.
         </p>
         <div className="flex w-full max-w-lg flex-col gap-4">
           <button

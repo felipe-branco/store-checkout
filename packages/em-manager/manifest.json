@@ -1,6 +1,6 @@
 {
   "snapshotFormatVersion": "1.0.0",
-  "currentSnapshot": "20260929231730_store",
+  "currentSnapshot": "20260930011438_store",
   "slices": {
     "_StatusMergeFixture": {
       "pinnedSnapshot": "20260701000000_tutorial",
@@ -21,7 +21,7 @@
       "sliceBorderIds": [
         "a3ecbe0a-e2d1-44a9-961e-475b71f3447c"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "CartDetails": {
       "pinnedSnapshot": "20260929231730_store",
@@ -91,7 +91,7 @@
       "sliceBorderIds": [
         "831370d2-c881-4eca-8060-36b666c3b77b"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "PayOrder": {
       "pinnedSnapshot": "20260929231730_store",
@@ -133,14 +133,14 @@
       "sliceBorderIds": [
         "65dcc3e1-6396-4897-8006-469dae19b1b1"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "WebhookSimulatorAutomator": {
       "pinnedSnapshot": "20260929231730_store",
       "sliceBorderIds": [
         "2bf88581-0bb0-4bff-a502-f234c213b1a2"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     }
   }
 }

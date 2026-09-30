@@ -4012,7 +4012,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[AUT] Webhook Simulator Automator",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "2f3c649a-1c15-4ac8-9031-63539bb8f71a": {
@@ -5905,7 +5905,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[AUT] Sold Items Order Automator",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "672c2783-78c2-4444-b1d7-9ba06e9224b2": {
@@ -6645,7 +6645,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[AUT] Order Paid Automator",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "87c818d3-a9df-4b19-8ac8-ca2d043082e3": {
@@ -7653,7 +7653,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[AUT] Cart Cleared Automator",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "a457ec12-1087-4e26-adfa-1eb77575a763": {

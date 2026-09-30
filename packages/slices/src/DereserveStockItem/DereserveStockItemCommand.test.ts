@@ -8,7 +8,7 @@ import {
   handleDereserveStockItem,
   type DereserveStockItemCommand,
 } from "./DereserveStockItemCommand";
-import type { StockItemDereserved, StockItemReserved } from "@store-checkout/core";
+import type { StockItemDereserved, StockItemReserved, StockItemSold } from "@store-checkout/core";
 import { CommandHandlerSpec, existingStream } from "../../test-utils/command-handler-spec";
 import { expectNewEvents } from "../../test-utils/helpers";
 import { setupTestDatabase } from "../../test-utils/test-database";
@@ -72,6 +72,45 @@ describe("DereserveStockItem", () => {
 
   it("does nothing when nothing was reserved for the cart line", () => {
     given([])
+      .when({
+        type: "DereserveStockItem",
+        data: {
+          stock_id: stockId,
+          cart_id: cartId,
+          item_id: itemId,
+          quantity: 1,
+        },
+        metadata: { now, correlation_id: stockId, causation_id: stockId },
+      })
+      .then([]);
+  });
+
+  it("does nothing when the cart line was already sold (EM: do not dereserve sold item)", () => {
+    const reserved: StockItemReserved = {
+      type: "StockItemReserved",
+      data: {
+        stock_id: stockId,
+        cart_id: cartId,
+        item_id: itemId,
+        quantity: 1,
+        reserved_at: now.getTime(),
+      },
+      metadata: { now, causation_id: stockId, streamName: stockId },
+    };
+    const sold: StockItemSold = {
+      type: "StockItemSold",
+      data: {
+        stock_id: stockId,
+        cart_id: cartId,
+        order_id: randomUUID(),
+        item_id: itemId,
+        quantity: 1,
+        sold_at: now.getTime(),
+      },
+      metadata: { now, causation_id: stockId, streamName: stockId },
+    };
+
+    given([reserved, sold] as unknown as StockItemDereserved[])
       .when({
         type: "DereserveStockItem",
         data: {

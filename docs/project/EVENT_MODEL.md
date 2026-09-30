@@ -1,7 +1,7 @@
 # Event model
 
 **Board:** MashginCheckout  
-**Snapshot:** `20260929231730_store` (`packages/em-manager/migrations/`, `manifest.json` → `currentSnapshot`)
+**Snapshot:** `20260930011438_store` (`packages/em-manager/migrations/`, `manifest.json` → `currentSnapshot`). Supersedes `20260929231730_store` (adds **Spec:** “Do not dereserve sold item” on **Dereserve Stock Item**). Re-export can reset border **`sliceStatus`** to `Planned`; merge from `slice.ref.json` before committing migrations.
 
 Planned slices (prefix = EM type: SC state change, SV state view, AUT automation, TR translator):
 
@@ -21,10 +21,10 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [SV] Cart Details | **Done** — `packages/slices/src/CartDetails/` (includes **Stock Products List** read model) |
 | [SV] Payment Failed Order | **Done** — `packages/slices/src/PaymentFailedOrder/` |
 | [SV] Order Finished Details | **Done** — `packages/slices/src/OrderFinishedDetails/` |
-| [AUT] Cart Cleared Automator | Planned |
-| [AUT] Webhook Simulator Automator | Planned |
-| [AUT] Order Paid Automator | Planned |
-| [AUT] Sold Items Order Automator | Planned |
+| [AUT] Cart Cleared Automator | **Done** — `packages/slices/src/CartClearedAutomator/` |
+| [AUT] Webhook Simulator Automator | **Done** — `packages/slices/src/WebhookSimulatorAutomator/` (server POST to `/api/webhooks/payment`) |
+| [AUT] Order Paid Automator | **Done** — `packages/slices/src/OrderPaidAutomator/` |
+| [AUT] Sold Items Order Automator | **Done** — `packages/slices/src/SoldItemsOrderAutomator/` |
 | [TR] External Payment Simulator Translator | **Done** — `packages/slices/src/ExternalPaymentSimulatorTranslator/` |
 
 Implement in dependency order per [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Slice refs: `packages/slices/src/<SliceDir>/slice.ref.json` after `pnpm em:slice:init --all-planned`.
@@ -37,6 +37,7 @@ The board defines read model **Stock Products List** (`READMODEL` in the migrati
 |--------|------|
 | [`apps/web-app/src/lib/kiosk/product-catalog.ts`](../../apps/web-app/src/lib/kiosk/product-catalog.ts) | Static `initial_products` (no DB seed). Shared `stockId` per `STOCK_SOURCES` |
 | Stock stream (`stock_id`) | Events `StockItemReserved`, `StockItemDereserved`, `StockItemSold` — handlers in `ReserveStockItem`, `DereserveStockItem`, `SellStockItem` |
+| Stock invariants | On **`StockItemSold`**, reservation for that **`cart_id` + `item_id`** is consumed in decider `evolve` (keep the three stock handlers in sync). **`DereserveStockItem`** emits nothing if that cart line was sold (EM spec). |
 | Target formula | **`available = quantity − reserved − sold`** per `item_id` |
 | API | `GET /api/products` uses `buildStockProductsList` + Pongo projection `stock-products-list-collection` |
 
@@ -70,10 +71,27 @@ Commands **Add Item to Cart** and **Remove Item from Cart** include **`price_in_
 | `DELETE` | `/api/cart` | end session | Clears cookie (see route) |
 | `POST` | `/api/cart/items` | `ReserveStockItem` → `AddItemToCart` | Body: `productId`, optional `quantity`; catalog supplies `stock_id`, `item_id`, `price_in_cents`, `on_hand_quantity` |
 | `DELETE` | `/api/cart/items` | `DereserveStockItem` → `RemoveItemFromCart` | Same body shape as POST |
-| `POST` | `/api/cart/clear` | `ClearCart` | Does not bulk-dereserve stock yet (automator planned) |
+| `POST` | `/api/cart/clear` | `ClearCart` | Stock dereserve via **`CartCleared`** → **Cart Cleared Automator** (see below) |
 | `GET` | `/api/products` | — | Stock Products List projection + static catalog |
 | `POST` | `/api/orders` | `CreateOrder` | Kiosk checkout; returns ids for payment simulator |
 | `POST` | `/api/webhooks/payment` | External payment translator → `PayOrder` / `FailOrderPayment` | Simulated provider callback |
 | `GET` | `/api/orders/status` | — | Poll `cart_id` + `order_id` → payment read models |
 
 Orchestration lives in `packages/slices/src/AddItemToCart/routes.ts` and `RemoveItemFromCart/routes.ts`; thin handlers in `apps/web-app/src/app/api/cart/**`.
+
+## Automations (message bus)
+
+Registered in `packages/slices/src/automations.ts` (`registerAllAutomations` on app startup).
+
+| Trigger | Automator | Action |
+|---------|-----------|--------|
+| `CartCleared` | **Cart Cleared Automator** | Read **`ClearedCartItems`** projection (`CartClearedAutomator/ClearedCartItemsProjection.ts`); for each cleared line, **`RemoveItemFromCart`** route with **`cartAlreadyCleared: true`** (dereserve only). Sold lines no-op at **`DereserveStockItem`**. |
+| `OrderPaid` | **Order Paid Automator** | `SellStockItem` per order line |
+| `StockItemSold` | **Sold Items Order Automator** | `FinishOrder` when all order lines sold |
+| `OrderCreated` | **Webhook Simulator Automator** | Delayed POST to `/api/webhooks/payment` when kiosk passes `simulationStatus` on create order |
+
+**Checkout success path (simplified):** `CreateOrder` → webhook → `PayOrder` → `OrderPaid` → sells → optional `FinishOrder`; kiosk clears cart → `CartCleared` → automator dereserves **unsold** reserved lines only.
+
+## Order checkout status
+
+`GET /api/orders/status` — handler in `CartDetails/routes.ts` (`handleOrderCheckoutStatusRoute`); UI polls via `@store-checkout/ui` (`use-order-checkout-status`) from **Order Finished Details** / **Payment Failed Order** projections.

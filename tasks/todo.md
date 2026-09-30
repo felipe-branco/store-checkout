@@ -2,7 +2,7 @@
 
 ## Done
 
-- [x] Monorepo, EM snapshot `20260929231730_store`, slice refs
+- [x] Monorepo, EM snapshot (current **`20260930011438_store`**), slice refs
 - [x] Kiosk theme in `@store-checkout/ui` + demo at `/` (v0-based)
 - [x] Static product catalog; `GET /api/products` via Stock Products List projection
 - [x] Milestone A — stock SC slices: Reserve / Dereserve / Sell + registrations
@@ -13,8 +13,9 @@
 
 ## Next
 
-- [ ] **Clear Cart** stock dereserve (Cart Cleared Automator or explicit flow)
-- [ ] Milestone E — Order Paid / Sold Items / Cart Cleared / Webhook automators
+- [ ] Pin `manifest.json` slice `pinnedSnapshot` ids to **`20260930011438_store`** when borders change on that migration (optional hygiene; `currentSnapshot` already updated)
+- [x] **Clear Cart** stock dereserve — **Cart Cleared Automator** + **Cleared Cart Items** projection; sold-line dereserve guard in **Dereserve Stock Item**
+- [x] Milestone E — Cart Cleared / Order Paid / Sold Items / Webhook Simulator automators (EM **Done**)
 
 ## Later
 

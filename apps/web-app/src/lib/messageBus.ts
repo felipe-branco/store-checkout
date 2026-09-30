@@ -10,6 +10,7 @@ import {
 } from "@store-checkout/slices/server";
 import { getEventStore, getPongoDb } from "./eventStore";
 import { CommandDispatcher } from "./commandDispatcher";
+import { getStockProductsListCatalogRows } from "@/lib/kiosk/stock-products-list";
 
 let messageBusInstance: (MessageBus & CommandProcessor & EventSubscription) | null = null;
 let commandDispatcherInstance: CommandDispatcher | null = null;
@@ -31,7 +32,27 @@ export async function initializeMessageBus(): Promise<void> {
       const dispatcher = new CommandDispatcher(messageBus);
 
       registerAllCommandHandlers(dispatcher, messageBus, eventStore);
-      registerAllAutomations(messageBus, {});
+      const appBase = process.env.APP_BASE_URL ?? "http://127.0.0.1:3000";
+      const catalogByItemId = new Map(
+        getStockProductsListCatalogRows().map((row) => [row.itemId, row])
+      );
+      registerAllAutomations(messageBus, {
+        dispatcher,
+        eventStore,
+        pongoDb: getPongoDb(),
+        paymentWebhookUrl: `${appBase.replace(/\/$/, "")}/api/webhooks/payment`,
+        resolveCartLineCatalog: (itemId) => {
+          const row = catalogByItemId.get(itemId);
+          if (!row) {
+            return null;
+          }
+          return {
+            stock_id: row.stockId,
+            price_in_cents: row.priceInCents,
+            on_hand_quantity: row.quantity,
+          };
+        },
+      });
 
       messageBusInstance = messageBus;
       commandDispatcherInstance = dispatcher;
