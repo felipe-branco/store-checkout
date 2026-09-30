@@ -1,26 +1,42 @@
 # Store Checkout — tasks
 
-## Done
+Tracking aligned with `.cursor/plans/em_checkout_completion_3883e44f.plan.md`.
 
-- [x] Monorepo, EM snapshot (current **`20260930011438_store`**), slice refs
-- [x] Kiosk theme in `@store-checkout/ui` + demo at `/` (v0-based)
-- [x] Static product catalog; `GET /api/products` via Stock Products List projection
-- [x] Milestone A — stock SC slices: Reserve / Dereserve / Sell + registrations
-- [x] Milestone B — Create/Add/Remove/Clear cart, Cart Details UI + API; cart slices **Done** in EM; **`ReserveStockItem` / `DereserveStockItem` wired** on `/api/cart/items` (see DECISIONS + EVENT_MODEL)
-- [x] API logging via `withLoggedApiRoute` on cart, health, products, orders
-- [x] Milestone C — CreateOrder, Pay/Fail/Finish order, External Payment Simulator Translator + `/api/orders`, `/api/webhooks/payment` (EM **Done**)
-- [x] Milestone D — PaymentFailedOrder, OrderFinishedDetails + `/api/orders/status` polling in checkout UI (EM **Done**)
-- [x] Milestone E — Cart Cleared / Order Paid / Sold Items / Webhook Simulator automators (EM **Done**)
-- [x] SC/SV registration checklist — commands, projections, registry, **manual-rebuild-config**, API routes (`api/README.md`); `pnpm em:slice:check-drift --all` clean
+## Phase 2 — Documentation map
 
-## Next
+- [x] [`docs/project/README.md`](../docs/project/README.md) — status, doc index, rebuild note
+- [x] [`docs/project/EVENT_MODEL.md`](../docs/project/EVENT_MODEL.md) — slices, API, projections, automations, kiosk session
+- [x] [`docs/project/DECISIONS.md`](../docs/project/DECISIONS.md) — catalog, cart/stock, gate, rebuild, checkout flow
+- [x] [`docs/LOCAL_SETUP.md`](../docs/LOCAL_SETUP.md) — Makefile, env, smoke test, verification commands
+- [x] [`tasks/lessons.md`](./lessons.md) — ongoing append during implementation
+- [ ] Archive plan → `docs/plans/em-checkout-completion.md` after Phase 4 (do not copy early)
 
-- [x] Pin `manifest.json` + all `slice.ref.json` to **`20260930011438_store`** (matches `currentSnapshot`)
+## Milestones (implementation)
 
-## Later
+- [x] Monorepo, EM snapshot **`20260930011438_store`**, slice refs + drift clean
+- [x] Kiosk theme in `@store-checkout/ui` + demo at `/`
+- [x] Static catalog; `GET /api/products` via Stock Products List projection
+- [x] Stock — Reserve / Dereserve / Sell
+- [x] Cart — Create / Add / Remove / Clear + Cart Details + reserve/dereserve on items API
+- [x] Order + External Payment Simulator Translator + `/api/orders`, `/api/webhooks/payment`
+- [x] PaymentFailedOrder, OrderFinishedDetails + `/api/orders/status` polling
+- [x] Automators (Cart Cleared, Order Paid, Sold Items, Webhook Simulator) + **`ClearedCartItems`** projection
+- [x] Registration checklist — commands, projections, **manual-rebuild-config**, [`api/README.md`](../apps/web-app/src/app/api/README.md)
+- [x] Production kiosk gate — magic word, HttpOnly session, middleware (no client bearer secret)
 
-- [ ] Auth (if needed)
+## Phase 3 — Kiosk completion
+
+- [ ] Confirm no in-memory `placeOrder` / local stock mutation left in catalog path
+- [ ] Idle guard / payment dialog wired to real API outcomes (409, failed payment view)
+- [ ] Expand manual E2E script in LOCAL_SETUP if gaps found during walkthrough
+
+## Phase 4 — Verification gates
+
+- [ ] `make setup` on clean machine path
+- [ ] `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm em:slice:check-drift --all`
+- [ ] Manual happy path + payment failure; optional Axiom if configured
+- [ ] Copy completed plan to `docs/plans/` and link from project README
 
 ## Backlog
 
-- [ ] Upgrade React / Next.js when `useEffectEvent` ships in stable React; remove `packages/ui/src/hooks/use-effect-event.ts` and import from `react` in kiosk components (`order-screen`, `idle-guard`, `payment-dialog`)
+- [ ] Upgrade React / Next.js when `useEffectEvent` ships in stable React; remove `packages/ui/src/hooks/use-effect-event.ts`

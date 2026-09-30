@@ -83,7 +83,42 @@ make db-reset
 
 For Neon or other hosted providers, set `DATABASE_URL` with `sslmode=require`. See `@store-checkout/event-store` URL normalization.
 
+## Projections rebuild
+
+If read models are empty or stale after pulling slice changes:
+
+```bash
+DATABASE_URL=postgresql://store_checkout:store_checkout@localhost:5432/store_checkout \
+  pnpm rebuild:projections --all
+```
+
+Requires Postgres up (`make db-up`) and the same `DATABASE_URL` as the web app. See [PROJECTION_REBUILD_PLAN.md](./PROJECTION_REBUILD_PLAN.md).
+
+## Manual kiosk smoke test (dev)
+
+With `make dev` running and gate env vars **unset** (default local):
+
+1. Open [http://localhost:3000](http://localhost:3000) — start screen or resume cart.
+2. Add two products; confirm totals and stock badges update after actions.
+3. Start checkout → choose simulated payment success → wait for pickup number / finished state.
+4. Optional failure path: create order with failure simulation (kiosk payment dialog) → confirm failed payment UI via status polling.
+5. `make health` or `curl -s http://localhost:3000/api/health | jq` — `"ok": true`.
+
+Structured API logs appear on the dev server stdout (`withLoggedApiRoute`).
+
+## Verification (before ship)
+
+From repo root (dev server not required for test/lint/build):
+
+```bash
+make setup   # if fresh clone
+pnpm test
+pnpm lint
+pnpm build
+pnpm em:slice:check-drift --all
+```
+
 ## Next steps
 
-- [docs/project/README.md](./project/README.md) — spec and EM model
+- [docs/project/README.md](./project/README.md) — spec, EM model, documentation map
 - [docs/TEMPLATE.md](./TEMPLATE.md) — first slice walkthrough

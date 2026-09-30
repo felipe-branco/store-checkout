@@ -4,7 +4,7 @@
 
 Built on an **event-sourced vertical slice** stack: PostgreSQL ([Emmett](https://github.com/event-driven-io/emmett) via `@store-checkout/event-store`), **Next.js 15** (React 19, App Router, Turbopack), **pnpm** monorepo with **Turborepo**. UI locale **en-US**. Runtime validation uses **Zod 4**.
 
-Checkout kiosk UI runs at `/` with theme from `@store-checkout/ui` (`checkout-theme.css`). EM slices still in progress — see [docs/project/README.md](docs/project/README.md).
+Checkout kiosk UI runs at `/` with theme from `@store-checkout/ui` (`checkout-theme.css`). All MashginCheckout EM slices are implemented — status and doc map: [docs/project/README.md](docs/project/README.md).
 
 ## Monorepo
 
@@ -32,7 +32,7 @@ Open [http://localhost:3000](http://localhost:3000). With the dev server running
 apps/web-app/           @store-checkout/web-app — Next.js shell
 packages/core/          @store-checkout/core — primitives (errors, money, metadata)
 packages/event-store/   @store-checkout/event-store — PostgreSQL / Emmett
-packages/slices/        @store-checkout/slices — vertical slices (empty registries)
+packages/slices/        @store-checkout/slices — vertical slices (commands, projections, automations)
 packages/ui/            @store-checkout/ui — UI skeleton (see packages/ui/UI_STACK.md)
 packages/em-manager/    @store-checkout/em-manager — EM migrations CLI
 packages/em-slice-generator/  @store-checkout/em-slice-generator — codegen

@@ -48,6 +48,10 @@ Framework and product notes for **store-checkout**.
 - **`StockItemSold`** must **consume cart-line reservation** in `evolve` (and track **`soldByCartItem`**) so post-checkout clear does not leave phantom reserves
 - **`DereserveStockItem`:** if **`soldByCartItem[cart_id:item_id] > 0`**, **`decide` returns `[]`** (no `StockItemDereserved`) — matches EM scenario on the Dereserve column in snapshot `20260930011438_store`
 
+## Documentation (Phase 2 map)
+
+- When behavior or EM snapshot changes, update together: [`docs/project/EVENT_MODEL.md`](../docs/project/EVENT_MODEL.md), [`DECISIONS.md`](../docs/project/DECISIONS.md), [`docs/project/README.md`](../docs/project/README.md), [`LOCAL_SETUP.md`](../docs/LOCAL_SETUP.md), [`tasks/todo.md`](./todo.md), and append here — do not archive `.cursor/plans/` into `docs/plans/` until Phase 4 verification passes
+
 ## Verification
 
 - Run `pnpm test`, `pnpm lint`, and `pnpm build` before merging template changes

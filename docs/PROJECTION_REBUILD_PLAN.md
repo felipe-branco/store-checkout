@@ -35,6 +35,18 @@ DATABASE_URL="postgresql://..." pnpm rebuild:projections --all
 DATABASE_URL="postgresql://..." pnpm diagnose:rebuild [stream_id]
 ```
 
+## Registered projections (MashginCheckout)
+
+| Registry key | Pongo collection |
+|--------------|------------------|
+| `CartDetails` | `cartdetails-collection` |
+| `StockProductsList` | `stock-products-list-collection` |
+| `PaymentFailedOrder` | `paymentfailedorder-collection` |
+| `OrderFinishedDetails` | `orderfinisheddetails-collection` |
+| `ClearedCartItems` | `clearedcartitems-collection` |
+
+Config lives in `packages/slices/src/manual-rebuild-config.ts` (must match `PROJECTION_REGISTRY` keys).
+
 ## When you add a projection
 
 1. Register inline handler in `packages/slices/src/projections-inline.ts`.
