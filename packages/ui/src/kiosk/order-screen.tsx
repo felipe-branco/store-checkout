@@ -34,9 +34,15 @@ export type ServerCartBinding = {
 export function OrderScreen({
   onExit,
   serverCart,
+  orderStatusEndpoint = '/api/orders/status',
+  CheckoutSuccessView = PlaceholderCheckoutSuccessView,
+  CheckoutFailedView = PlaceholderCheckoutFailedView,
 }: {
   onExit: () => void
   serverCart?: ServerCartBinding
+  orderStatusEndpoint?: string
+  CheckoutSuccessView?: React.ComponentType<import('./payment-dialog').CheckoutSuccessViewProps>
+  CheckoutFailedView?: React.ComponentType<import('./payment-dialog').CheckoutFailedViewProps>
 }) {
   const { data: products, error, isLoading, mutate } = useProducts()
   const [localCart, dispatch] = useCart()
@@ -260,10 +266,45 @@ export function OrderScreen({
             await mutate()
           }}
           onFinish={onExit}
+          orderStatusEndpoint={orderStatusEndpoint}
+          CheckoutSuccessView={CheckoutSuccessView}
+          CheckoutFailedView={CheckoutFailedView}
         />
       )}
 
       <IdleGuard active={!paymentOpen} hasItems={itemCount > 0} onTimeout={onExit} />
     </main>
+  )
+}
+
+function PlaceholderCheckoutSuccessView({
+  orderNumber,
+  onFinish,
+}: import('./payment-dialog').CheckoutSuccessViewProps) {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
+      <p className="font-display text-4xl font-bold">Payment approved — {orderNumber}</p>
+      <button
+        type="button"
+        onClick={onFinish}
+        className="h-16 rounded-full bg-primary px-10 font-display text-xl font-bold text-primary-foreground"
+      >
+        Done
+      </button>
+    </div>
+  )
+}
+
+function PlaceholderCheckoutFailedView({
+  message,
+  onRetry,
+}: import('./payment-dialog').CheckoutFailedViewProps) {
+  return (
+    <div className="flex flex-1 flex-col items-center justify-center gap-6 px-8 text-center">
+      <p className="text-2xl text-muted-foreground">{message}</p>
+      <button type="button" onClick={onRetry} className="h-16 rounded-full bg-primary px-10 text-xl font-bold text-primary-foreground">
+        Try again
+      </button>
+    </div>
   )
 }

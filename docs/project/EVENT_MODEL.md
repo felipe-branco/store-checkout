@@ -19,8 +19,8 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [SC] Sell Stock Item | **Done** — `packages/slices/src/SellStockItem/` |
 | [SC] Finish Order | **Done** — `packages/slices/src/FinishOrder/` |
 | [SV] Cart Details | **Done** — `packages/slices/src/CartDetails/` (includes **Stock Products List** read model) |
-| [SV] Payment Failed Order | Planned |
-| [SV] Order Finished Details | Planned |
+| [SV] Payment Failed Order | **Done** — `packages/slices/src/PaymentFailedOrder/` |
+| [SV] Order Finished Details | **Done** — `packages/slices/src/OrderFinishedDetails/` |
 | [AUT] Cart Cleared Automator | Planned |
 | [AUT] Webhook Simulator Automator | Planned |
 | [AUT] Order Paid Automator | Planned |
@@ -72,5 +72,8 @@ Commands **Add Item to Cart** and **Remove Item from Cart** include **`price_in_
 | `DELETE` | `/api/cart/items` | `DereserveStockItem` → `RemoveItemFromCart` | Same body shape as POST |
 | `POST` | `/api/cart/clear` | `ClearCart` | Does not bulk-dereserve stock yet (automator planned) |
 | `GET` | `/api/products` | — | Stock Products List projection + static catalog |
+| `POST` | `/api/orders` | `CreateOrder` | Kiosk checkout; returns ids for payment simulator |
+| `POST` | `/api/webhooks/payment` | External payment translator → `PayOrder` / `FailOrderPayment` | Simulated provider callback |
+| `GET` | `/api/orders/status` | — | Poll `cart_id` + `order_id` → payment read models |
 
 Orchestration lives in `packages/slices/src/AddItemToCart/routes.ts` and `RemoveItemFromCart/routes.ts`; thin handlers in `apps/web-app/src/app/api/cart/**`.

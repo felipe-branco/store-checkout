@@ -9,12 +9,12 @@
 - [x] Milestone B — Create/Add/Remove/Clear cart, Cart Details UI + API; cart slices **Done** in EM; **`ReserveStockItem` / `DereserveStockItem` wired** on `/api/cart/items` (see DECISIONS + EVENT_MODEL)
 - [x] API logging via `withLoggedApiRoute` on cart, health, products, orders
 - [x] Milestone C — CreateOrder, Pay/Fail/Finish order, External Payment Simulator Translator + `/api/orders`, `/api/webhooks/payment` (EM **Done**)
+- [x] Milestone D — PaymentFailedOrder, OrderFinishedDetails + `/api/orders/status` polling in checkout UI (EM **Done**)
 
 ## Next
 
 - [ ] **Clear Cart** stock dereserve (Cart Cleared Automator or explicit flow)
-- [ ] Milestone D — PaymentFailedOrder, OrderFinishedDetails projections + confirmation UI
-- [ ] Milestone E — Order Paid / Sold Items / Webhook automators
+- [ ] Milestone E — Order Paid / Sold Items / Cart Cleared / Webhook automators
 
 ## Later
 

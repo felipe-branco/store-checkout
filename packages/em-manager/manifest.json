@@ -84,7 +84,7 @@
       "sliceBorderIds": [
         "9720bc80-64bb-49c0-aa21-0322fb6a44c2"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "OrderPaidAutomator": {
       "pinnedSnapshot": "20260929231730_store",
@@ -105,7 +105,7 @@
       "sliceBorderIds": [
         "06af0d78-0747-432f-9a69-a35a0e190fc3"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "RemoveItemFromCart": {
       "pinnedSnapshot": "20260929231730_store",
