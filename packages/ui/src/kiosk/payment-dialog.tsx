@@ -5,7 +5,6 @@ import { useEffectEvent } from '../hooks/use-effect-event'
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import {
   AlertTriangle,
-  ArrowDown,
   ArrowLeft,
   Check,
   CreditCard,
@@ -19,8 +18,11 @@ import { formatPrice, pluralize } from '../lib/format'
 import type { CreateOrderResponse, OrderResult, PaymentMethod, StockConflict } from '../lib/kiosk-types'
 import { cn } from '../lib/utils'
 
-const TERMINAL_WAIT_MS = 3500
 const SUCCESS_RETURN_SECONDS = 15
+
+function randomWebhookDelayMs(): number {
+  return 300 + Math.floor(Math.random() * 1701)
+}
 
 const METHODS: { id: PaymentMethod; label: string; hint: string; icon: LucideIcon; instruction: string }[] = [
   {
@@ -48,7 +50,7 @@ const METHODS: { id: PaymentMethod; label: string; hint: string; icon: LucideIco
 
 type Phase =
   | { name: 'review' }
-  | { name: 'waiting'; method: PaymentMethod }
+  | { name: 'simulator'; method: PaymentMethod }
   | { name: 'authorizing'; method: PaymentMethod }
   | { name: 'success'; order: OrderResult }
   | { name: 'stock'; conflicts: StockConflict[] }
@@ -67,17 +69,15 @@ export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onS
   const [{ lines, total }] = useState(() => ({ lines: liveLines, total: liveTotal }))
   const [phase, setPhase] = useState<Phase>({ name: 'review' })
   const idempotencyKey = useRef<string | null>(null)
-  const terminalTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
   const itemCount = lines.reduce((sum, l) => sum + l.quantity, 0)
 
-  useEffect(() => () => {
-    if (terminalTimer.current) clearTimeout(terminalTimer.current)
-  }, [])
-
-  async function authorize(method: PaymentMethod) {
+  async function runCheckoutSimulation(method: PaymentMethod, paymentOutcome: 'success' | 'fail') {
+    if (!idempotencyKey.current) idempotencyKey.current = crypto.randomUUID()
     setPhase({ name: 'authorizing', method })
+
     try {
-      const res = await fetch('/api/orders', {
+      const orderRes = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -86,27 +86,71 @@ export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onS
           idempotencyKey: idempotencyKey.current,
         }),
       })
-      const data = (await res.json()) as CreateOrderResponse
-      if (data.ok) setPhase({ name: 'success', order: data.order })
-      else if (data.error === 'stock') setPhase({ name: 'stock', conflicts: data.conflicts })
-      else setPhase({ name: 'failed', method, message: data.message })
+      const orderData = (await orderRes.json()) as CreateOrderResponse
+
+      if (!orderData.ok) {
+        if (orderData.error === 'stock') {
+          setPhase({ name: 'stock', conflicts: orderData.conflicts })
+          return
+        }
+        setPhase({
+          name: 'failed',
+          method,
+          message: 'message' in orderData ? orderData.message : 'Could not create order.',
+        })
+        return
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, randomWebhookDelayMs()))
+
+      const webhookRes = await fetch('/api/webhooks/payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cart_id: orderData.cartId,
+          order_id: orderData.orderId,
+          items: orderData.webhookItems,
+          value_paid: orderData.order.total,
+          currency: orderData.currency,
+          payment_method: orderData.paymentMethod,
+          status: paymentOutcome,
+        }),
+      })
+      const webhookData = (await webhookRes.json()) as {
+        success?: boolean
+        error?: string
+        paymentStatus?: 'success' | 'fail'
+      }
+
+      if (!webhookRes.ok || webhookData.success !== true) {
+        setPhase({
+          name: 'failed',
+          method,
+          message: webhookData.error ?? 'Payment simulation failed.',
+        })
+        return
+      }
+
+      if (paymentOutcome === 'success' && webhookData.paymentStatus === 'success') {
+        setPhase({ name: 'success', order: orderData.order })
+        return
+      }
+
+      setPhase({
+        name: 'failed',
+        method,
+        message: 'The payment provider declined this transaction.',
+      })
     } catch {
       setPhase({ name: 'failed', method, message: "We couldn't reach the payment system." })
     }
   }
 
-  function startPayment(method: PaymentMethod, { retry = false } = {}) {
-    if (!retry || !idempotencyKey.current) idempotencyKey.current = crypto.randomUUID()
-    setPhase({ name: 'waiting', method })
-    terminalTimer.current = setTimeout(() => authorize(method), TERMINAL_WAIT_MS)
+  function selectPaymentMethod(method: PaymentMethod) {
+    setPhase({ name: 'simulator', method })
   }
 
-  function cancelWaiting() {
-    if (terminalTimer.current) clearTimeout(terminalTimer.current)
-    setPhase({ name: 'review' })
-  }
-
-  const canDismiss = phase.name === 'review'
+  const canDismiss = phase.name === 'review' || phase.name === 'simulator'
 
   return (
     <DialogPrimitive.Root open onOpenChange={(open) => !open && canDismiss && onClose()} disablePointerDismissal>
@@ -116,10 +160,16 @@ export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onS
           aria-describedby={undefined}
         >
           {phase.name === 'review' && (
-            <ReviewPhase lines={lines} total={total} itemCount={itemCount} onBack={onClose} onSelect={startPayment} />
+            <ReviewPhase lines={lines} total={total} itemCount={itemCount} onBack={onClose} onSelect={selectPaymentMethod} />
           )}
-          {phase.name === 'waiting' && (
-            <WaitingPhase method={phase.method} total={total} onCancel={cancelWaiting} />
+          {phase.name === 'simulator' && (
+            <SimulatorPhase
+              method={phase.method}
+              total={total}
+              onBack={() => setPhase({ name: 'review' })}
+              onSimulateSuccess={() => void runCheckoutSimulation(phase.method, 'success')}
+              onSimulateFailure={() => void runCheckoutSimulation(phase.method, 'fail')}
+            />
           )}
           {phase.name === 'authorizing' && <AuthorizingPhase total={total} />}
           {phase.name === 'success' && <SuccessPhase order={phase.order} lines={lines} onFinish={onFinish} />}
@@ -127,7 +177,10 @@ export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onS
           {phase.name === 'failed' && (
             <FailedPhase
               message={phase.message}
-              onRetry={() => startPayment(phase.method, { retry: true })}
+              onRetry={() => {
+                idempotencyKey.current = crypto.randomUUID()
+                setPhase({ name: 'simulator', method: phase.method })
+              }}
               onChangeMethod={() => setPhase({ name: 'review' })}
               onBack={onClose}
             />
@@ -218,39 +271,59 @@ function ReviewPhase({
   )
 }
 
-function WaitingPhase({ method, total, onCancel }: { method: PaymentMethod; total: number; onCancel: () => void }) {
+function SimulatorPhase({
+  method,
+  total,
+  onBack,
+  onSimulateSuccess,
+  onSimulateFailure,
+}: {
+  method: PaymentMethod
+  total: number
+  onBack: () => void
+  onSimulateSuccess: () => void
+  onSimulateFailure: () => void
+}) {
   const info = METHODS.find((m) => m.id === method)!
-  const Icon = info.icon
   return (
-    <div className="flex flex-1 flex-col items-center justify-between gap-8 px-8 py-16 text-center">
-      <p className="text-xl font-semibold text-muted-foreground">
-        {info.label} · <span className="text-foreground tabular-nums">{formatPrice(total)}</span>
-      </p>
-
-      <div className="flex flex-col items-center gap-10">
-        <div className="animate-kiosk-pulse flex size-56 items-center justify-center rounded-full bg-primary text-primary-foreground">
-          <Icon className="size-28" strokeWidth={1.5} aria-hidden="true" />
-        </div>
-        <PhaseTitle className="max-w-lg">{info.instruction}</PhaseTitle>
-        <p role="status" className="text-2xl text-muted-foreground">
-          Waiting for payment…
-        </p>
-      </div>
-
-      <div className="flex w-full flex-col items-center gap-8">
-        <div className="flex flex-col items-center gap-2 text-xl font-semibold">
-          The card reader is right below the screen
-          <ArrowDown className="size-12 animate-bounce" aria-hidden="true" />
-        </div>
+    <>
+      <header className="flex items-center justify-between gap-4 px-6 pt-6">
         <button
           type="button"
-          onClick={onCancel}
-          className="h-16 w-full max-w-md rounded-full border-2 text-xl font-semibold active:bg-muted"
+          onClick={onBack}
+          className="flex h-14 items-center gap-2 rounded-full border-2 px-6 text-lg font-semibold active:bg-muted"
         >
-          Cancel payment
+          <ArrowLeft className="size-6" aria-hidden="true" />
+          Change method
         </button>
+        <span className="font-display text-2xl font-extrabold tracking-tight">STORE</span>
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col items-center justify-center gap-8 px-8 py-10 text-center">
+        <PhaseTitle className="max-w-xl">Simulate payment</PhaseTitle>
+        <p className="text-xl text-muted-foreground">
+          {info.label} · <span className="text-foreground tabular-nums">{formatPrice(total)}</span>
+        </p>
+        <p className="max-w-lg text-lg text-muted-foreground">
+          Creates the order, waits like an external provider, then posts the payment webhook.
+        </p>
+        <div className="flex w-full max-w-lg flex-col gap-4">
+          <button
+            type="button"
+            onClick={onSimulateSuccess}
+            className="h-20 rounded-full bg-success font-display text-2xl font-bold text-success-foreground active:scale-[0.98]"
+          >
+            Simulate Payment
+          </button>
+          <button
+            type="button"
+            onClick={onSimulateFailure}
+            className="h-20 rounded-full bg-destructive font-display text-2xl font-bold text-destructive-foreground active:scale-[0.98]"
+          >
+            Simulate Payment Failure
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 

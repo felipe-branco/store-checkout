@@ -1,10 +1,4 @@
-import type {
-  CreateOrderResponse,
-  OrderItemInput,
-  PaymentMethod,
-  Product,
-  StockConflict,
-} from "@store-checkout/ui";
+import type { OrderItemInput, PaymentMethod, Product } from "@store-checkout/ui";
 import { MAX_QTY_PER_ITEM } from "@store-checkout/ui";
 import { getCatalogProductById, INITIAL_PRODUCT_CATALOG } from "./product-catalog";
 
@@ -24,20 +18,6 @@ function catalogRowToProduct(row: (typeof INITIAL_PRODUCT_CATALOG)[number]): Pro
 export function listProducts(): Product[] {
   return INITIAL_PRODUCT_CATALOG.map(catalogRowToProduct);
 }
-
-interface OrderStore {
-  processed: Map<string, CreateOrderResponse>;
-  orderCounter: number;
-}
-
-const globalForStore = globalThis as unknown as { __storeCheckoutOrders?: OrderStore };
-
-const orderStore: OrderStore =
-  globalForStore.__storeCheckoutOrders ??
-  (globalForStore.__storeCheckoutOrders = {
-    processed: new Map(),
-    orderCounter: 40,
-  });
 
 const PAYMENT_METHODS: PaymentMethod[] = ["credit", "debit", "tap"];
 
@@ -80,48 +60,4 @@ export function validateOrderPayload(
     paymentMethod: paymentMethod as PaymentMethod,
     idempotencyKey,
   };
-}
-
-export function placeOrder(items: OrderItemInput[], idempotencyKey: string): CreateOrderResponse {
-  const previous = orderStore.processed.get(idempotencyKey);
-  if (previous) return previous;
-
-  const byId = new Map(listProducts().map((p) => [p.id, p]));
-
-  const conflicts: StockConflict[] = [];
-  for (const { productId, quantity } of items) {
-    const product = byId.get(productId);
-    if (!product) {
-      return { ok: false, error: "invalid", message: "Item not found." };
-    }
-    if (product.stock < quantity) {
-      conflicts.push({
-        productId,
-        name: product.name,
-        requested: quantity,
-        available: product.stock,
-      });
-    }
-  }
-  if (conflicts.length > 0) return { ok: false, error: "stock", conflicts };
-
-  let total = 0;
-  let itemCount = 0;
-  for (const { productId, quantity } of items) {
-    const product = byId.get(productId)!;
-    total += product.price * quantity;
-    itemCount += quantity;
-  }
-
-  orderStore.orderCounter = orderStore.orderCounter >= 999 ? 1 : orderStore.orderCounter + 1;
-  const result: CreateOrderResponse = {
-    ok: true,
-    order: {
-      orderNumber: String(orderStore.orderCounter).padStart(3, "0"),
-      itemCount,
-      total,
-    },
-  };
-  orderStore.processed.set(idempotencyKey, result);
-  return result;
 }

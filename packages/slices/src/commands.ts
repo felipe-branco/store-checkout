@@ -28,6 +28,22 @@ import {
   handleClearCart,
   type ClearCartCommand,
 } from "./ClearCart/ClearCartCommand";
+import {
+  handleCreateOrder,
+  type CreateOrderCommand,
+} from "./CreateOrder/CreateOrderCommand";
+import {
+  handlePayOrder,
+  type PayOrderCommand,
+} from "./PayOrder/PayOrderCommand";
+import {
+  handleFailOrderPayment,
+  type FailOrderPaymentCommand,
+} from "./FailOrderPayment/FailOrderPaymentCommand";
+import {
+  handleFinishOrder,
+  type FinishOrderCommand,
+} from "./FinishOrder/FinishOrderCommand";
 
 export function registerAllCommandHandlers(
   dispatcher: ICommandDispatcher,
@@ -54,5 +70,17 @@ export function registerAllCommandHandlers(
   );
   dispatcher.register<ClearCartCommand>("ClearCart", (cmd) =>
     handleClearCart(cmd, eventStore)
+  );
+  dispatcher.register<CreateOrderCommand>("CreateOrder", (cmd) =>
+    handleCreateOrder(cmd, eventStore)
+  );
+  dispatcher.register<PayOrderCommand>("PayOrder", (cmd) =>
+    handlePayOrder(cmd, eventStore)
+  );
+  dispatcher.register<FailOrderPaymentCommand>("FailOrderPayment", (cmd) =>
+    handleFailOrderPayment(cmd, eventStore)
+  );
+  dispatcher.register<FinishOrderCommand>("FinishOrder", (cmd) =>
+    handleFinishOrder(cmd, eventStore)
   );
 }
