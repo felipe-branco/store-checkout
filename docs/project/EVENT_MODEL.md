@@ -3,6 +3,12 @@
 **Board:** MashginCheckout  
 **Snapshot:** `20260930011438_store` (`packages/em-manager/migrations/`, `manifest.json` → `currentSnapshot`). Supersedes `20260929231730_store` (adds **Spec:** “Do not dereserve sold item” on **Dereserve Stock Item**). Re-export can reset border **`sliceStatus`** to `Planned`; merge from `slice.ref.json` before committing migrations.
 
+## Board diagram (Event Modelers export)
+
+Full **Self-service checkout** board timeline (commands, events, read models, UI wireframes). Source: [Event Modelers](https://app.eventmodelers.ai/) — export dated 2026-09-30; aligned with snapshot **`20260930011438_store`**. Re-export from the live board when the migration changes.
+
+![MashginCheckout event model board — self-service checkout timeline](./assets/mashgin-checkout-event-board-2026-09-30.png)
+
 Planned slices (prefix = EM type: SC state change, SV state view, AUT automation, TR translator):
 
 **Dependency order (milestones):** stock (Reserve → Dereserve → Sell + Stock Products List) → cart (Create → Add → Remove → Clear + Cart Details) → order + translator (Create → Pay / Fail → Finish) → read models (Payment Failed Order, Order Finished Details) → automators (Cart Cleared, Order Paid, Sold Items, Webhook Simulator). See [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md).
