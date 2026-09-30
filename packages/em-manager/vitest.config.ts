@@ -4,9 +4,4 @@ export default defineConfig({
   test: {
     include: ["src/**/*.test.ts"],
   },
-  resolve: {
-    extensionAlias: {
-      ".js": [".ts", ".js"],
-    },
-  },
 });

@@ -53,10 +53,11 @@ export class CommandDispatcher implements ICommandDispatcher {
     const result = (await handler(command)) as CommandResult<Event>;
 
     if (result.success) {
+      const eventsPublished = result.newEvents.length;
       for (const event of result.newEvents) {
         await this.messageBus.publish(event);
       }
-      return { success: true };
+      return { success: true, eventsPublished };
     }
 
     const error: CommandFailure["error"] = {

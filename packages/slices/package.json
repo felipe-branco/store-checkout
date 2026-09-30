@@ -4,6 +4,20 @@
   "private": true,
   "main": "./src/index.ts",
   "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./server": {
+      "types": "./server.ts",
+      "default": "./server.ts"
+    },
+    "./src/*": {
+      "types": "./src/*",
+      "default": "./src/*"
+    }
+  },
   "scripts": {
     "lint": "eslint src",
     "test": "vitest run --passWithNoTests",

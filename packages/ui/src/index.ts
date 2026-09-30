@@ -49,6 +49,8 @@ export { CheckoutThemeProvider, type CheckoutThemeProviderProps } from './Checko
 export { ThemeToggle } from './ThemeToggle';
 
 export { Kiosk } from './kiosk/kiosk';
+export { StartScreen } from './kiosk/start-screen';
+export { OrderScreen, type ServerCartBinding } from './kiosk/order-screen';
 export { cn } from './lib/utils';
 export { formatPrice, pluralize } from './lib/format';
 export type {
@@ -62,5 +64,6 @@ export type {
   CreateOrderResponse,
 } from './lib/kiosk-types';
 export { CATEGORIES, MAX_QTY_PER_ITEM } from './lib/kiosk-types';
+export type { Cart } from './hooks/use-cart';
 
 export { tokenNames, type TokenName } from './tokens/tokens';

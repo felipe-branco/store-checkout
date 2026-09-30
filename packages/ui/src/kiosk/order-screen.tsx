@@ -9,7 +9,13 @@ import { IdleGuard } from './idle-guard'
 import { PaymentDialog } from './payment-dialog'
 import { ProductCard } from './product-card'
 import { ThemeToggle } from '../ThemeToggle'
-import { findCartAdjustments, maxAllowed, useCart, type CartAdjustment } from '../hooks/use-cart'
+import {
+  findCartAdjustments,
+  maxAllowed,
+  useCart,
+  type Cart,
+  type CartAdjustment,
+} from '../hooks/use-cart'
 import { useProducts } from '../hooks/use-products'
 import { CATEGORIES, type Category, type Product } from '../lib/kiosk-types'
 import { cn } from '../lib/utils'
@@ -18,9 +24,23 @@ type Confirm = 'clear' | 'exit' | null
 
 const GRID = 'grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-3'
 
-export function OrderScreen({ onExit }: { onExit: () => void }) {
+export type ServerCartBinding = {
+  cart: Cart
+  onAdd: (product: Product) => Promise<void>
+  onDecrement: (productId: string) => Promise<void>
+  onClear: () => Promise<void>
+}
+
+export function OrderScreen({
+  onExit,
+  serverCart,
+}: {
+  onExit: () => void
+  serverCart?: ServerCartBinding
+}) {
   const { data: products, error, isLoading, mutate } = useProducts()
-  const [cart, dispatch] = useCart()
+  const [localCart, dispatch] = useCart()
+  const cart = serverCart?.cart ?? localCart
   const [category, setCategory] = useState<Category | 'all'>('all')
   const [paymentOpen, setPaymentOpen] = useState(false)
   const [confirm, setConfirm] = useState<Confirm>(null)
@@ -28,7 +48,7 @@ export function OrderScreen({ onExit }: { onExit: () => void }) {
   const [announcement, setAnnouncement] = useState('')
 
   const syncCart = useEffectEvent((list: Product[]) => {
-    if (paymentOpen) return
+    if (paymentOpen || serverCart) return
     const changes = findCartAdjustments(cart, list)
     if (changes.length === 0) return
     dispatch({ type: 'sync', products: list })
@@ -56,16 +76,24 @@ export function OrderScreen({ onExit }: { onExit: () => void }) {
     return [...filtered].sort((a, b) => Number(a.stock <= 0) - Number(b.stock <= 0))
   }, [products, category])
 
-  function handleAdd(product: Product) {
+  async function handleAdd(product: Product) {
     const current = cart[product.id] ?? 0
     if (product.stock <= 0 || current >= maxAllowed(product)) return
-    dispatch({ type: 'add', product })
+    if (serverCart) {
+      await serverCart.onAdd(product)
+    } else {
+      dispatch({ type: 'add', product })
+    }
     setAnnouncement(`${product.name} added. ${current + 1} in your order.`)
   }
 
-  function handleDecrement(id: string) {
+  async function handleDecrement(id: string) {
     const product = products?.find((p) => p.id === id)
-    dispatch({ type: 'decrement', id })
+    if (serverCart) {
+      await serverCart.onDecrement(id)
+    } else {
+      dispatch({ type: 'decrement', id })
+    }
     if (product) {
       const next = (cart[id] ?? 0) - 1
       setAnnouncement(next > 0 ? `${product.name}: ${next} in your order.` : `${product.name} removed.`)
@@ -199,10 +227,16 @@ export function OrderScreen({ onExit }: { onExit: () => void }) {
         confirmLabel="Yes, clear everything"
         onCancel={() => setConfirm(null)}
         onConfirm={() => {
-          dispatch({ type: 'clear' })
-          setAdjustments([])
-          setConfirm(null)
-          setAnnouncement('Order cleared.')
+          void (async () => {
+            if (serverCart) {
+              await serverCart.onClear()
+            } else {
+              dispatch({ type: 'clear' })
+            }
+            setAdjustments([])
+            setConfirm(null)
+            setAnnouncement('Order cleared.')
+          })()
         }}
       />
 

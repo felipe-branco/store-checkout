@@ -1,7 +1,7 @@
 {
   "snapshotFormatVersion": "1.0.0",
-  "snapshot": "../../../em-manager/migrations/20260929200131_store.json",
-  "pinnedSnapshot": "20260929200131_store",
+  "snapshot": "../../../em-manager/migrations/20260929231730_store.json",
+  "pinnedSnapshot": "20260929231730_store",
   "sourceRefs": {
     "boardId": "05a02a55-6eb6-41e0-b692-b9b40501af7b",
     "chapterId": "54ddc847-aa4a-44ba-9ee6-f356141b4744",
@@ -14,5 +14,5 @@
   },
   "sliceTitle": "Create Cart",
   "sliceType": "STATE_CHANGE",
-  "sliceStatus": "Planned"
+  "sliceStatus": "Done"
 }
