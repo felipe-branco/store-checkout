@@ -1,6 +1,6 @@
 {
   "snapshotFormatVersion": "1.0.0",
-  "currentSnapshot": "20260929231730_store",
+  "currentSnapshot": "20260930011438_store",
   "slices": {
     "_StatusMergeFixture": {
       "pinnedSnapshot": "20260701000000_tutorial",
