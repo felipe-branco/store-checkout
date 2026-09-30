@@ -4861,7 +4861,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Reserve Stock Item",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "54ddc847-aa4a-44ba-9ee6-f356141b4744": {
@@ -6631,14 +6631,14 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Dereserve Stock Item",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "80c2b529-c3e8-46f1-a3e7-4e93d4ef4b6e": {
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Add Item to Cart",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "831370d2-c881-4eca-8060-36b666c3b77b": {
@@ -6750,7 +6750,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Remove Item from Cart",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "8f08635a-6a58-4964-b6c1-0d102e2324db": {
@@ -7696,7 +7696,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Clear Cart",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "a75127f1-cfa6-4d99-be4b-dd190e5d22b5": {
@@ -9503,7 +9503,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Create Cart",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "e8e51a4f-0bff-46a1-93e8-8f50ee3e098a": {
@@ -9705,7 +9705,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SC] Sell Stock Item",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "f1edd6f8-c0f8-4b40-be42-d68f3188c093": {
@@ -9767,7 +9767,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SV] Cart Details",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "f4ffbb22-83b3-4588-b5f2-f09ceafa807a": {

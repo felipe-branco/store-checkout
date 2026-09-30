@@ -8,6 +8,139 @@
         "33333333-3333-4333-8333-333333333333"
       ],
       "sliceStatus": "Done"
+    },
+    "AddItemToCart": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "80c2b529-c3e8-46f1-a3e7-4e93d4ef4b6e"
+      ],
+      "sliceStatus": "Done"
+    },
+    "CartClearedAutomator": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "a3ecbe0a-e2d1-44a9-961e-475b71f3447c"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "CartDetails": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "f3f308bc-81f3-41cc-ab8b-1f9fcd723345"
+      ],
+      "sliceStatus": "Done"
+    },
+    "ClearCart": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "a6f1d409-6150-444f-b7f4-e135ca0e34dd"
+      ],
+      "sliceStatus": "Done"
+    },
+    "CreateCart": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "e46420b2-48c6-4d87-9a8d-244feefe9f48"
+      ],
+      "sliceStatus": "Done"
+    },
+    "CreateOrder": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "9752d5aa-cd45-4164-abb8-8cfe145eae7a"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "DereserveStockItem": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "7ee2e11c-7f18-4469-a810-8c9837608a6a"
+      ],
+      "sliceStatus": "Done"
+    },
+    "ExternalPaymentSimulatorTranslator": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "d81d97c0-8d77-4037-bf99-32f04f446428"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "FailOrderPayment": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "ef437701-9b30-4a04-9ba5-37363aabbe61"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "FinishOrder": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "c976a72f-db8e-4090-9172-0d92433d0892"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "OrderFinishedDetails": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "9720bc80-64bb-49c0-aa21-0322fb6a44c2"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "OrderPaidAutomator": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "831370d2-c881-4eca-8060-36b666c3b77b"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "PayOrder": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "2beaf773-d70f-4db2-8ad1-acf2705fb17f"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "PaymentFailedOrder": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "06af0d78-0747-432f-9a69-a35a0e190fc3"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "RemoveItemFromCart": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "8cc2c288-2ae6-402b-8a17-5ae03123ca3e"
+      ],
+      "sliceStatus": "Done"
+    },
+    "ReserveStockItem": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "521b19bc-49d9-4689-908d-2a70c293bc17"
+      ],
+      "sliceStatus": "Done"
+    },
+    "SellStockItem": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "f0d3be81-f2d2-4123-b886-ba23114fa866"
+      ],
+      "sliceStatus": "Done"
+    },
+    "SoldItemsOrderAutomator": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "65dcc3e1-6396-4897-8006-469dae19b1b1"
+      ],
+      "sliceStatus": "Planned"
+    },
+    "WebhookSimulatorAutomator": {
+      "pinnedSnapshot": "20260929231730_store",
+      "sliceBorderIds": [
+        "2bf88581-0bb0-4bff-a502-f234c213b1a2"
+      ],
+      "sliceStatus": "Planned"
     }
   }
 }
