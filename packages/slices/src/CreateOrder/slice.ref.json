@@ -14,5 +14,5 @@
   },
   "sliceTitle": "Create Order",
   "sliceType": "STATE_CHANGE",
-  "sliceStatus": "Planned"
+  "sliceStatus": "Done"
 }
