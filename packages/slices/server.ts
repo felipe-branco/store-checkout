@@ -37,6 +37,7 @@ export type { PaymentFailedOrderReadModel } from "./src/PaymentFailedOrder/Payme
 export type { OrderFinishedDetailsReadModel } from "./src/OrderFinishedDetails/OrderFinishedDetailsProjection";
 
 export { registerAllCommandHandlers } from "./src/commands";
-export { registerAllAutomations } from "./src/automations";
+export { registerAllAutomations, type RegisterAutomationsDeps } from "./src/automations";
+export { registerPendingPaymentSimulation } from "./src/WebhookSimulatorAutomator/pendingPaymentSimulation";
 export { INLINE_PROJECTIONS } from "./src/projections-inline";
 export type { InlineProjection } from "./src/projections-inline";

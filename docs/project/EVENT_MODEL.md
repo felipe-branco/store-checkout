@@ -21,10 +21,10 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [SV] Cart Details | **Done** — `packages/slices/src/CartDetails/` (includes **Stock Products List** read model) |
 | [SV] Payment Failed Order | **Done** — `packages/slices/src/PaymentFailedOrder/` |
 | [SV] Order Finished Details | **Done** — `packages/slices/src/OrderFinishedDetails/` |
-| [AUT] Cart Cleared Automator | Planned |
-| [AUT] Webhook Simulator Automator | Planned |
-| [AUT] Order Paid Automator | Planned |
-| [AUT] Sold Items Order Automator | Planned |
+| [AUT] Cart Cleared Automator | **Done** — `packages/slices/src/CartClearedAutomator/` |
+| [AUT] Webhook Simulator Automator | **Done** — `packages/slices/src/WebhookSimulatorAutomator/` (server POST to `/api/webhooks/payment`) |
+| [AUT] Order Paid Automator | **Done** — `packages/slices/src/OrderPaidAutomator/` |
+| [AUT] Sold Items Order Automator | **Done** — `packages/slices/src/SoldItemsOrderAutomator/` |
 | [TR] External Payment Simulator Translator | **Done** — `packages/slices/src/ExternalPaymentSimulatorTranslator/` |
 
 Implement in dependency order per [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Slice refs: `packages/slices/src/<SliceDir>/slice.ref.json` after `pnpm em:slice:init --all-planned`.

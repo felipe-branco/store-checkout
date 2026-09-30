@@ -14,7 +14,7 @@
 ## Next
 
 - [ ] **Clear Cart** stock dereserve (Cart Cleared Automator or explicit flow)
-- [ ] Milestone E — Order Paid / Sold Items / Cart Cleared / Webhook automators
+- [x] Milestone E — Cart Cleared / Order Paid / Sold Items / Webhook Simulator automators (EM **Done**)
 
 ## Later
 

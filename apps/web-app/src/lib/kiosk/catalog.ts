@@ -24,10 +24,10 @@ const PAYMENT_METHODS: PaymentMethod[] = ["credit", "debit", "tap"];
 export function validateOrderPayload(
   body: unknown
 ):
-  | { ok: true; items: OrderItemInput[]; paymentMethod: PaymentMethod; idempotencyKey: string }
+  | { ok: true; items: OrderItemInput[]; paymentMethod: PaymentMethod; idempotencyKey: string; simulationStatus?: "success" | "fail" }
   | { ok: false; message: string } {
   if (!body || typeof body !== "object") return { ok: false, message: "Invalid order." };
-  const { items, paymentMethod, idempotencyKey } = body as Record<string, unknown>;
+  const { items, paymentMethod, idempotencyKey, simulationStatus } = body as Record<string, unknown>;
 
   if (typeof idempotencyKey !== "string" || idempotencyKey.length < 8 || idempotencyKey.length > 64) {
     return { ok: false, message: "Invalid payment session." };
@@ -54,10 +54,19 @@ export function validateOrderPayload(
     if (qty > MAX_QTY_PER_ITEM) return { ok: false, message: "Quantity is over the limit." };
   }
 
+  let parsedSimulation: "success" | "fail" | undefined;
+  if (simulationStatus !== undefined && simulationStatus !== null && simulationStatus !== "") {
+    if (simulationStatus !== "success" && simulationStatus !== "fail") {
+      return { ok: false, message: "Invalid payment simulation." };
+    }
+    parsedSimulation = simulationStatus;
+  }
+
   return {
     ok: true,
     items: Array.from(merged, ([productId, quantity]) => ({ productId, quantity })),
     paymentMethod: paymentMethod as PaymentMethod,
     idempotencyKey,
+    simulationStatus: parsedSimulation,
   };
 }

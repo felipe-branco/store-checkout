@@ -49,12 +49,14 @@ function routeCommandMetadata(cartId: string, correlationId?: string) {
 export async function handleRemoveItemFromCartRoute(
   params: unknown,
   dispatcher: ICommandDispatcher,
-  correlationId?: string
+  correlationId?: string,
+  options?: { cartAlreadyCleared?: boolean }
 ): Promise<RemoveItemFromCartRouteResult> {
   try {
     const validated = RemoveItemFromCartSchema.parse(params);
     const { cart_id, stock_id, item_id, quantity, on_hand_quantity } = validated;
     const metadata = routeCommandMetadata(cart_id, correlationId);
+    const cartAlreadyCleared = options?.cartAlreadyCleared === true;
 
     const dereserveCommand: DereserveStockItemCommand = {
       type: "DereserveStockItem",
@@ -80,6 +82,10 @@ export async function handleRemoveItemFromCartRoute(
         failedCommandType: "DereserveStockItem",
         correlationId,
       };
+    }
+
+    if (cartAlreadyCleared) {
+      return { success: true };
     }
 
     const removeCommand: RemoveItemFromCartCommand = {

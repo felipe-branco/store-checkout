@@ -8,6 +8,7 @@ import {
   handleCreateOrderRoute,
   mapPaymentMethodToEm,
   orderDisplayNumber,
+  registerPendingPaymentSimulation,
   type OrderLineItem,
 } from "@store-checkout/slices/server";
 import { getCatalogRowByProductId, getStockProductsListCatalogRows } from "@/lib/kiosk/stock-products-list";
@@ -109,6 +110,16 @@ export const POST = withLoggedApiRoute(
     const orderId = z.uuid().safeParse(parsed.idempotencyKey).success
       ? parsed.idempotencyKey
       : crypto.randomUUID();
+
+    if (parsed.simulationStatus) {
+      registerPendingPaymentSimulation(orderId, {
+        status: parsed.simulationStatus,
+        paymentMethod: mapPaymentMethodToEm(parsed.paymentMethod),
+        valuePaid: built.totalInCents,
+        currency: "USD",
+        webhookItems: built.lines,
+      });
+    }
 
     const correlationId = crypto.randomUUID();
     const dispatcher = getCommandDispatcher();
