@@ -17,8 +17,24 @@ Thin Next.js adapters over handlers in `packages/slices/src/{SliceName}/routes.t
 | `POST` | `/api/orders` | CreateOrder | `CreateOrder`; optional payment simulation |
 | `GET` | `/api/orders/status` | CartDetails | Order Finished Details + Payment Failed Order |
 | `POST` | `/api/webhooks/payment` | ExternalPaymentSimulatorTranslator | → `PayOrder` / `FailOrderPayment` |
+| `GET` | `/api/kiosk/session` | inline | Gate status (`gateEnabled`, `authorized`) |
+| `POST` | `/api/kiosk/access` | inline | Magic word → HttpOnly `kiosk_session` cookie |
 
 Automations (not HTTP): registered in `packages/slices/src/automations.ts` via `initializeMessageBus()`.
+
+## Production kiosk gate (HttpOnly session)
+
+When **`NODE_ENV=production`** and **`KIOSK_ACCESS_MAGIC_WORD`** is set:
+
+1. **`/`** shows an access-code form until **`POST /api/kiosk/access`** succeeds.
+2. Middleware requires a signed **`kiosk_session`** cookie on **`/api/*`** except:
+   - **`/api/health`**
+   - **`/api/kiosk/access`**, **`/api/kiosk/session`**
+   - **`/api/webhooks/payment`** (server-side Webhook Simulator; protect via network or add a dedicated secret later)
+
+Local dev: leave **`KIOSK_ACCESS_MAGIC_WORD`** unset — no gate, no cookie checks.
+
+Optional **`KIOSK_SESSION_SECRET`** signs cookies (recommended in production; falls back to the magic word if unset).
 
 ## Registration checklist (SC / SV)
 

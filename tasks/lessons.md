@@ -17,6 +17,7 @@ Framework and product notes for **store-checkout**.
 - **Cross-slice sequencing at the route layer:** when the EM board chains commands (e.g. reserve then add to cart), orchestrate in `{Slice}/routes.ts` via multiple `dispatcher.sendCommand()` calls — do **not** import another slice’s command handler into a decider. Roll back the stock step if the cart step fails after a successful reserve/dereserve.
 - **Next.js client vs server:** `@store-checkout/slices` exports **UI only** (`CreateCart`, `CartDetails`). Routes, projections, `commands`, and `INLINE_PROJECTIONS` live on `@store-checkout/slices/server` — never import the barrel from Client Components or you pull `pg` into the browser bundle
 - API routes go under `apps/web-app/src/app/api/`
+- **Production kiosk gate:** `KIOSK_ACCESS_MAGIC_WORD` + HttpOnly **`kiosk_session`** cookie; middleware protects `/api/*` without exposing secrets to the browser bundle
 - Use `pnpm em:slice:*` CLI, not legacy Miro generators
 
 ## Error handling

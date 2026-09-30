@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { isKioskApiPathExempt, isKioskGateEnabled, verifyKioskSessionRequest } from "@/lib/kiosk-session";
 
 function isMaintenanceEnabled(): boolean {
   const v = process.env.MAINTENANCE_MODE?.trim().toLowerCase();
@@ -14,8 +15,22 @@ function isMaintenanceExempt(pathname: string): boolean {
   );
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+
+  if (
+    pathname.startsWith("/api") &&
+    !isKioskApiPathExempt(pathname) &&
+    isKioskGateEnabled()
+  ) {
+    const allowed = await verifyKioskSessionRequest(request);
+    if (!allowed) {
+      return NextResponse.json(
+        { success: false, error: "Unauthorized", code: "KIOSK_SESSION_REQUIRED" },
+        { status: 401 }
+      );
+    }
+  }
 
   if (isMaintenanceEnabled() && !isMaintenanceExempt(pathname)) {
     if (pathname.startsWith("/api")) {

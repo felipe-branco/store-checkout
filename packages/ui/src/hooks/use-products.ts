@@ -5,7 +5,7 @@ import type { Product } from '../lib/kiosk-types'
 
 async function fetcher(url: string): Promise<Product[]> {
   const res = await fetch(url, { cache: 'no-store' })
-  if (!res.ok) throw new Error('Falha ao carregar o cardápio')
+  if (!res.ok) throw new Error('Could not load the menu')
   return res.json()
 }
 
