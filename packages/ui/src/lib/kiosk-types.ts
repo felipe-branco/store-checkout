@@ -38,7 +38,20 @@ export interface OrderResult {
 }
 
 export type CreateOrderResponse =
-  | { ok: true; order: OrderResult }
+  | {
+      ok: true
+      order: OrderResult
+      orderId: string
+      cartId: string
+      paymentMethod: string
+      webhookItems: {
+        stock_id: string
+        item_id: string
+        price_in_cents: number
+        quantity: number
+      }[]
+      currency: string
+    }
   | { ok: false; error: 'stock'; conflicts: StockConflict[] }
   | { ok: false; error: 'invalid'; message: string }
   | { ok: false; error: 'failed'; message: string }

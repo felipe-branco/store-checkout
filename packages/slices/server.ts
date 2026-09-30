@@ -19,6 +19,17 @@ export { handleCreateCartRoute } from "./src/CreateCart/routes";
 export { handleAddItemToCartRoute } from "./src/AddItemToCart/routes";
 export { handleRemoveItemFromCartRoute } from "./src/RemoveItemFromCart/routes";
 export { handleClearCartRoute } from "./src/ClearCart/routes";
+export {
+  handleCreateOrderRoute,
+  orderDisplayNumber,
+  mapPaymentMethodToEm,
+  type OrderLineItem,
+} from "./src/CreateOrder/routes";
+export {
+  handleExternalPaymentSimulatorRoute,
+  ExternalPaymentWebhookSchema,
+  type ExternalPaymentWebhookBody,
+} from "./src/ExternalPaymentSimulatorTranslator/routes";
 
 export { registerAllCommandHandlers } from "./src/commands";
 export { registerAllAutomations } from "./src/automations";

@@ -49,7 +49,7 @@
       "sliceBorderIds": [
         "9752d5aa-cd45-4164-abb8-8cfe145eae7a"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "DereserveStockItem": {
       "pinnedSnapshot": "20260929231730_store",
@@ -63,21 +63,21 @@
       "sliceBorderIds": [
         "d81d97c0-8d77-4037-bf99-32f04f446428"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "FailOrderPayment": {
       "pinnedSnapshot": "20260929231730_store",
       "sliceBorderIds": [
         "ef437701-9b30-4a04-9ba5-37363aabbe61"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "FinishOrder": {
       "pinnedSnapshot": "20260929231730_store",
       "sliceBorderIds": [
         "c976a72f-db8e-4090-9172-0d92433d0892"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "OrderFinishedDetails": {
       "pinnedSnapshot": "20260929231730_store",
@@ -98,7 +98,7 @@
       "sliceBorderIds": [
         "2beaf773-d70f-4db2-8ad1-acf2705fb17f"
       ],
-      "sliceStatus": "Planned"
+      "sliceStatus": "Done"
     },
     "PaymentFailedOrder": {
       "pinnedSnapshot": "20260929231730_store",
