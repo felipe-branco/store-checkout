@@ -5,12 +5,13 @@
 - [x] Monorepo, EM snapshot `20260929200131_store`, slice refs
 - [x] Kiosk theme in `@store-checkout/ui` + demo at `/` (v0-based)
 - [x] Static product catalog in web-app (`product-catalog.ts`); availability formula (minus reserved/sold) not wired yet
+- [x] Milestone A — stock SC slices: Reserve / Dereserve / Sell + `commands.ts` registration
 - [x] API logging via `withLoggedApiRoute` on `/api/health`, `/api/products`, `/api/orders`
 - [x] In-memory `/api/products` and `/api/orders` for UI demo
 
 ## Next
 
-- [ ] Implement EM slices; replace in-memory catalog with event-sourced menu/orders
+- [ ] Milestone B — cart slices + **Cart Details** (Stock Products List read model)
 - [ ] Wire payment translator slice to real API boundary
 
 ## Later

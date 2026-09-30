@@ -1,6 +1,7 @@
 export * from "./eventMetadata";
 export * from "./errors";
 export * from "./money";
+export * from "./events";
 
 export {
   getInMemoryMessageBus,
