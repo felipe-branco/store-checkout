@@ -94,15 +94,18 @@ DATABASE_URL=postgresql://store_checkout:store_checkout@localhost:5432/store_che
 
 Requires Postgres up (`make db-up`) and the same `DATABASE_URL` as the web app. See [PROJECTION_REBUILD_PLAN.md](./PROJECTION_REBUILD_PLAN.md).
 
-## Manual kiosk smoke test (dev)
+## Manual kiosk E2E (dev)
 
 With `make dev` running and gate env vars **unset** (default local):
 
-1. Open [http://localhost:3000](http://localhost:3000) — start screen or resume cart.
-2. Add two products; confirm totals and stock badges update after actions.
-3. Start checkout → choose simulated payment success → wait for pickup number / finished state.
-4. Optional failure path: create order with failure simulation (kiosk payment dialog) → confirm failed payment UI via status polling.
-5. `make health` or `curl -s http://localhost:3000/api/health | jq` — `"ok": true`.
+1. Open [http://localhost:3000](http://localhost:3000). Tap **Start** if you see the welcome screen (creates cart + `cart_id` cookie).
+2. Add at least two items from different categories; confirm the cart panel total and **in stock** badges on the menu.
+3. Tap **Pay** → pick a card method → **Simulate payment** (success). Wait for **Payment approved** and a large **order number** (pickup ticket).
+4. Tap **Done** (or wait for the countdown) to return to the start screen; cart session ends.
+5. **Payment failure:** repeat checkout, choose **Simulate payment failure** → **Payment not completed** with retry / change method.
+6. **Stock conflict (optional):** open checkout with items, clear the cart in another tab or via API, then simulate payment on the first tab → **Some items sold out** (no charge).
+7. **Add conflict:** with only one unit left on a low-stock item, two browser sessions can race; the loser gets a stock message on add (HTTP 409).
+8. `make health` or `curl -s http://localhost:3000/api/health | jq` — `"ok": true`.
 
 Structured API logs appear on the dev server stdout (`withLoggedApiRoute`).
 

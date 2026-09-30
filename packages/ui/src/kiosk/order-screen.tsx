@@ -1,21 +1,14 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
-import { useEffectEvent } from '../hooks/use-effect-event'
-import { Info, RotateCcw, X } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { RotateCcw } from 'lucide-react'
 import { CartPanel, type CartLine } from './cart-panel'
 import { ConfirmDialog } from './confirm-dialog'
 import { IdleGuard } from './idle-guard'
 import { PaymentDialog } from './payment-dialog'
 import { ProductCard } from './product-card'
 import { ThemeToggle } from '../ThemeToggle'
-import {
-  findCartAdjustments,
-  maxAllowed,
-  useCart,
-  type Cart,
-  type CartAdjustment,
-} from '../hooks/use-cart'
+import type { Cart } from '../hooks/use-cart'
 import { useProducts } from '../hooks/use-products'
 import { CATEGORIES, type Category, type Product } from '../lib/kiosk-types'
 import { cn } from '../lib/utils'
@@ -26,9 +19,10 @@ const GRID = 'grid grid-cols-[repeat(auto-fill,minmax(12.5rem,1fr))] gap-3'
 
 export type ServerCartBinding = {
   cart: Cart
-  onAdd: (product: Product) => Promise<void>
-  onDecrement: (productId: string) => Promise<void>
-  onClear: () => Promise<void>
+  refresh: () => Promise<Cart>
+  onAdd: (product: Product) => Promise<{ ok: true } | { ok: false; reason: 'stock' | 'error'; message?: string }>
+  onDecrement: (productId: string) => Promise<{ ok: true } | { ok: false; reason: 'error'; message?: string }>
+  onClear: () => Promise<{ ok: true } | { ok: false; reason: 'error'; message?: string }>
 }
 
 export function OrderScreen({
@@ -39,31 +33,17 @@ export function OrderScreen({
   CheckoutFailedView = PlaceholderCheckoutFailedView,
 }: {
   onExit: () => void
-  serverCart?: ServerCartBinding
+  serverCart: ServerCartBinding
   orderStatusEndpoint?: string
   CheckoutSuccessView?: React.ComponentType<import('./payment-dialog').CheckoutSuccessViewProps>
   CheckoutFailedView?: React.ComponentType<import('./payment-dialog').CheckoutFailedViewProps>
 }) {
   const { data: products, error, isLoading, mutate } = useProducts()
-  const [localCart, dispatch] = useCart()
-  const cart = serverCart?.cart ?? localCart
+  const cart = serverCart.cart
   const [category, setCategory] = useState<Category | 'all'>('all')
   const [paymentOpen, setPaymentOpen] = useState(false)
   const [confirm, setConfirm] = useState<Confirm>(null)
-  const [adjustments, setAdjustments] = useState<CartAdjustment[]>([])
   const [announcement, setAnnouncement] = useState('')
-
-  const syncCart = useEffectEvent((list: Product[]) => {
-    if (paymentOpen || serverCart) return
-    const changes = findCartAdjustments(cart, list)
-    if (changes.length === 0) return
-    dispatch({ type: 'sync', products: list })
-    setAdjustments(changes)
-  })
-
-  useEffect(() => {
-    if (products) syncCart(products)
-  }, [products])
 
   const lines: CartLine[] = useMemo(() => {
     if (!products) return []
@@ -78,27 +58,31 @@ export function OrderScreen({
   const visible = useMemo(() => {
     if (!products) return []
     const filtered = category === 'all' ? products : products.filter((p) => p.category === category)
-    // Available items first, sold out at the end so they never block the good stuff.
     return [...filtered].sort((a, b) => Number(a.stock <= 0) - Number(b.stock <= 0))
   }, [products, category])
 
   async function handleAdd(product: Product) {
     const current = cart[product.id] ?? 0
-    if (product.stock <= 0 || current >= maxAllowed(product)) return
-    if (serverCart) {
-      await serverCart.onAdd(product)
-    } else {
-      dispatch({ type: 'add', product })
+    const result = await serverCart.onAdd(product)
+    if (!result.ok) {
+      if (result.reason === 'stock') {
+        setAnnouncement(`${product.name} is no longer available in that quantity.`)
+        await mutate()
+        await serverCart.refresh()
+      } else {
+        setAnnouncement(result.message ?? 'Could not add item.')
+      }
+      return
     }
     setAnnouncement(`${product.name} added. ${current + 1} in your order.`)
   }
 
   async function handleDecrement(id: string) {
     const product = products?.find((p) => p.id === id)
-    if (serverCart) {
-      await serverCart.onDecrement(id)
-    } else {
-      dispatch({ type: 'decrement', id })
+    const result = await serverCart.onDecrement(id)
+    if (!result.ok) {
+      setAnnouncement(result.message ?? 'Could not update item.')
+      return
     }
     if (product) {
       const next = (cart[id] ?? 0) - 1
@@ -152,33 +136,6 @@ export function OrderScreen({
           </ul>
         </nav>
 
-        {adjustments.length > 0 && (
-          <div
-            role="status"
-            className="mx-6 mb-4 flex items-start gap-4 rounded-2xl bg-secondary p-4 text-secondary-foreground"
-          >
-            <Info className="mt-0.5 size-6 shrink-0" aria-hidden="true" />
-            <div className="flex flex-1 flex-col gap-1">
-              <p className="text-lg font-bold">We updated your order because stock changed.</p>
-              <ul className="text-base leading-relaxed">
-                {adjustments.map((a) => (
-                  <li key={a.name}>
-                    {a.name}: {a.to === 0 ? 'sold out and was removed' : `changed from ${a.from} to ${a.to}`}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <button
-              type="button"
-              onClick={() => setAdjustments([])}
-              className="flex size-12 shrink-0 items-center justify-center rounded-full active:bg-foreground/10"
-              aria-label="Dismiss notice"
-            >
-              <X className="size-6" />
-            </button>
-          </div>
-        )}
-
         <section aria-label="Menu" className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-6 pb-6">
           {error && !products ? (
             <div className="flex h-full flex-col items-center justify-center gap-6 text-center" role="alert">
@@ -215,10 +172,7 @@ export function OrderScreen({
         onIncrement={handleAdd}
         onDecrement={handleDecrement}
         onClear={() => setConfirm('clear')}
-        onCheckout={() => {
-          setAdjustments([])
-          setPaymentOpen(true)
-        }}
+        onCheckout={() => setPaymentOpen(true)}
       />
 
       <p className="sr-only" aria-live="polite">
@@ -234,12 +188,12 @@ export function OrderScreen({
         onCancel={() => setConfirm(null)}
         onConfirm={() => {
           void (async () => {
-            if (serverCart) {
-              await serverCart.onClear()
-            } else {
-              dispatch({ type: 'clear' })
+            const result = await serverCart.onClear()
+            if (!result.ok) {
+              setAnnouncement(result.message ?? 'Could not clear cart.')
+              setConfirm(null)
+              return
             }
-            setAdjustments([])
             setConfirm(null)
             setAnnouncement('Order cleared.')
           })()
@@ -264,6 +218,7 @@ export function OrderScreen({
           onStockConflict={async () => {
             setPaymentOpen(false)
             await mutate()
+            await serverCart.refresh()
           }}
           onFinish={onExit}
           orderStatusEndpoint={orderStatusEndpoint}

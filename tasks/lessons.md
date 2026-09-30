@@ -35,7 +35,7 @@ Framework and product notes for **store-checkout**.
 
 ## UI
 
-- **Kiosk polling:** product catalog via SWR **15s** + focus revalidate (`packages/ui/src/hooks/use-products.ts`); cart is **not** polled — refetch after commands only (`CartDetails`)
+- **Kiosk polling:** product catalog via SWR **15s** + focus revalidate (`packages/ui/src/hooks/use-products.ts`); cart is **not** polled — refetch after commands only (`CartDetails`). **`OrderScreen`** requires a **`serverCart`** binding; stock changes surface via **409 on add**, checkout **stock conflicts**, not client-side cart clamping.
 - **Cart `price_in_cents`:** set from catalog in `/api/cart/items`, stored on cart stream events; board snapshot in `manifest.json` → `currentSnapshot` (latest: **`20260930011438_store`**, adds Dereserve spec scenario). After a new EM export, **`sliceStatus` on borders can regress to `Planned`** — restore from prior migration or run `pnpm em:export:merge-status` so snapshot matches `slice.ref.json` / `manifest.json`
 - **Clear cart → stock:** `ClearCart` does not dereserve on the command; **`CartClearedAutomator`** reads **`ClearedCartItems`** projection and calls **`RemoveItemFromCart`** orchestration with **`cartAlreadyCleared: true`** (dereserve only; cart lines already empty on stream)
 - **Cart ↔ stock:** `AddItemToCart/routes.ts` and `RemoveItemFromCart/routes.ts` require **`on_hand_quantity`** (catalog `quantity`) for `ReserveStockItem` / rollback re-reserve; web-app passes it from `getCatalogRowByProductId`

@@ -48,7 +48,6 @@ export {
 export { CheckoutThemeProvider, type CheckoutThemeProviderProps } from './CheckoutThemeProvider';
 export { ThemeToggle } from './ThemeToggle';
 
-export { Kiosk } from './kiosk/kiosk';
 export { StartScreen } from './kiosk/start-screen';
 export { OrderScreen, type ServerCartBinding } from './kiosk/order-screen';
 export type { CartLine } from './kiosk/cart-panel';

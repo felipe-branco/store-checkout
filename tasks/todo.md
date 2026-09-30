@@ -26,9 +26,11 @@ Tracking aligned with `.cursor/plans/em_checkout_completion_3883e44f.plan.md`.
 
 ## Phase 3 — Kiosk completion
 
-- [ ] Confirm no in-memory `placeOrder` / local stock mutation left in catalog path
-- [ ] Idle guard / payment dialog wired to real API outcomes (409, failed payment view)
-- [ ] Expand manual E2E script in LOCAL_SETUP if gaps found during walkthrough
+- [x] Server-backed cart only (`CartDetails` + `cart_id` cookie); no in-memory cart in `OrderScreen`
+- [x] Static catalog only (no runtime stock mutation); availability via **`GET /api/products`** projection
+- [x] Payment dialog → **`POST /api/orders`**, status polling, stock + payment failure views
+- [x] Cart add **409** / checkout **stock** conflicts surfaced in UI; menu refresh syncs server cart
+- [x] Manual E2E script in [LOCAL_SETUP.md](../docs/LOCAL_SETUP.md)
 
 ## Phase 4 — Verification gates
 

@@ -4,9 +4,9 @@ import type { Category } from "@store-checkout/ui";
 /**
  * Static kiosk menu (EM `initial_products`). No DB seed.
  *
- * Target availability (Stock Products List read model, not implemented yet):
- *   available = quantity − reserved − sold
- * Reserved/sold will come from stock slice events + projections once those slices land.
+ * **`quantity`** is initial on-hand for commands and the Stock Products List formula:
+ * `available = quantity − reserved − sold` (see `GET /api/products` + Pongo projection).
+ * Do not mutate this array at runtime.
  */
 
 /** Inventory pool (EM `stock_id`). Products on the same source share one `stockId`. */
