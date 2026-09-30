@@ -17,15 +17,14 @@ Checkout kiosk UI runs at `/` with theme from `@store-checkout/ui` (`checkout-th
 
 ## Getting started
 
-See **[docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md)** for env files and local setup.
+See **[docs/LOCAL_SETUP.md](docs/LOCAL_SETUP.md)** for prerequisites and env files.
 
 ```bash
-docker compose up -d
-pnpm install
-pnpm dev
+make setup
+make dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000). Health check: `GET /api/health`.
+Open [http://localhost:3000](http://localhost:3000). With the dev server running, `make health` checks `GET /api/health`.
 
 ## Workspace packages (8)
 
@@ -56,7 +55,7 @@ packages/tsconfig/      @store-checkout/tsconfig — shared TS configs
 PostgreSQL 16 via **`docker-compose.yml`**:
 
 ```
-DATABASE_URL=postgresql://em_slices:em_slices@localhost:5432/em_slices
+DATABASE_URL=postgresql://store_checkout:store_checkout@localhost:5432/store_checkout
 ```
 
 If you previously used different local Postgres credentials, run `docker compose down -v` and recreate volumes.

@@ -28,5 +28,6 @@ Framework and product notes for **store-checkout**.
 ## Verification
 
 - Run `pnpm test`, `pnpm lint`, and `pnpm build` before merging template changes
+- Local bootstrap: `make check-deps` fails fast if Node is below 24 (see `.nvmrc`) even when other tools accept an older runtime
 - Keep legacy product brand strings out of the repo (grep gate in CI or local checks)
 - Keep old npm scope out of imports (use `@store-checkout/*` only)
