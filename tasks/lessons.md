@@ -50,11 +50,13 @@ Framework and product notes for **store-checkout**.
 
 ## Documentation (Phase 2 map)
 
-- When behavior or EM snapshot changes, update together: [`docs/project/EVENT_MODEL.md`](../docs/project/EVENT_MODEL.md), [`DECISIONS.md`](../docs/project/DECISIONS.md), [`docs/project/README.md`](../docs/project/README.md), [`LOCAL_SETUP.md`](../docs/LOCAL_SETUP.md), [`tasks/todo.md`](./todo.md), and append here — do not archive `.cursor/plans/` into `docs/plans/` until Phase 4 verification passes
+- When behavior or EM snapshot changes, update together: [`docs/project/EVENT_MODEL.md`](../docs/project/EVENT_MODEL.md), [`DECISIONS.md`](../docs/project/DECISIONS.md), [`docs/project/README.md`](../docs/project/README.md), [`LOCAL_SETUP.md`](../docs/LOCAL_SETUP.md), [`tasks/todo.md`](./todo.md), and append here — archived plan: [`docs/plans/em-checkout-completion.md`](../docs/plans/em-checkout-completion.md)
 
 ## Verification
 
 - Run `pnpm test`, `pnpm lint`, and `pnpm build` before merging template changes
+- Phase 4 gate (2026-09-30): `make setup` → test/lint/build → `pnpm em:slice:check-drift --all`; use **`nvm use`** (Node 24) before `make setup` in shells that default to Node 22
 - Local bootstrap: `make check-deps` fails fast if Node is below 24 (see `.nvmrc`) even when other tools accept an older runtime
+- **`make db-reset`** before stock/concurrency experiments — orphan **`StockItemReserved`** on the shared stock stream persists across new cart sessions; menu badges can look stricter than the stream allows until the DB is clean
 - Keep legacy product brand strings out of the repo (grep gate in CI or local checks)
 - Keep old npm scope out of imports (use `@store-checkout/*` only)

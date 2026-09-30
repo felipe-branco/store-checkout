@@ -25,8 +25,9 @@ Keep these aligned when behavior or EM exports change (Phase 2 of the implementa
 | [../TEMPLATE.md](../TEMPLATE.md) | First-slice walkthrough |
 | [../../tasks/todo.md](../../tasks/todo.md) | Milestone checklist |
 | [../../tasks/lessons.md](../../tasks/lessons.md) | Gotchas discovered during implementation |
+| [../plans/em-checkout-completion.md](../plans/em-checkout-completion.md) | Archived EM checkout implementation plan (completed 2026-09-30) |
 
-**Archived plan (after ship):** copy `.cursor/plans/em_checkout_completion_*.plan.md` to `docs/plans/em-checkout-completion.md` and link here — not done until Phase 4 verification passes.
+**Implementation plan (archived):** [em-checkout-completion.md](../plans/em-checkout-completion.md) — completed 2026-09-30.
 
 ## Other assets
 

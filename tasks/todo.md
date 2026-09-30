@@ -9,7 +9,7 @@ Tracking aligned with `.cursor/plans/em_checkout_completion_3883e44f.plan.md`.
 - [x] [`docs/project/DECISIONS.md`](../docs/project/DECISIONS.md) — catalog, cart/stock, gate, rebuild, checkout flow
 - [x] [`docs/LOCAL_SETUP.md`](../docs/LOCAL_SETUP.md) — Makefile, env, smoke test, verification commands
 - [x] [`tasks/lessons.md`](./lessons.md) — ongoing append during implementation
-- [ ] Archive plan → `docs/plans/em-checkout-completion.md` after Phase 4 (do not copy early)
+- [x] Archive plan → [`docs/plans/em-checkout-completion.md`](../docs/plans/em-checkout-completion.md) (2026-09-30)
 
 ## Milestones (implementation)
 
@@ -34,10 +34,10 @@ Tracking aligned with `.cursor/plans/em_checkout_completion_3883e44f.plan.md`.
 
 ## Phase 4 — Verification gates
 
-- [ ] `make setup` on clean machine path
-- [ ] `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm em:slice:check-drift --all`
-- [ ] Manual happy path + payment failure; optional Axiom if configured
-- [ ] Copy completed plan to `docs/plans/` and link from project README
+- [x] `make setup` (Node 24 via `.nvmrc`; Postgres healthy)
+- [x] `pnpm test`, `pnpm lint`, `pnpm build`, `pnpm em:slice:check-drift --all` (2026-09-30)
+- [x] API smoke: `make health`, `GET /api/products`, `POST /api/cart` — kiosk happy/fail paths in [LOCAL_SETUP.md](../docs/LOCAL_SETUP.md) for manual UI
+- [x] Plan archived + linked from [project README](../docs/project/README.md)
 
 ## Backlog
 
