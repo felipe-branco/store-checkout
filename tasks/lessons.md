@@ -10,7 +10,7 @@ Framework and product notes for **store-checkout**.
 ## Slices
 
 - Register command handlers in `commands.ts`
-- Register inline projections in `projections-inline.ts`
+- Register inline projections in `projections-inline.ts`; state views also in `projections-registry.ts` and **`packages/slices/src/manual-rebuild-config.ts`** (same keys as registry) so `pnpm rebuild:projections --all` works
 - **Do not add code under `packages/slices/src/` outside an EM slice directory** (no shared `stock/`, `stockProductsList/`, etc.) unless the user explicitly asks for it
 - **Slices are self-contained units** — keep state, `evolve`, and `decide` inside each slice folder; prefer **duplication over cross-slice shared modules** (including stock deciders: `ReserveStockItem`, `DereserveStockItem`, and `SellStockItem` must keep identical `evolve` for `StockItemSold` / reservation fields)
 - **Automators:** register in `packages/slices/src/automations.ts`; use **per-slice context types** (e.g. `WebhookSimulatorAutomatorContext`, `CartClearedAutomatorContext`) — no shared `packages/slices/src/automation/` helpers unless explicitly requested

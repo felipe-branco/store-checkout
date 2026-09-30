@@ -10,12 +10,12 @@
 - [x] API logging via `withLoggedApiRoute` on cart, health, products, orders
 - [x] Milestone C — CreateOrder, Pay/Fail/Finish order, External Payment Simulator Translator + `/api/orders`, `/api/webhooks/payment` (EM **Done**)
 - [x] Milestone D — PaymentFailedOrder, OrderFinishedDetails + `/api/orders/status` polling in checkout UI (EM **Done**)
+- [x] Milestone E — Cart Cleared / Order Paid / Sold Items / Webhook Simulator automators (EM **Done**)
+- [x] SC/SV registration checklist — commands, projections, registry, **manual-rebuild-config**, API routes (`api/README.md`); `pnpm em:slice:check-drift --all` clean
 
 ## Next
 
-- [ ] Pin `manifest.json` slice `pinnedSnapshot` ids to **`20260930011438_store`** when borders change on that migration (optional hygiene; `currentSnapshot` already updated)
-- [x] **Clear Cart** stock dereserve — **Cart Cleared Automator** + **Cleared Cart Items** projection; sold-line dereserve guard in **Dereserve Stock Item**
-- [x] Milestone E — Cart Cleared / Order Paid / Sold Items / Webhook Simulator automators (EM **Done**)
+- [x] Pin `manifest.json` + all `slice.ref.json` to **`20260930011438_store`** (matches `currentSnapshot`)
 
 ## Later
 

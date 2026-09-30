@@ -41,3 +41,5 @@ export { registerAllAutomations, type RegisterAutomationsDeps } from "./src/auto
 export { registerPendingPaymentSimulation } from "./src/WebhookSimulatorAutomator/pendingPaymentSimulation";
 export { INLINE_PROJECTIONS } from "./src/projections-inline";
 export type { InlineProjection } from "./src/projections-inline";
+export { MANUAL_REBUILD_CONFIG, type ManualRebuildConfig } from "./src/manual-rebuild-config";
+export { PROJECTION_REGISTRY } from "./src/projections-registry";
