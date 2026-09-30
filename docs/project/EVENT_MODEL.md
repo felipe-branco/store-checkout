@@ -28,3 +28,13 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [TR] External Payment Simulator Translator |
 
 Implement in dependency order per [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Slice refs: `packages/slices/src/<SliceDir>/slice.ref.json` after `pnpm em:slice:init --all-planned`.
+
+## Stock Products List (read model — planned)
+
+The board defines read model **Stock Products List** (`READMODEL` in the migration JSON). Not implemented in code yet.
+
+| Source | Role |
+|--------|------|
+| [`apps/web-app/src/lib/kiosk/product-catalog.ts`](../../apps/web-app/src/lib/kiosk/product-catalog.ts) | Static `initial_products` today (no DB seed). All items use one **stock source** (`STOCK_SOURCES` → shared `stockId`); add sources when inventory is split |
+| Planned | **`available = quantity − reserved − sold`** — `reserved` / `sold` from stock slice projections after Reserve / Dereserve / Sell land |
+| API today | `GET /api/products` returns static catalog `quantity` as kiosk `stock` |
