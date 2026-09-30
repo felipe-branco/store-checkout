@@ -1,10 +1,30 @@
-import type { MessageBus, EventStore } from "@store-checkout/event-store";
+import type { MessageBus, PostgresEventStore } from "@store-checkout/event-store";
 import type { ICommandDispatcher } from "@store-checkout/core";
+import {
+  handleReserveStockItem,
+  type ReserveStockItemCommand,
+} from "./ReserveStockItem/ReserveStockItemCommand";
+import {
+  handleDereserveStockItem,
+  type DereserveStockItemCommand,
+} from "./DereserveStockItem/DereserveStockItemCommand";
+import {
+  handleSellStockItem,
+  type SellStockItemCommand,
+} from "./SellStockItem/SellStockItemCommand";
 
 export function registerAllCommandHandlers(
-  _dispatcher: ICommandDispatcher,
+  dispatcher: ICommandDispatcher,
   _messageBus: MessageBus,
-  _eventStore: EventStore
+  eventStore: PostgresEventStore
 ): void {
-  // Register slice command handlers here after code generation.
+  dispatcher.register<ReserveStockItemCommand>("ReserveStockItem", (cmd) =>
+    handleReserveStockItem(cmd, eventStore)
+  );
+  dispatcher.register<DereserveStockItemCommand>("DereserveStockItem", (cmd) =>
+    handleDereserveStockItem(cmd, eventStore)
+  );
+  dispatcher.register<SellStockItemCommand>("SellStockItem", (cmd) =>
+    handleSellStockItem(cmd, eventStore)
+  );
 }

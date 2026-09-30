@@ -11,6 +11,10 @@ Framework and product notes for **store-checkout**.
 
 - Register command handlers in `commands.ts`
 - Register inline projections in `projections-inline.ts`
+- **Do not add code under `packages/slices/src/` outside an EM slice directory** (no shared `stock/`, `stockProductsList/`, etc.) unless the user explicitly asks for it
+- **Slices are self-contained units** — keep state, `evolve`, and `decide` inside each slice folder; prefer **duplication over cross-slice shared modules**
+- API routes go under `apps/web-app/src/app/api/`
+- Use `pnpm em:slice:*` CLI, not legacy Miro generators
 - API routes go under `apps/web-app/src/app/api/`
 - Use `pnpm em:slice:*` CLI, not legacy Miro generators
 

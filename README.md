@@ -52,7 +52,7 @@ packages/tsconfig/      @store-checkout/tsconfig — shared TS configs
 
 ## Database
 
-PostgreSQL 16 via **`docker-compose.yml`**:
+PostgreSQL 17 via **`docker-compose.yml`**:
 
 ```
 DATABASE_URL=postgresql://store_checkout:store_checkout@localhost:5432/store_checkout
@@ -74,4 +74,4 @@ If you previously used different local Postgres credentials, run `docker compose
 - [docs/SLICE_IMPLEMENTATION_WORKFLOW.md](docs/SLICE_IMPLEMENTATION_WORKFLOW.md)
 - [docs/EVENT_SOURCING_BEST_PRACTICES.md](docs/EVENT_SOURCING_BEST_PRACTICES.md)
 - [docs/ZOD.md](docs/ZOD.md)
-- [packages/ui/UI_STACK.md](packages/ui/UI_STACK.md) — adopt MUI or Tailwind + shadcn
+- [packages/ui/UI_STACK.md](packages/ui/UI_STACK.md) — **Tailwind 4 + shadcn** in `@store-checkout/ui` (locked in; MUI path in doc is historical)
