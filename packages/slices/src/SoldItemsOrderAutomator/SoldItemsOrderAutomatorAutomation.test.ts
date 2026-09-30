@@ -1,7 +1,7 @@
-import { describe, it, expect, vi, beforeEach } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import type { StockItemSold } from "@store-checkout/core";
 import { handleSoldItemsOrderAutomatorAutomation } from "./SoldItemsOrderAutomatorAutomation";
-import type { OrderPaidAutomatorContext } from "../OrderPaidAutomator/OrderPaidAutomatorContext";
+import type { SoldItemsOrderAutomatorContext } from "../OrderPaidAutomator/OrderPaidAutomatorContext";
 
 describe("SoldItemsOrderAutomator", () => {
   const cartId = "11111111-1111-4111-8111-111111111111";
@@ -11,9 +11,8 @@ describe("SoldItemsOrderAutomator", () => {
 
   it("dispatches FinishOrder when all lines are sold", async () => {
     const sendCommand = vi.fn().mockResolvedValue({ success: true, eventsPublished: 1 });
-    const context: OrderPaidAutomatorContext = {
+    const context: SoldItemsOrderAutomatorContext = {
       sendCommand,
-      paymentWebhookUrl: "http://localhost:3000/api/webhooks/payment",
       eventStore: {
         readStream: vi.fn(async (streamId: string) => {
           if (streamId === cartId) {
@@ -50,7 +49,7 @@ describe("SoldItemsOrderAutomator", () => {
             ],
           };
         }),
-      } as unknown as AutomationContext["eventStore"],
+      } as unknown as SoldItemsOrderAutomatorContext["eventStore"],
     };
 
     const event: StockItemSold = {

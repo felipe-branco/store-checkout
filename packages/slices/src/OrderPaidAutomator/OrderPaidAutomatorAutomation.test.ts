@@ -16,7 +16,6 @@ describe("OrderPaidAutomator", () => {
     sendCommand = vi.fn().mockResolvedValue({ success: true, eventsPublished: 1 });
     context = {
       sendCommand,
-      paymentWebhookUrl: "http://localhost:3000/api/webhooks/payment",
       eventStore: {
         readStream: vi.fn().mockResolvedValue({
           events: [
@@ -40,7 +39,7 @@ describe("OrderPaidAutomator", () => {
             },
           ],
         }),
-      } as unknown as AutomationContext["eventStore"],
+      } as unknown as OrderPaidAutomatorContext["eventStore"],
     };
   });
 
