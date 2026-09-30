@@ -15,7 +15,7 @@ let initializationPromise: Promise<void> | null = null;
 let initializationError: Error | null = null;
 
 export async function initializeEventStore(): Promise<void> {
-  if (eventStoreInstance) return;
+  if (eventStoreInstance && pongoDbInstance) return;
   if (initializationError) throw initializationError;
   if (initializationInFlight && initializationPromise) {
     await initializationPromise;

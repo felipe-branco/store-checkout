@@ -6,7 +6,7 @@ How to replay events into Pongo read models in this template.
 
 - **Architecture:** Event sourcing with Emmett, vertical slices, Pongo/PostgreSQL projections.
 - **Runtime:** Projections register via `projections.inline([...])` in the event store setup and process events when the app handles requests.
-- **Starter state:** `packages/slices/src/projections-registry.ts` and `scripts/manual-rebuild-config.ts` start **empty**. Register each STATE_VIEW projection you add.
+- **Starter state:** Register each STATE_VIEW (and other inline projections you rebuild) in `packages/slices/src/projections-registry.ts` and **`packages/slices/src/manual-rebuild-config.ts`** (re-exported to `scripts/manual-rebuild-config.ts` for `pnpm rebuild:projections`).
 
 ## Why a manual rebuild engine
 
@@ -39,7 +39,7 @@ DATABASE_URL="postgresql://..." pnpm diagnose:rebuild [stream_id]
 
 1. Register inline handler in `packages/slices/src/projections-inline.ts`.
 2. Add an entry to `packages/slices/src/projections-registry.ts` (for discovery).
-3. Add matching config to `scripts/manual-rebuild-config.ts` (`collectionName`, `canHandle`, `evolve`, optional `getDocumentId` for multi-document streams).
+3. Add matching config to **`packages/slices/src/manual-rebuild-config.ts`** (`collectionName`, `canHandle`, `evolve`, optional `getDocumentId` for multi-document streams). Keys must match `PROJECTION_REGISTRY`.
 
 For multi-stream projections, `getDocumentId` might map an event to a document key other than `streamId` (e.g. a user id). Document that rule in the slice.
 
