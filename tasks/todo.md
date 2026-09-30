@@ -2,7 +2,7 @@
 
 ## Done
 
-- [x] Monorepo, EM snapshot `20260929200131_store`, slice refs
+- [x] Monorepo, EM snapshot `20260929231730_store`, slice refs
 - [x] Kiosk theme in `@store-checkout/ui` + demo at `/` (v0-based)
 - [x] Static product catalog in web-app (`product-catalog.ts`); availability formula (minus reserved/sold) not wired yet
 - [x] Milestone A — stock SC slices: Reserve / Dereserve / Sell + `commands.ts` registration

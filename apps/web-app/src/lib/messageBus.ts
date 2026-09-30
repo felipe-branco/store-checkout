@@ -4,8 +4,10 @@ import {
   type EventSubscription,
   type CommandProcessor,
 } from "@store-checkout/event-store";
-import { registerAllCommandHandlers } from "@store-checkout/slices/src/commands";
-import { registerAllAutomations } from "@store-checkout/slices/src/automations";
+import {
+  registerAllAutomations,
+  registerAllCommandHandlers,
+} from "@store-checkout/slices/server";
 import { getEventStore, getPongoDb } from "./eventStore";
 import { CommandDispatcher } from "./commandDispatcher";
 

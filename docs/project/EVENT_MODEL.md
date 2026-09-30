@@ -1,16 +1,16 @@
 # Event model
 
 **Board:** MashginCheckout  
-**Snapshot:** `20260929200131_store` (`packages/em-manager/migrations/`, `manifest.json` → `currentSnapshot`)
+**Snapshot:** `20260929231730_store` (`packages/em-manager/migrations/`, `manifest.json` → `currentSnapshot`)
 
 Planned slices (prefix = EM type: SC state change, SV state view, AUT automation, TR translator):
 
 | Slice | Status |
 |-------|--------|
-| [SC] Create Cart | Planned |
-| [SC] Add Item to Cart | Planned |
-| [SC] Remove Item from Cart | Planned |
-| [SC] Clear Cart | Planned |
+| [SC] Create Cart | **Done** — `packages/slices/src/CreateCart/` |
+| [SC] Add Item to Cart | **Done** — `packages/slices/src/AddItemToCart/` |
+| [SC] Remove Item from Cart | **Done** — `packages/slices/src/RemoveItemFromCart/` |
+| [SC] Clear Cart | **Done** — `packages/slices/src/ClearCart/` |
 | [SC] Reserve Stock Item | **Done** — `packages/slices/src/ReserveStockItem/` |
 | [SC] Dereserve Stock Item | **Done** — `packages/slices/src/DereserveStockItem/` |
 | [SC] Create Order | Planned |
@@ -18,7 +18,7 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [SC] Fail Order Payment | Planned |
 | [SC] Sell Stock Item | **Done** — `packages/slices/src/SellStockItem/` |
 | [SC] Finish Order | Planned |
-| [SV] Cart Details | Planned (includes **Stock Products List** read model composition) |
+| [SV] Cart Details | **Done** — `packages/slices/src/CartDetails/` (includes **Stock Products List** read model) |
 | [SV] Payment Failed Order | Planned |
 | [SV] Order Finished Details | Planned |
 | [AUT] Cart Cleared Automator | Planned |
@@ -29,13 +29,32 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 
 Implement in dependency order per [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Slice refs: `packages/slices/src/<SliceDir>/slice.ref.json` after `pnpm em:slice:init --all-planned`.
 
-## Stock Products List (read model — planned in Cart Details)
+## Stock Products List (read model — in Cart Details)
 
-The board defines read model **Stock Products List** (`READMODEL` in the migration JSON). **Not a separate slice** — implement inside **[SV] Cart Details** (static catalog + reserved/sold projections).
+The board defines read model **Stock Products List** (`READMODEL` in the migration JSON). **Not a separate slice** — implemented inside **[SV] Cart Details** (static catalog + reserved/sold projections).
 
 | Source | Role |
 |--------|------|
 | [`apps/web-app/src/lib/kiosk/product-catalog.ts`](../../apps/web-app/src/lib/kiosk/product-catalog.ts) | Static `initial_products` (no DB seed). Shared `stockId` per `STOCK_SOURCES` |
 | Stock stream (`stock_id`) | Events `StockItemReserved`, `StockItemDereserved`, `StockItemSold` — handlers in `ReserveStockItem`, `DereserveStockItem`, `SellStockItem` |
 | Target formula | **`available = quantity − reserved − sold`** per `item_id` |
-| API today | `GET /api/products` still returns static `quantity` as kiosk `stock` until Cart Details + wiring land |
+| API | `GET /api/products` uses `buildStockProductsList` + Pongo projection `stock-products-list-collection` |
+
+## Kiosk client refresh
+
+| Read path | API | Client behavior |
+|-----------|-----|-----------------|
+| Stock Products List (menu + `stock` badges) | `GET /api/products` | SWR in `@store-checkout/ui` — poll every **15s**, revalidate on window focus ([`use-products.ts`](../../packages/ui/src/hooks/use-products.ts)) |
+| Cart Details (line items, totals) | `GET /api/cart` | Fetch on mount + after mutations only — [`CartDetails.tsx`](../../packages/slices/src/CartDetails/ui/CartDetails.tsx); no interval |
+| Session (start vs order) | `GET /api/cart` | Once on mount — [`apps/web-app/src/app/page.tsx`](../../apps/web-app/src/app/page.tsx) |
+
+Rationale: shared stock read model can change without this kiosk issuing commands; cart state is owned by this session’s commands. Documented in [DECISIONS.md](./DECISIONS.md).
+
+## Cart stream events (Add / Remove)
+
+| Event | Notable payload fields |
+|-------|-------------------------|
+| `ItemAddedToCart` | `cart_id`, `stock_id`, `item_id`, **`price_in_cents`**, `quantity`, `added_at` |
+| `ItemRemovedFromCart` | `cart_id`, `stock_id`, `item_id`, **`price_in_cents`**, `quantity`, `removed_at` |
+
+Commands **Add Item to Cart** and **Remove Item from Cart** include **`price_in_cents`** (from static catalog at dispatch in `POST`/`DELETE` `/api/cart/items`).

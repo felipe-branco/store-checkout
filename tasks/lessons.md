@@ -13,6 +13,7 @@ Framework and product notes for **store-checkout**.
 - Register inline projections in `projections-inline.ts`
 - **Do not add code under `packages/slices/src/` outside an EM slice directory** (no shared `stock/`, `stockProductsList/`, etc.) unless the user explicitly asks for it
 - **Slices are self-contained units** — keep state, `evolve`, and `decide` inside each slice folder; prefer **duplication over cross-slice shared modules**
+- **Next.js client vs server:** `@store-checkout/slices` exports **UI only** (`CreateCart`, `CartDetails`). Routes, projections, `commands`, and `INLINE_PROJECTIONS` live on `@store-checkout/slices/server` — never import the barrel from Client Components or you pull `pg` into the browser bundle
 - API routes go under `apps/web-app/src/app/api/`
 - Use `pnpm em:slice:*` CLI, not legacy Miro generators
 - API routes go under `apps/web-app/src/app/api/`
@@ -31,6 +32,8 @@ Framework and product notes for **store-checkout**.
 
 ## UI
 
+- **Kiosk polling:** product catalog via SWR **15s** + focus revalidate (`packages/ui/src/hooks/use-products.ts`); cart is **not** polled — refetch after commands only (`CartDetails`)
+- **Cart `price_in_cents`:** EM snapshot `20260929231730_store`; set from catalog in `/api/cart/items`, stored on cart stream events; slice refs and `manifest.json` must stay on the same snapshot id
 - Default locale **en-US** in the web shell (`lang="en-US"`, English copy on home/maintenance pages). No i18n framework.
 - UI skeleton via `@store-checkout/ui`; pick MUI or Tailwind + shadcn in `packages/ui` (see `UI_STACK.md`)
 - No em dashes in user-facing copy
