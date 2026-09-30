@@ -6,7 +6,7 @@
  *   DATABASE_URL="postgresql://..." pnpm tsx scripts/diagnose-rebuild.ts [stream_id] [collection_name]
  *
  * Example:
- *   DATABASE_URL="postgresql://em_slices:em_slices@localhost:5432/em_slices" pnpm tsx scripts/diagnose-rebuild.ts <stream_id> itemlist-collection
+ *   DATABASE_URL="postgresql://store_checkout:store_checkout@localhost:5432/store_checkout" pnpm tsx scripts/diagnose-rebuild.ts <stream_id> itemlist-collection
  */
 
 import {

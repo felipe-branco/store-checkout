@@ -2,7 +2,7 @@
 
 **Spec:** [web_checkout_v0.1.pdf](./web_checkout_v0.1.pdf)
 
-**Run:** [LOCAL_SETUP.md](../LOCAL_SETUP.md) → `pnpm dev` → [http://localhost:3000](http://localhost:3000) (kiosk UI).
+**Run:** [LOCAL_SETUP.md](../LOCAL_SETUP.md) — `make setup`, then `make dev` → [http://localhost:3000](http://localhost:3000) (kiosk UI).
 
 | Doc | Purpose |
 |-----|---------|
