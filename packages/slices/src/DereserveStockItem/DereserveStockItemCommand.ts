@@ -4,6 +4,7 @@ import {
   type PostgresEventStore,
 } from "@store-checkout/event-store";
 import type {
+  CommandMetadata,
   CommandResult,
   StockItemDereserved,
   StockItemReserved,
@@ -95,7 +96,8 @@ export type DereserveStockItemCommand = Command<
     cart_id: string;
     item_id: string;
     quantity: number;
-  }
+  },
+  CommandMetadata
 >;
 
 export function decide(
@@ -123,6 +125,14 @@ export function decide(
         item_id,
         quantity,
         dereserved_at: command.metadata!.now.getTime(),
+      },
+      metadata: {
+        now: command.metadata!.now,
+        streamName: stock_id,
+        causation_id: command.metadata?.causation_id ?? stock_id,
+        ...(command.metadata?.correlation_id
+          ? { correlation_id: command.metadata.correlation_id }
+          : {}),
       },
     } as StockItemDereserved,
   ];

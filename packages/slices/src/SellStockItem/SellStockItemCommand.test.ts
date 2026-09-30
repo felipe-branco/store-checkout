@@ -51,6 +51,11 @@ describe("SellStockItem", () => {
             quantity: 2,
             sold_at: now.getTime(),
           },
+          metadata: {
+            now,
+            streamName: stockId,
+            causation_id: stockId,
+          },
         },
       ]);
   });
@@ -120,10 +125,10 @@ describe("SellStockItem", () => {
             order_id: command.data.order_id,
             item_id: command.data.item_id,
             quantity: 1,
-            sold_at: command.metadata.now.getTime(),
+            sold_at: command.metadata!.now.getTime(),
           },
           metadata: {
-            now: command.metadata.now,
+            now: command.metadata!.now,
             causation_id: streamId,
             streamName: streamId,
           },

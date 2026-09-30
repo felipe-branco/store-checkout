@@ -4,6 +4,7 @@ import {
   type PostgresEventStore,
 } from "@store-checkout/event-store";
 import type {
+  CommandMetadata,
   CommandResult,
   StockItemDereserved,
   StockItemReserved,
@@ -97,7 +98,8 @@ export type ReserveStockItemCommand = Command<
     quantity: number;
     /** Initial on-hand count from static catalog (EM Stock Products List). */
     on_hand_quantity: number;
-  }
+  },
+  CommandMetadata
 >;
 
 export function decide(
@@ -130,6 +132,14 @@ export function decide(
         item_id,
         quantity,
         reserved_at: command.metadata!.now.getTime(),
+      },
+      metadata: {
+        now: command.metadata!.now,
+        streamName: stock_id,
+        causation_id: command.metadata?.causation_id ?? stock_id,
+        ...(command.metadata?.correlation_id
+          ? { correlation_id: command.metadata.correlation_id }
+          : {}),
       },
     } as StockItemReserved,
   ];

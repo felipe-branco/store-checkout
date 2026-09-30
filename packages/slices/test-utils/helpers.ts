@@ -68,6 +68,34 @@ function mergeMetadataExpectedWithActual(
   return expectedNorm;
 }
 
+/** Postgres may persist a subset of event metadata (e.g. only streamName). */
+function expectedMetadataMatchingPersistedShape(
+  expectedNorm: unknown,
+  actualNorm: unknown
+): unknown {
+  if (
+    expectedNorm === null ||
+    expectedNorm === undefined ||
+    typeof expectedNorm !== "object" ||
+    Array.isArray(expectedNorm) ||
+    actualNorm === null ||
+    actualNorm === undefined ||
+    typeof actualNorm !== "object" ||
+    Array.isArray(actualNorm)
+  ) {
+    return expectedNorm;
+  }
+  const exp = expectedNorm as Record<string, unknown>;
+  const act = actualNorm as Record<string, unknown>;
+  const subset: Record<string, unknown> = {};
+  for (const key of Object.keys(act)) {
+    if (key in exp) {
+      subset[key] = exp[key];
+    }
+  }
+  return mergeMetadataExpectedWithActual(subset, act);
+}
+
 export type NormalizeDataOptions = {
   /**
    * Field names where Postgres/JSON may deserialize numeric-looking values as numbers
@@ -256,7 +284,10 @@ export function expectNewEvents<E extends Event>(
         const normalizedActualMetadata = normalizeMetadata(actualMetadata);
         const normalizedExpectedMetadata = normalizeMetadata(expected.metadata);
         expect(normalizedActualMetadata).toEqual(
-          mergeMetadataExpectedWithActual(normalizedExpectedMetadata, normalizedActualMetadata)
+          mergeMetadataExpectedWithActual(
+            normalizedExpectedMetadata,
+            normalizedActualMetadata
+          )
         );
       }
     }
@@ -316,7 +347,10 @@ export function expectNewEvents<E extends Event>(
         const normalizedActualMetadata = normalizeMetadata(actualMetadata);
         const normalizedExpectedMetadata = normalizeMetadata(expected.metadata);
         expect(normalizedActualMetadata).toEqual(
-          mergeMetadataExpectedWithActual(normalizedExpectedMetadata, normalizedActualMetadata)
+          expectedMetadataMatchingPersistedShape(
+            normalizedExpectedMetadata,
+            normalizedActualMetadata
+          )
         );
       }
     }

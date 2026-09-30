@@ -39,7 +39,8 @@ describe("DereserveStockItem", () => {
       metadata: { now, causation_id: stockId, streamName: stockId },
     };
 
-    given([reserved])
+    // DeciderSpecification types `given` from this slice's output event; stream replay includes StockItemReserved.
+    given([reserved] as unknown as StockItemDereserved[])
       .when({
         type: "DereserveStockItem",
         data: {
@@ -59,6 +60,11 @@ describe("DereserveStockItem", () => {
             item_id: itemId,
             quantity: 1,
             dereserved_at: now.getTime(),
+          },
+          metadata: {
+            now,
+            streamName: stockId,
+            causation_id: stockId,
           },
         },
       ]);
@@ -128,10 +134,10 @@ describe("DereserveStockItem", () => {
             cart_id: cart,
             item_id: item,
             quantity: 1,
-            dereserved_at: command.metadata.now.getTime(),
+            dereserved_at: command.metadata!.now.getTime(),
           },
           metadata: {
-            now: command.metadata.now,
+            now: command.metadata!.now,
             causation_id: streamId,
             streamName: streamId,
           },

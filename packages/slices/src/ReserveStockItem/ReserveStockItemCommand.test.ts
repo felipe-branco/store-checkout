@@ -49,6 +49,11 @@ describe("ReserveStockItem", () => {
             quantity: 1,
             reserved_at: now.getTime(),
           },
+          metadata: {
+            now,
+            streamName: stockId,
+            causation_id: stockId,
+          },
         },
       ]);
   });
@@ -132,10 +137,10 @@ describe("ReserveStockItem", () => {
             cart_id: command.data.cart_id,
             item_id: command.data.item_id,
             quantity: 2,
-            reserved_at: command.metadata.now.getTime(),
+            reserved_at: command.metadata!.now.getTime(),
           },
           metadata: {
-            now: command.metadata.now,
+            now: command.metadata!.now,
             causation_id: streamId,
             streamName: streamId,
           },
