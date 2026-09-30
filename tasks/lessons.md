@@ -35,7 +35,7 @@ Framework and product notes for **store-checkout**.
 
 ## UI
 
-- **Kiosk polling:** product catalog via SWR **15s** + focus revalidate (`packages/ui/src/hooks/use-products.ts`); cart is **not** polled — refetch after commands only (`CartDetails`)
+- **Kiosk polling:** product catalog via SWR **15s** + focus revalidate (`packages/ui/src/hooks/use-products.ts`); cart is **not** polled — refetch after commands only (`CartDetails`). **`OrderScreen`** requires a **`serverCart`** binding; stock changes surface via **409 on add**, checkout **stock conflicts**, not client-side cart clamping.
 - **Cart `price_in_cents`:** set from catalog in `/api/cart/items`, stored on cart stream events; board snapshot in `manifest.json` → `currentSnapshot` (latest: **`20260930011438_store`**, adds Dereserve spec scenario). After a new EM export, **`sliceStatus` on borders can regress to `Planned`** — restore from prior migration or run `pnpm em:export:merge-status` so snapshot matches `slice.ref.json` / `manifest.json`
 - **Clear cart → stock:** `ClearCart` does not dereserve on the command; **`CartClearedAutomator`** reads **`ClearedCartItems`** projection and calls **`RemoveItemFromCart`** orchestration with **`cartAlreadyCleared: true`** (dereserve only; cart lines already empty on stream)
 - **Cart ↔ stock:** `AddItemToCart/routes.ts` and `RemoveItemFromCart/routes.ts` require **`on_hand_quantity`** (catalog `quantity`) for `ReserveStockItem` / rollback re-reserve; web-app passes it from `getCatalogRowByProductId`
@@ -48,9 +48,15 @@ Framework and product notes for **store-checkout**.
 - **`StockItemSold`** must **consume cart-line reservation** in `evolve` (and track **`soldByCartItem`**) so post-checkout clear does not leave phantom reserves
 - **`DereserveStockItem`:** if **`soldByCartItem[cart_id:item_id] > 0`**, **`decide` returns `[]`** (no `StockItemDereserved`) — matches EM scenario on the Dereserve column in snapshot `20260930011438_store`
 
+## Documentation (Phase 2 map)
+
+- When behavior or EM snapshot changes, update together: [`docs/project/EVENT_MODEL.md`](../docs/project/EVENT_MODEL.md), [`DECISIONS.md`](../docs/project/DECISIONS.md), [`docs/project/README.md`](../docs/project/README.md), [`LOCAL_SETUP.md`](../docs/LOCAL_SETUP.md), [`tasks/todo.md`](./todo.md), and append here — archived plan: [`docs/plans/em-checkout-completion.md`](../docs/plans/em-checkout-completion.md)
+
 ## Verification
 
 - Run `pnpm test`, `pnpm lint`, and `pnpm build` before merging template changes
+- Phase 4 gate (2026-09-30): `make setup` → test/lint/build → `pnpm em:slice:check-drift --all`; use **`nvm use`** (Node 24) before `make setup` in shells that default to Node 22
 - Local bootstrap: `make check-deps` fails fast if Node is below 24 (see `.nvmrc`) even when other tools accept an older runtime
+- **`make db-reset`** before stock/concurrency experiments — orphan **`StockItemReserved`** on the shared stock stream persists across new cart sessions; menu badges can look stricter than the stream allows until the DB is clean
 - Keep legacy product brand strings out of the repo (grep gate in CI or local checks)
 - Keep old npm scope out of imports (use `@store-checkout/*` only)

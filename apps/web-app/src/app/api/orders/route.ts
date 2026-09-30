@@ -6,12 +6,18 @@ import {
   catalogRowsToKioskCart,
   handleCartDetailsRoute,
   handleCreateOrderRoute,
+  handleStockProductsListRoute,
   mapPaymentMethodToEm,
   orderDisplayNumber,
   registerPendingPaymentSimulation,
   type OrderLineItem,
 } from "@store-checkout/slices/server";
-import { getCatalogRowByProductId, getStockProductsListCatalogRows } from "@/lib/kiosk/stock-products-list";
+import {
+  getCatalogRowByProductId,
+  getDefaultStockId,
+  getStockProductsListCatalogRows,
+} from "@/lib/kiosk/stock-products-list";
+import { buildCheckoutStockConflicts } from "@/lib/kiosk/checkout-stock";
 import { validateOrderPayload } from "@/lib/kiosk/catalog";
 import type { CreateOrderResponse } from "@store-checkout/ui";
 import { z } from "zod";
@@ -97,14 +103,23 @@ export const POST = withLoggedApiRoute(
     }
 
     const kioskCart = catalogRowsToKioskCart(cartDetails.data, catalog);
-    for (const { productId, quantity } of parsed.items) {
-      const inCart = kioskCart[productId] ?? 0;
-      if (inCart < quantity) {
-        return Response.json(
-          { ok: false, error: "invalid", message: "Cart no longer matches this order." } satisfies CreateOrderResponse,
-          { status: 409 }
-        );
-      }
+    const stockList = await handleStockProductsListRoute(
+      { stockId: getDefaultStockId(), catalog },
+      db
+    );
+    if (!stockList.success) {
+      return Response.json(
+        { ok: false, error: "failed", message: "Could not verify stock." } satisfies CreateOrderResponse,
+        { status: 500 }
+      );
+    }
+
+    const stockConflicts = buildCheckoutStockConflicts(parsed.items, kioskCart, stockList.data);
+    if (stockConflicts.length > 0) {
+      return Response.json(
+        { ok: false, error: "stock", conflicts: stockConflicts } satisfies CreateOrderResponse,
+        { status: 409 }
+      );
     }
 
     const orderId = z.uuid().safeParse(parsed.idempotencyKey).success

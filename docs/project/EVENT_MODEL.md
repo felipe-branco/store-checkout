@@ -5,6 +5,8 @@
 
 Planned slices (prefix = EM type: SC state change, SV state view, AUT automation, TR translator):
 
+**Dependency order (milestones):** stock (Reserve → Dereserve → Sell + Stock Products List) → cart (Create → Add → Remove → Clear + Cart Details) → order + translator (Create → Pay / Fail → Finish) → read models (Payment Failed Order, Order Finished Details) → automators (Cart Cleared, Order Paid, Sold Items, Webhook Simulator). See [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md).
+
 | Slice | Status |
 |-------|--------|
 | [SC] Create Cart | **Done** — `packages/slices/src/CreateCart/` |
@@ -39,7 +41,8 @@ The board defines read model **Stock Products List** (`READMODEL` in the migrati
 | Stock stream (`stock_id`) | Events `StockItemReserved`, `StockItemDereserved`, `StockItemSold` — handlers in `ReserveStockItem`, `DereserveStockItem`, `SellStockItem` |
 | Stock invariants | On **`StockItemSold`**, reservation for that **`cart_id` + `item_id`** is consumed in decider `evolve` (keep the three stock handlers in sync). **`DereserveStockItem`** emits nothing if that cart line was sold (EM spec). |
 | Target formula | **`available = quantity − reserved − sold`** per `item_id` |
-| API | `GET /api/products` uses `buildStockProductsList` + Pongo projection `stock-products-list-collection` |
+| Inline projection | `StockProductsList` — `stock-products-list-collection` |
+| API | `GET /api/products` uses `buildStockProductsList` + Pongo projection |
 
 ## Kiosk client refresh
 
@@ -47,7 +50,7 @@ The board defines read model **Stock Products List** (`READMODEL` in the migrati
 |-----------|-----|-----------------|
 | Stock Products List (menu + `stock` badges) | `GET /api/products` | SWR in `@store-checkout/ui` — poll every **15s**, revalidate on window focus ([`use-products.ts`](../../packages/ui/src/hooks/use-products.ts)) |
 | Cart Details (line items, totals) | `GET /api/cart` | Fetch on mount + after mutations only — [`CartDetails.tsx`](../../packages/slices/src/CartDetails/ui/CartDetails.tsx); no interval |
-| Session (start vs order) | `GET /api/cart` | Once on mount — [`apps/web-app/src/app/page.tsx`](../../apps/web-app/src/app/page.tsx) |
+| Session (start vs order) | `GET /api/kiosk/session` then `GET /api/cart` | On mount — [`apps/web-app/src/app/page.tsx`](../../apps/web-app/src/app/page.tsx); production gate when `KIOSK_ACCESS_MAGIC_WORD` is set |
 
 Rationale: shared stock read model can change without this kiosk issuing commands; cart state is owned by this session’s commands. Documented in [DECISIONS.md](./DECISIONS.md).
 
@@ -62,10 +65,15 @@ Commands **Add Item to Cart** and **Remove Item from Cart** include **`price_in_
 
 **API orchestration:** those routes dispatch **`ReserveStockItem` then `AddItemToCart`**, or **`DereserveStockItem` then `RemoveItemFromCart`**, with rollback if the cart step fails after stock succeeds. See [DECISIONS.md](./DECISIONS.md).
 
-## HTTP API (kiosk cart)
+## HTTP API (kiosk + checkout)
+
+Full route notes: [`apps/web-app/src/app/api/README.md`](../../apps/web-app/src/app/api/README.md).
 
 | Method | Path | Commands (order) | Notes |
 |--------|------|------------------|--------|
+| `GET` | `/api/health` | — | Public; Postgres ping |
+| `GET` | `/api/kiosk/session` | — | `{ gateEnabled, authorized }` (exempt from session cookie) |
+| `POST` | `/api/kiosk/access` | — | Magic word → HttpOnly `kiosk_session` (production gate) |
 | `POST` | `/api/cart` | `CreateCart` | Sets HttpOnly `cart_id` cookie |
 | `GET` | `/api/cart` | — | Cart Details projection → kiosk cart map |
 | `DELETE` | `/api/cart` | end session | Clears cookie (see route) |
@@ -95,3 +103,19 @@ Registered in `packages/slices/src/automations.ts` (`registerAllAutomations` on 
 ## Order checkout status
 
 `GET /api/orders/status` — handler in `CartDetails/routes.ts` (`handleOrderCheckoutStatusRoute`); UI polls via `@store-checkout/ui` (`use-order-checkout-status`) from **Order Finished Details** / **Payment Failed Order** projections.
+
+## Inline projections (Pongo)
+
+Registered in `packages/slices/src/projections-inline.ts` and rebuildable via [PROJECTION_REBUILD_PLAN.md](../PROJECTION_REBUILD_PLAN.md):
+
+| Registry key | Collection | Primary consumer |
+|--------------|------------|------------------|
+| `CartDetails` | `cartdetails-collection` | `GET /api/cart` |
+| `StockProductsList` | `stock-products-list-collection` | `GET /api/products` |
+| `PaymentFailedOrder` | `paymentfailedorder-collection` | `GET /api/orders/status` |
+| `OrderFinishedDetails` | `orderfinisheddetails-collection` | `GET /api/orders/status` |
+| `ClearedCartItems` | `clearedcartitems-collection` | **Cart Cleared Automator** (dereserve cleared lines) |
+
+## Production API access
+
+When **`NODE_ENV=production`** and **`KIOSK_ACCESS_MAGIC_WORD`** is set, middleware requires a signed **`kiosk_session`** cookie on `/api/*` except health, kiosk routes, and **`/api/webhooks/payment`**. See [DECISIONS.md](./DECISIONS.md) and [LOCAL_SETUP.md](../LOCAL_SETUP.md).

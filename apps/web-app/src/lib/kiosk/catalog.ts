@@ -1,30 +1,19 @@
-import type { OrderItemInput, PaymentMethod, Product } from "@store-checkout/ui";
+import type { OrderItemInput, PaymentMethod } from "@store-checkout/ui";
 import { MAX_QTY_PER_ITEM } from "@store-checkout/ui";
-import { getCatalogProductById, INITIAL_PRODUCT_CATALOG } from "./product-catalog";
-
-/** Until reserved/sold projections exist, kiosk `stock` = static catalog `quantity`. */
-function catalogRowToProduct(row: (typeof INITIAL_PRODUCT_CATALOG)[number]): Product {
-  return {
-    id: row.id,
-    name: row.name,
-    description: row.description,
-    price: row.priceInCents,
-    image: row.image,
-    category: row.category,
-    stock: row.quantity,
-  };
-}
-
-export function listProducts(): Product[] {
-  return INITIAL_PRODUCT_CATALOG.map(catalogRowToProduct);
-}
+import { getCatalogProductById } from "./product-catalog";
 
 const PAYMENT_METHODS: PaymentMethod[] = ["credit", "debit", "tap"];
 
 export function validateOrderPayload(
   body: unknown
 ):
-  | { ok: true; items: OrderItemInput[]; paymentMethod: PaymentMethod; idempotencyKey: string; simulationStatus?: "success" | "fail" }
+  | {
+      ok: true;
+      items: OrderItemInput[];
+      paymentMethod: PaymentMethod;
+      idempotencyKey: string;
+      simulationStatus?: "success" | "fail";
+    }
   | { ok: false; message: string } {
   if (!body || typeof body !== "object") return { ok: false, message: "Invalid order." };
   const { items, paymentMethod, idempotencyKey, simulationStatus } = body as Record<string, unknown>;

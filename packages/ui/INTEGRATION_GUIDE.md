@@ -12,7 +12,7 @@ Self-service UI lives in `@store-checkout/ui` (`src/kiosk/`, `src/styles/checkou
 import "@store-checkout/ui/checkout-theme.css";
 ```
 
-via `apps/web-app/src/app/globals.css`. Use `CheckoutThemeProvider` + `Kiosk` from `@store-checkout/ui`. Reference export: [docs/project/vercel-v0-self-service-store-theme-source.zip](../../docs/project/vercel-v0-self-service-store-theme-source.zip).
+via `apps/web-app/src/app/globals.css`. Use `CheckoutThemeProvider` and wire checkout with **`CreateCart` + `CartDetails`** from `@store-checkout/slices` (event-sourced cart via `/api/cart`). Low-level pieces: `StartScreen`, `OrderScreen` from `@store-checkout/ui`. Reference export: [docs/project/vercel-v0-self-service-store-theme-source.zip](../../docs/project/vercel-v0-self-service-store-theme-source.zip).
 
 ## Quick start (legacy skeleton)
 
