@@ -10,5 +10,6 @@ Brief notes for the take-home. Expand when needed.
 - **Payment:** simulated only; no real gateway; no card data in events or logs.
 - **UX:** self-service kiosk at `/`; English (`en-US`); auth not required for v0.1.
 - **Local bootstrap:** root [Makefile](../Makefile) — `make setup` (deps, env, Postgres, `pnpm install`); Node **24+** enforced via `make check-deps` and `package.json` engines. Details: [LOCAL_SETUP.md](../LOCAL_SETUP.md).
+- **API logging:** App Router routes use `@/lib/api-log` (`withLoggedApiRoute`) — structured stdout (+ optional Axiom); `correlationId`, timing, status; no card data in logs.
 
 **Out of scope for now:** real payments, back-office menu admin, required Sentry/Axiom locally.
