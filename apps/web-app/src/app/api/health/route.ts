@@ -9,7 +9,7 @@ import {
   getInitializationError as getMessageBusInitError,
 } from "@/lib/messageBus";
 import { logger } from "@/lib/logger";
-import { withAxiomRouteHandler } from "@/lib/axiom/route-handler";
+import { withLoggedApiRoute } from "@/lib/api-log";
 
 const HEALTH_CHECK_STREAM_ID = "__health_check__";
 const CACHE_MAX_AGE_SECONDS = 5;
@@ -18,7 +18,7 @@ const cacheHeaders = {
   "Cache-Control": `public, max-age=${CACHE_MAX_AGE_SECONDS}`,
 };
 
-export const GET = withAxiomRouteHandler(async function GET() {
+export const GET = withLoggedApiRoute("GET", "/api/health", async () => {
   try {
     const eventStoreError = getEventStoreInitError();
     if (eventStoreError) {

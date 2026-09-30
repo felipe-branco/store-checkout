@@ -19,6 +19,12 @@ Framework and product notes for **store-checkout**.
 - Command handlers return `CommandResult`
 - Routes use `ICommandDispatcher.sendCommand()` with `correlationId`
 
+## API logging
+
+- Wrap `apps/web-app/src/app/api/**/route.ts` handlers with `withLoggedApiRoute` from `@/lib/api-log`
+- Pass `commandType` / `aggregateId` via the `enrich` callback when dispatching commands; never log payment card fields
+- Generate correlation IDs with global `crypto.randomUUID()` — not `node:crypto` — so helpers stay valid on Node, Edge, and other Vercel runtimes
+
 ## UI
 
 - Default locale **en-US** in the web shell (`lang="en-US"`, English copy on home/maintenance pages). No i18n framework.
