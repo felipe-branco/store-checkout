@@ -63,6 +63,8 @@ DATABASE_URL=postgresql://store_checkout:store_checkout@localhost:5432/store_che
 
 **Logging (stdout; optional Axiom mirror):** `LOG_LEVEL` (`info` default). See `apps/web-app/.env.example` for `AXIOM_*`, Sentry, `MAINTENANCE_MODE`, `DEV_USER_ID`.
 
+**Production kiosk gate:** set **`KIOSK_ACCESS_MAGIC_WORD`** (and preferably **`KIOSK_SESSION_SECRET`**) on the deployed web app. The gate runs only when **`NODE_ENV=production`**. Local dev leaves these unset so `/` and `/api/*` work without a cookie. After entering the code, the browser holds an **HttpOnly** `kiosk_session` cookie for API calls. **`GET /api/health`** stays public.
+
 Root [`.env.example`](../.env.example) points at the web-app file; Next.js only loads `apps/web-app/.env.local`.
 
 ## Database
