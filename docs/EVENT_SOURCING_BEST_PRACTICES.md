@@ -80,7 +80,15 @@ Propagate from command → event in `decide`:
 
 Types: `packages/core/src/eventMetadata.ts` (`EventMetadata`, `CommandMetadata`).
 
+## Read models (projections)
+
+- **Source of truth for writes:** append-only **event streams** in PostgreSQL (`emt_messages` / per-stream history).
+- **Source of truth for reads in the kiosk:** **projection tables** — one table per Pongo collection (e.g. `cartdetails-collection`). Each row is a materialized document (`data` JSON, `_version`, …).
+- **Updates:** when a command appends new events, inline projections registered on the event store run **`evolve`** and **write to those tables in the same database** before the API returns. No separate “projection worker” is required in local or Vercel deploys for the default inline setup.
+- **Rebuild:** if `evolve` logic changes or data drifted, replay events with `pnpm rebuild:projections` — see [PROJECTION_REBUILD_PLAN.md](./PROJECTION_REBUILD_PLAN.md).
+
 ## Related docs
 
 - [docs/ZOD.md](./ZOD.md) — runtime validation at HTTP/webhook boundaries
 - [docs/SLICE_IMPLEMENTATION_WORKFLOW.md](./SLICE_IMPLEMENTATION_WORKFLOW.md) — EM slice workflow
+- [docs/PROJECTION_REBUILD_PLAN.md](./PROJECTION_REBUILD_PLAN.md) — projection tables in Postgres, inline updates, manual rebuild

@@ -8,6 +8,27 @@ How to replay events into Pongo read models in this template.
 - **Runtime:** Projections register via `projections.inline([...])` in the event store setup and process events when the app handles requests.
 - **Starter state:** Register each STATE_VIEW (and other inline projections you rebuild) in `packages/slices/src/projections-registry.ts` and **`packages/slices/src/manual-rebuild-config.ts`** (re-exported to `scripts/manual-rebuild-config.ts` for `pnpm rebuild:projections`).
 
+## Projections as PostgreSQL tables
+
+In this stack, **read models are not separate databases or caches** — they are **materialized in the same PostgreSQL database** as the event store. Each inline projection uses a **Pongo collection**, which Emmett maps to an ordinary **`public` schema table** (name suffix `-collection`, e.g. `cartdetails-collection`).
+
+Typical columns (exact names follow Emmett/Pongo):
+
+| Column | Role |
+|--------|------|
+| `_id` | Document key (often the aggregate / stream id) |
+| `data` | JSON read-model payload produced by the projection’s `evolve` |
+| `_version` | Monotonic version; increments as that document is updated |
+| `_created`, `_archived`, … | Pongo metadata |
+
+**When a new domain event is appended** to a stream, registered inline projections run **`evolve`** for matching event types and **upsert or delete rows in those tables immediately** (same request path as command handling in the web app). Queries such as `GET /api/cart` and `GET /api/products` read these tables — they do not replay the full event log on every HTTP call.
+
+Hosted Postgres explorers (Neon, Supabase, Vercel Postgres, etc.) show the same tables next to Emmett’s `emt_messages` event table:
+
+![Neon SQL editor: cartdetails-collection projection table](./project/assets/neon-projection-table-cartdetails-collection.png)
+
+If a table is empty or stale after code changes, use the manual rebuild below — that **replays events** and rewrites collection rows from scratch.
+
 ## Why a manual rebuild engine
 
 Emmett’s `rebuildPostgreSQLProjections` can truncate collections but, in our setup, writes from that consumer did not persist reliably. The repo ships a **manual rebuild engine** that:

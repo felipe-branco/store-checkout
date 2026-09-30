@@ -34,4 +34,5 @@ Keep these aligned when behavior or EM exports change (Phase 2 of the implementa
 | Asset | Purpose |
 |-------|---------|
 | [EVENT_MODEL.md](./EVENT_MODEL.md) — [board PNG](./assets/mashgin-checkout-event-board-2026-09-30.png) | Event Modelers ([app.eventmodelers.ai](https://app.eventmodelers.ai/)) export of **MashginCheckout** / Self-service checkout (2026-09-30) |
+| [neon-projection-table-cartdetails-collection.png](./assets/neon-projection-table-cartdetails-collection.png) | Example: **`cartdetails-collection`** read model as a Postgres table (Neon); see [PROJECTION_REBUILD_PLAN.md](../PROJECTION_REBUILD_PLAN.md) |
 | [vercel-v0-self-service-store-theme-source.zip](./vercel-v0-self-service-store-theme-source.zip) | v0 export reference |

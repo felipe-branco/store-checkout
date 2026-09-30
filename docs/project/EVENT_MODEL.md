@@ -112,6 +112,8 @@ Registered in `packages/slices/src/automations.ts` (`registerAllAutomations` on 
 
 ## Inline projections (Pongo)
 
+Each read model below is stored in a **normal PostgreSQL table** in the same database as domain events (`emt_messages`). Tables are **updated on every appended event** that the projection handles (via `evolve` registered in `projections-inline.ts`). See [PROJECTION_REBUILD_PLAN.md](../PROJECTION_REBUILD_PLAN.md) for collection names, rebuild, and a Neon table screenshot.
+
 Registered in `packages/slices/src/projections-inline.ts` and rebuildable via [PROJECTION_REBUILD_PLAN.md](../PROJECTION_REBUILD_PLAN.md):
 
 | Registry key | Collection | Primary consumer |
