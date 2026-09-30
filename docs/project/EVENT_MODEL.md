@@ -13,11 +13,11 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [SC] Clear Cart | **Done** — `packages/slices/src/ClearCart/` |
 | [SC] Reserve Stock Item | **Done** — `packages/slices/src/ReserveStockItem/` |
 | [SC] Dereserve Stock Item | **Done** — `packages/slices/src/DereserveStockItem/` |
-| [SC] Create Order | Planned |
-| [SC] Pay Order | Planned |
-| [SC] Fail Order Payment | Planned |
+| [SC] Create Order | **Done** — `packages/slices/src/CreateOrder/` |
+| [SC] Pay Order | **Done** — `packages/slices/src/PayOrder/` |
+| [SC] Fail Order Payment | **Done** — `packages/slices/src/FailOrderPayment/` |
 | [SC] Sell Stock Item | **Done** — `packages/slices/src/SellStockItem/` |
-| [SC] Finish Order | Planned |
+| [SC] Finish Order | **Done** — `packages/slices/src/FinishOrder/` |
 | [SV] Cart Details | **Done** — `packages/slices/src/CartDetails/` (includes **Stock Products List** read model) |
 | [SV] Payment Failed Order | Planned |
 | [SV] Order Finished Details | Planned |
@@ -25,7 +25,7 @@ Planned slices (prefix = EM type: SC state change, SV state view, AUT automation
 | [AUT] Webhook Simulator Automator | Planned |
 | [AUT] Order Paid Automator | Planned |
 | [AUT] Sold Items Order Automator | Planned |
-| [TR] External Payment Simulator Translator | Planned |
+| [TR] External Payment Simulator Translator | **Done** — `packages/slices/src/ExternalPaymentSimulatorTranslator/` |
 
 Implement in dependency order per [SLICE_IMPLEMENTATION_WORKFLOW.md](../SLICE_IMPLEMENTATION_WORKFLOW.md). Slice refs: `packages/slices/src/<SliceDir>/slice.ref.json` after `pnpm em:slice:init --all-planned`.
 
