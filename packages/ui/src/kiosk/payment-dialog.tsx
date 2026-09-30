@@ -1,12 +1,9 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import { useEffectEvent } from '../hooks/use-effect-event'
-import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
+import { useRef, useState } from 'react'
 import {
   AlertTriangle,
   ArrowLeft,
-  Check,
   CreditCard,
   Loader2,
   Nfc,
@@ -15,10 +12,10 @@ import {
 } from 'lucide-react'
 import type { CartLine } from './cart-panel'
 import { formatPrice, pluralize } from '../lib/format'
-import type { CreateOrderResponse, OrderResult, PaymentMethod, StockConflict } from '../lib/kiosk-types'
+import type { CreateOrderResponse, PaymentMethod, StockConflict } from '../lib/kiosk-types'
+import { useOrderCheckoutStatus } from '../hooks/use-order-checkout-status'
+import { Dialog as DialogPrimitive } from '@base-ui/react/dialog'
 import { cn } from '../lib/utils'
-
-const SUCCESS_RETURN_SECONDS = 15
 
 function randomWebhookDelayMs(): number {
   return 300 + Math.floor(Math.random() * 1701)
@@ -52,9 +49,29 @@ type Phase =
   | { name: 'review' }
   | { name: 'simulator'; method: PaymentMethod }
   | { name: 'authorizing'; method: PaymentMethod }
-  | { name: 'success'; order: OrderResult }
+  | {
+      name: 'awaitingOutcome'
+      cartId: string
+      orderId: string
+      method: PaymentMethod
+      totalInCents: number
+    }
   | { name: 'stock'; conflicts: StockConflict[] }
   | { name: 'failed'; method: PaymentMethod; message: string }
+
+export interface CheckoutSuccessViewProps {
+  orderNumber: string
+  totalInCents: number
+  lines: CartLine[]
+  onFinish: () => void
+}
+
+export interface CheckoutFailedViewProps {
+  message?: string
+  onRetry: () => void
+  onChangeMethod: () => void
+  onBack: () => void
+}
 
 interface PaymentDialogProps {
   lines: CartLine[]
@@ -62,9 +79,21 @@ interface PaymentDialogProps {
   onClose: () => void
   onStockConflict: () => void
   onFinish: () => void
+  orderStatusEndpoint?: string
+  CheckoutSuccessView: React.ComponentType<CheckoutSuccessViewProps>
+  CheckoutFailedView: React.ComponentType<CheckoutFailedViewProps>
 }
 
-export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onStockConflict, onFinish }: PaymentDialogProps) {
+export function PaymentDialog({
+  lines: liveLines,
+  total: liveTotal,
+  onClose,
+  onStockConflict,
+  onFinish,
+  orderStatusEndpoint = '/api/orders/status',
+  CheckoutSuccessView,
+  CheckoutFailedView,
+}: PaymentDialogProps) {
   // Freeze the order the customer is paying for, so background stock refreshes can't change it mid-payment.
   const [{ lines, total }] = useState(() => ({ lines: liveLines, total: liveTotal }))
   const [phase, setPhase] = useState<Phase>({ name: 'review' })
@@ -131,15 +160,12 @@ export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onS
         return
       }
 
-      if (paymentOutcome === 'success' && webhookData.paymentStatus === 'success') {
-        setPhase({ name: 'success', order: orderData.order })
-        return
-      }
-
       setPhase({
-        name: 'failed',
+        name: 'awaitingOutcome',
+        cartId: orderData.cartId,
+        orderId: orderData.orderId,
         method,
-        message: 'The payment provider declined this transaction.',
+        totalInCents: orderData.order.total,
       })
     } catch {
       setPhase({ name: 'failed', method, message: "We couldn't reach the payment system." })
@@ -172,10 +198,27 @@ export function PaymentDialog({ lines: liveLines, total: liveTotal, onClose, onS
             />
           )}
           {phase.name === 'authorizing' && <AuthorizingPhase total={total} />}
-          {phase.name === 'success' && <SuccessPhase order={phase.order} lines={lines} onFinish={onFinish} />}
+          {phase.name === 'awaitingOutcome' && (
+            <AwaitingOutcomePhase
+              cartId={phase.cartId}
+              orderId={phase.orderId}
+              totalInCents={phase.totalInCents}
+              lines={lines}
+              orderStatusEndpoint={orderStatusEndpoint}
+              CheckoutSuccessView={CheckoutSuccessView}
+              CheckoutFailedView={CheckoutFailedView}
+              onFinish={onFinish}
+              onRetry={() => {
+                idempotencyKey.current = crypto.randomUUID()
+                setPhase({ name: 'simulator', method: phase.method })
+              }}
+              onChangeMethod={() => setPhase({ name: 'review' })}
+              onBack={onClose}
+            />
+          )}
           {phase.name === 'stock' && <StockPhase conflicts={phase.conflicts} onReview={onStockConflict} />}
           {phase.name === 'failed' && (
-            <FailedPhase
+            <CheckoutFailedView
               message={phase.message}
               onRetry={() => {
                 idempotencyKey.current = crypto.randomUUID()
@@ -340,63 +383,72 @@ function AuthorizingPhase({ total }: { total: number }) {
   )
 }
 
-function SuccessPhase({ order, lines, onFinish }: { order: OrderResult; lines: CartLine[]; onFinish: () => void }) {
-  const [secondsLeft, setSecondsLeft] = useState(SUCCESS_RETURN_SECONDS)
-  const finish = useEffectEvent(onFinish)
-
-  useEffect(() => {
-    if (secondsLeft <= 0) {
-      finish()
-      return
-    }
-    const timer = setTimeout(() => setSecondsLeft((s) => s - 1), 1000)
-    return () => clearTimeout(timer)
-  }, [secondsLeft])
-
-  return (
-    <div className="flex flex-1 flex-col items-center justify-between gap-8 px-8 py-16 text-center">
-      <div className="flex flex-col items-center gap-6">
-        <div className="flex size-28 items-center justify-center rounded-full bg-success text-success-foreground">
-          <Check className="size-16" strokeWidth={3} aria-hidden="true" />
-        </div>
-        <PhaseTitle>Payment approved!</PhaseTitle>
-      </div>
-
-      <div className="flex w-full max-w-lg flex-col items-center gap-2 rounded-4xl bg-secondary px-8 py-10 text-secondary-foreground">
-        <span className="text-xl font-semibold tracking-[0.2em] uppercase">Your order number</span>
-        <span className="font-display text-[10rem] leading-none font-extrabold tabular-nums" aria-live="polite">
-          {order.orderNumber}
-        </span>
-        <span className="text-xl leading-relaxed text-pretty">
-          Wait for your number to be called, then pick up at the counter.
-        </span>
-      </div>
-
-      <ul className="flex w-full max-w-lg flex-col gap-1 text-lg text-muted-foreground" aria-label="Paid items">
-        {lines.map(({ product, quantity }) => (
-          <li key={product.id} className="flex justify-between gap-4">
-            <span>
-              {quantity}x {product.name}
-            </span>
-            <span className="tabular-nums">{formatPrice(product.price * quantity)}</span>
-          </li>
-        ))}
-        <li className="mt-2 flex justify-between gap-4 border-t pt-2 text-xl font-bold text-foreground">
-          <span>Total paid</span>
-          <span className="tabular-nums">{formatPrice(order.total)}</span>
-        </li>
-      </ul>
-
-      <button
-        type="button"
-        onClick={onFinish}
-        className="flex h-20 w-full max-w-lg items-center justify-center gap-3 rounded-full bg-primary font-display text-2xl font-bold text-primary-foreground active:scale-[0.98]"
-      >
-        Done
-        <span className="text-lg font-medium opacity-70">({secondsLeft}s)</span>
-      </button>
-    </div>
+function AwaitingOutcomePhase({
+  cartId,
+  orderId,
+  totalInCents,
+  lines,
+  orderStatusEndpoint,
+  CheckoutSuccessView,
+  CheckoutFailedView,
+  onFinish,
+  onRetry,
+  onChangeMethod,
+  onBack,
+}: {
+  cartId: string
+  orderId: string
+  totalInCents: number
+  lines: CartLine[]
+  orderStatusEndpoint: string
+  CheckoutSuccessView: React.ComponentType<CheckoutSuccessViewProps>
+  CheckoutFailedView: React.ComponentType<CheckoutFailedViewProps>
+  onFinish: () => void
+  onRetry: () => void
+  onChangeMethod: () => void
+  onBack: () => void
+}) {
+  const { status, orderNumber, error, timedOut } = useOrderCheckoutStatus(
+    cartId,
+    orderId,
+    orderStatusEndpoint,
+    true
   )
+
+  if (status === 'payment_succeeded' && orderNumber) {
+    return (
+      <CheckoutSuccessView
+        orderNumber={orderNumber}
+        totalInCents={totalInCents}
+        lines={lines}
+        onFinish={onFinish}
+      />
+    )
+  }
+
+  if (status === 'payment_failed') {
+    return (
+      <CheckoutFailedView
+        message="The payment provider declined this transaction."
+        onRetry={onRetry}
+        onChangeMethod={onChangeMethod}
+        onBack={onBack}
+      />
+    )
+  }
+
+  if (timedOut || error) {
+    return (
+      <CheckoutFailedView
+        message={error ?? 'Payment status unavailable.'}
+        onRetry={onRetry}
+        onChangeMethod={onChangeMethod}
+        onBack={onBack}
+      />
+    )
+  }
+
+  return <AuthorizingPhase total={totalInCents} />
 }
 
 function StockPhase({ conflicts, onReview }: { conflicts: StockConflict[]; onReview: () => void }) {
@@ -422,48 +474,6 @@ function StockPhase({ conflicts, onReview }: { conflicts: StockConflict[]; onRev
       >
         Review my order
       </button>
-    </div>
-  )
-}
-
-function FailedPhase({
-  message,
-  onRetry,
-  onChangeMethod,
-  onBack,
-}: {
-  message: string
-  onRetry: () => void
-  onChangeMethod: () => void
-  onBack: () => void
-}) {
-  return (
-    <div className="flex flex-1 flex-col items-center justify-center gap-8 px-8 text-center" role="alert">
-      <AlertTriangle className="size-24 text-destructive" strokeWidth={1.75} aria-hidden="true" />
-      <PhaseTitle>Payment not completed</PhaseTitle>
-      <p className="max-w-md text-2xl leading-relaxed text-muted-foreground">{message}</p>
-      <p className="max-w-md text-2xl leading-relaxed font-semibold text-pretty">
-        {"It's safe to try again: you'll never be charged twice for the same order."}
-      </p>
-      <div className="flex w-full max-w-lg flex-col gap-3">
-        <button
-          type="button"
-          onClick={onRetry}
-          className="h-20 rounded-full bg-primary font-display text-2xl font-bold text-primary-foreground active:scale-[0.98]"
-        >
-          Try again
-        </button>
-        <button
-          type="button"
-          onClick={onChangeMethod}
-          className="h-16 rounded-full border-2 text-xl font-semibold active:bg-muted"
-        >
-          Choose another payment method
-        </button>
-        <button type="button" onClick={onBack} className="h-14 text-lg font-semibold text-muted-foreground">
-          Back to order
-        </button>
-      </div>
     </div>
   )
 }

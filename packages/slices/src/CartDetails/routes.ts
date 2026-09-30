@@ -12,6 +12,11 @@ import {
   type StockProductsListCatalogRow,
 } from "./buildStockProductsList";
 import type { Product } from "@store-checkout/ui";
+import { getPaymentFailedOrderById } from "../PaymentFailedOrder/PaymentFailedOrderProjection";
+import { getOrderFinishedDetailsById } from "../OrderFinishedDetails/OrderFinishedDetailsProjection";
+import { orderDisplayNumber } from "../CreateOrder/routes";
+import type { PaymentFailedOrderReadModel } from "../PaymentFailedOrder/PaymentFailedOrderProjection";
+import type { OrderFinishedDetailsReadModel } from "../OrderFinishedDetails/OrderFinishedDetailsProjection";
 
 export interface CartDetailsRouteParams {
   cartId: string;
@@ -103,4 +108,73 @@ export function catalogRowsToKioskCart(
     }
   }
   return cart;
+}
+
+export type OrderCheckoutStatus = "pending" | "payment_failed" | "payment_succeeded";
+
+export interface OrderCheckoutStatusRouteParams {
+  cartId: string;
+  orderId: string;
+}
+
+export interface OrderCheckoutStatusRouteResponse {
+  success: true;
+  status: OrderCheckoutStatus;
+  orderNumber: string;
+  paymentFailed: PaymentFailedOrderReadModel | null;
+  orderFinished: OrderFinishedDetailsReadModel | null;
+}
+
+export interface OrderCheckoutStatusRouteError {
+  success: false;
+  error: string;
+}
+
+export type OrderCheckoutStatusRouteResult =
+  | OrderCheckoutStatusRouteResponse
+  | OrderCheckoutStatusRouteError;
+
+export async function handleOrderCheckoutStatusRoute(
+  params: OrderCheckoutStatusRouteParams,
+  db: PongoDb
+): Promise<OrderCheckoutStatusRouteResult> {
+  try {
+    const { cartId, orderId } = params;
+    const orderNumber = orderDisplayNumber(orderId);
+
+    const [paymentFailed, orderFinished] = await Promise.all([
+      getPaymentFailedOrderById(db, cartId),
+      getOrderFinishedDetailsById(db, cartId),
+    ]);
+
+    const failedForOrder =
+      paymentFailed && paymentFailed.order_id === orderId ? paymentFailed : null;
+
+    const finishedForOrder =
+      orderFinished && orderFinished.order_id === orderId ? orderFinished : null;
+
+    const paidOrFinished =
+      finishedForOrder &&
+      (finishedForOrder.paid_at !== null || finishedForOrder.finished_at !== null);
+
+    let status: OrderCheckoutStatus = "pending";
+    if (failedForOrder) {
+      status = "payment_failed";
+    } else if (paidOrFinished) {
+      status = "payment_succeeded";
+    }
+
+    return {
+      success: true,
+      status,
+      orderNumber,
+      paymentFailed: failedForOrder,
+      orderFinished: paidOrFinished ? finishedForOrder : null,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error occurred",
+    };
+  }
 }

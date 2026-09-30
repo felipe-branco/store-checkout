@@ -1,8 +1,9 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { Box, CircularProgress } from '@store-checkout/ui';
-import { OrderScreen, type ServerCartBinding, type Product, type Cart } from '@store-checkout/ui';
+import { Box, CircularProgress, OrderScreen, type ServerCartBinding, type Product, type Cart } from '@store-checkout/ui';
+import OrderFinishedDetails from '../../OrderFinishedDetails/ui/OrderFinishedDetails';
+import PaymentFailedOrder from '../../PaymentFailedOrder/ui/PaymentFailedOrder';
 
 interface CartApiResponse {
   success: boolean;
@@ -113,6 +114,9 @@ export default function CartDetails({
   return (
     <OrderScreen
       serverCart={serverCart}
+      orderStatusEndpoint="/api/orders/status"
+      CheckoutSuccessView={OrderFinishedDetails}
+      CheckoutFailedView={PaymentFailedOrder}
       onExit={() => {
         void (async () => {
           await fetch(cartApiEndpoint, { method: 'DELETE' });

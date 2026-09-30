@@ -3213,7 +3213,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SV] Payment Failed Order",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "11d54bd2-0c74-49a4-a80b-65fe9a0b29b8": {
@@ -7100,7 +7100,7 @@
         "meta": {
           "type": "SLICE_BORDER",
           "title": "[SV] Order Finished Details",
-          "sliceStatus": "Planned"
+          "sliceStatus": "Done"
         }
       },
       "9752d5aa-cd45-4164-abb8-8cfe145eae7a": {

@@ -13,6 +13,9 @@ export {
   handleCartDetailsRoute,
   handleStockProductsListRoute,
   catalogRowsToKioskCart,
+  handleOrderCheckoutStatusRoute,
+  type OrderCheckoutStatus,
+  type OrderCheckoutStatusRouteResult,
 } from "./src/CartDetails/routes";
 
 export { handleCreateCartRoute } from "./src/CreateCart/routes";
@@ -30,6 +33,8 @@ export {
   ExternalPaymentWebhookSchema,
   type ExternalPaymentWebhookBody,
 } from "./src/ExternalPaymentSimulatorTranslator/routes";
+export type { PaymentFailedOrderReadModel } from "./src/PaymentFailedOrder/PaymentFailedOrderProjection";
+export type { OrderFinishedDetailsReadModel } from "./src/OrderFinishedDetails/OrderFinishedDetailsProjection";
 
 export { registerAllCommandHandlers } from "./src/commands";
 export { registerAllAutomations } from "./src/automations";
