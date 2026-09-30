@@ -11,7 +11,7 @@ After `pnpm em:slice:generate` or `pnpm em:slice:implement`. See [docs/TEMPLATE.
 - [ ] Routes: `initializeEventStore()` + `initializeMessageBus()`; wrap with `withAxiomRouteHandler`
 - [ ] Query via slice-local projections, not ad-hoc `readStream` in routes
 - [ ] No cross-slice imports
-- [ ] Slice UI imports **`@store-checkout/ui` only** (see [UI_STACK.md](../../packages/ui/UI_STACK.md))
+- [ ] Slice UI imports **`@store-checkout/ui` only**; use Tailwind classes from `checkout-theme.css` (see [UI_STACK.md](../../packages/ui/UI_STACK.md))
 
 ## STATE_CHANGE
 

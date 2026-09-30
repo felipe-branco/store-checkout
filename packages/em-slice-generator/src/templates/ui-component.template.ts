@@ -1,6 +1,8 @@
 import type { Slice, Screen, ReadModel, Field } from "../types/codegen-slice.js";
 import { toPascalCase, toCamelCase } from "../utils/naming.js";
 
+/** Generated slice UI uses Tailwind utilities aligned with @store-checkout/ui/checkout-theme.css */
+
 /** Screen type guard (schema may have type) */
 function isScreen(obj: Screen | ReadModel): obj is Screen {
   return (obj as { type?: string }).type === "SCREEN";
@@ -123,7 +125,7 @@ ${generateRequestBodyMapping(fields)}
       if (!response.ok || !data.success) {
         const apiError = data as { success: false; error?: string; code?: string; details?: Record<string, string> };
         if (response.status === 409) {
-          setSubmitError('Este registro já existe.');
+          setSubmitError('This record already exists.');
         } else if (response.status === 400 && apiError.details) {
           // Handle validation errors from API
           const detailErrors: Partial<Record<keyof FormData, string>> = {};
@@ -131,9 +133,9 @@ ${generateRequestBodyMapping(fields)}
             detailErrors[field as keyof FormData] = message;
           });
           setErrors(detailErrors);
-          setSubmitError('Corrija os erros de validação abaixo.');
+          setSubmitError('Fix the validation errors below.');
         } else {
-          setSubmitError(apiError.error || 'Falha ao enviar. Tente novamente.');
+          setSubmitError(apiError.error || 'Submit failed. Try again.');
         }
         setLoading(false);
         return;
@@ -144,7 +146,7 @@ ${generateRequestBodyMapping(fields)}
         onSuccess();
       }
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado.');
+      setSubmitError(err instanceof Error ? err.message : 'An unexpected error occurred.');
       setLoading(false);
     }
   };
@@ -162,45 +164,45 @@ ${generateRequestBodyMapping(fields)}
   };
 
   return (
-    <Container maxWidth="md" className="ui-page-shell">
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Container maxWidth={false} className="mx-auto w-full max-w-2xl px-4 py-6 sm:px-6">
+      <Typography variant="h4" component="h1" className="mb-4 font-display text-3xl font-bold tracking-tight text-foreground" gutterBottom>
         ${screen.title || componentName}
       </Typography>
 
-      <Paper className="ui-p-4 ui-mt-3">
+      <Paper className="mt-4 rounded-2xl border-2 border-border bg-card p-6 text-card-foreground">
         <form onSubmit={handleSubmit}>
-          <Box className="ui-stack-col">
+          <Box className="flex flex-col gap-4">
 ${formFields}
           </Box>
 
           {submitError && (
-            <Alert severity="error" className="ui-mt-3">
+            <Alert severity="error" className="mt-4">
               {submitError}
             </Alert>
           )}
 
-          <Box className="ui-flex-end ui-mt-4">
+          <Box className="mt-6 flex flex-wrap items-center justify-end gap-3">
             {onCancel && (
               <Button
-                variant="outlined"
+                variant="outline"
                 onClick={onCancel}
                 disabled={loading}
               >
-                Cancelar
+                Cancel
               </Button>
             )}
             <Button
               type="submit"
-              variant="contained"
+              variant="default"
               disabled={loading}
             >
               {loading ? (
-                <Box className="ui-flex-align-center">
+                <Box className="inline-flex items-center gap-2">
                   <CircularProgress size={16} />
-                  Enviando...
+                  Submitting...
                 </Box>
               ) : (
-                'Enviar'
+                'Submit'
               )}
             </Button>
           </Box>
@@ -287,7 +289,7 @@ export default function ${componentName}({ apiEndpoint = '${defaultApiEndpoint}'
         const responseData = (await response.json()) as ApiResponse;
 
         if (!response.ok || !responseData.success) {
-          throw new Error(responseData.error || 'Falha ao carregar os dados');
+          throw new Error(responseData.error || 'Failed to load data');
         }
 
         if (responseData.data) {
@@ -300,7 +302,7 @@ export default function ${componentName}({ apiEndpoint = '${defaultApiEndpoint}'
           setData([]);
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Ocorreu um erro');
+        setError(err instanceof Error ? err.message : 'An error occurred');
         setData([]);
       } finally {
         setLoading(false);
@@ -311,7 +313,7 @@ export default function ${componentName}({ apiEndpoint = '${defaultApiEndpoint}'
   }, []);
 
   const formatDate = (dateString?: string | Date) => {
-    if (!dateString) return 'N/D';
+    if (!dateString) return 'N/A';
     try {
       return new Date(dateString).toLocaleDateString();
     } catch {
@@ -321,8 +323,8 @@ export default function ${componentName}({ apiEndpoint = '${defaultApiEndpoint}'
 
   if (loading) {
     return (
-      <Container maxWidth="lg" className="ui-page-shell">
-        <Box className="ui-flex-center">
+      <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
+        <Box className="flex items-center justify-center py-16">
           <CircularProgress />
         </Box>
       </Container>
@@ -331,7 +333,7 @@ export default function ${componentName}({ apiEndpoint = '${defaultApiEndpoint}'
 
   if (error) {
     return (
-      <Container maxWidth="lg" className="ui-page-shell">
+      <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
         <Alert severity="error">{error}</Alert>
       </Container>
     );
@@ -387,10 +389,11 @@ function generateStateViewFormComponent(
       const label = f.name.charAt(0).toUpperCase() + f.name.slice(1).replace(/([A-Z])/g, " $1");
       return `            <TextField
               fullWidth
+              className="w-full"
               label="${label}"
               value={data?.${fn} ?? ''}
               disabled
-              InputProps={{ readOnly: true }}
+              readOnly
             />`;
     })
     .join("\n");
@@ -453,11 +456,11 @@ ${initialFormState}
         const response = await fetch(url);
         const responseData = (await response.json()) as ApiResponse;
         if (!response.ok || !responseData.success) {
-          throw new Error(responseData.error || 'Falha ao carregar os dados');
+          throw new Error(responseData.error || 'Failed to load data');
         }
         setData(responseData.data ?? null);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Ocorreu um erro');
+        setError(err instanceof Error ? err.message : 'An error occurred');
         setData(null);
       } finally {
         setLoading(false);
@@ -506,7 +509,7 @@ ${requestBodyMapping}
       });
       const result = (await response.json()) as { success: boolean; error?: string };
       if (!response.ok || !result.success) {
-        setSubmitError(result.error || 'Falha ao enviar. Tente novamente.');
+        setSubmitError(result.error || 'Submit failed. Try again.');
         setSubmitLoading(false);
         return;
       }
@@ -514,7 +517,7 @@ ${requestBodyMapping}
         onRedirect();
       }
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Ocorreu um erro inesperado.');
+      setSubmitError(err instanceof Error ? err.message : 'An unexpected error occurred.');
     } finally {
       setSubmitLoading(false);
     }
@@ -522,8 +525,8 @@ ${requestBodyMapping}
 
   if (loading) {
     return (
-      <Container maxWidth="lg" className="ui-page-shell">
-        <Box className="ui-flex-center">
+      <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
+        <Box className="flex items-center justify-center py-16">
           <CircularProgress />
         </Box>
       </Container>
@@ -532,7 +535,7 @@ ${requestBodyMapping}
 
   if (error) {
     return (
-      <Container maxWidth="lg" className="ui-page-shell">
+      <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
         <Alert severity="error">{error}</Alert>
       </Container>
     );
@@ -540,10 +543,10 @@ ${requestBodyMapping}
 
   if (!data) {
     return (
-      <Container maxWidth="lg" className="ui-page-shell">
-        <Paper className="ui-p-4 ui-text-center">
+      <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
+        <Paper className="rounded-2xl border-2 border-border bg-muted/40 p-6 text-center text-muted-foreground">
           <Typography variant="h6" color="text.secondary">
-            Nenhum dado encontrado
+            No data found
           </Typography>
         </Paper>
       </Container>
@@ -551,33 +554,33 @@ ${requestBodyMapping}
   }
 
   return (
-    <Container maxWidth="md" className="ui-page-shell">
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Container maxWidth={false} className="mx-auto w-full max-w-2xl px-4 py-6 sm:px-6">
+      <Typography variant="h4" component="h1" className="mb-4 font-display text-3xl font-bold tracking-tight text-foreground" gutterBottom>
         ${screen.title || componentName}
       </Typography>
 
-      <Paper className="ui-p-4 ui-mt-3">
+      <Paper className="mt-4 rounded-2xl border-2 border-border bg-card p-6 text-card-foreground">
         <form onSubmit={handleSubmit}>
-          <Box className="ui-stack-col">
+          <Box className="flex flex-col gap-4">
 ${readOnlyDisplay}
 ${formFields}
           </Box>
 
           {submitError && (
-            <Alert severity="error" className="ui-mt-3">
+            <Alert severity="error" className="mt-4">
               {submitError}
             </Alert>
           )}
 
-          <Box className="ui-flex-end ui-mt-4">
+          <Box className="mt-6 flex flex-wrap items-center justify-end gap-3">
             <Button type="submit" variant="default" disabled={submitLoading}>
               {submitLoading ? (
-                <Box className="ui-flex-align-center">
+                <Box className="inline-flex items-center gap-2">
                   <CircularProgress size={16} />
-                  Enviando...
+                  Submitting...
                 </Box>
               ) : (
-                'Enviar'
+                'Submit'
               )}
             </Button>
           </Box>
@@ -605,11 +608,11 @@ function generateStateViewFormField(field: Field): string {
     const crmState = subfields.find((s) => s.name.toLowerCase() === "state");
     const crmValue = subfields.find((s) => s.name.toLowerCase() === "value");
     if (crmState && crmValue) {
-      return `            <Box className="ui-stack-row">
+      return `            <Box className="flex flex-row flex-wrap gap-3">
               <TextField
-                className="ui-full-width"
+                className="w-full min-w-0 flex-1"
                 type="text"
-                label="Estado do CRM"
+                label="CRM state"
                 placeholder="MG"
                 value={formData.crm_state}
                 onChange={handleChange('crm_state')}
@@ -621,7 +624,7 @@ function generateStateViewFormField(field: Field): string {
               <TextField
                 style={{ flex: 1, minWidth: 120 }}
                 type="text"
-                label="Número do CRM"
+                label="CRM number"
                 placeholder="12345"
                 value={formData.crm_value}
                 onChange={handleChange('crm_value')}
@@ -636,6 +639,7 @@ function generateStateViewFormField(field: Field): string {
 
   return `            <TextField
               fullWidth
+              className="w-full"
               type="${fieldType}"
               label="${label}"
               placeholder="${placeholder}"
@@ -645,7 +649,6 @@ function generateStateViewFormField(field: Field): string {
               helperText={formErrors.${fieldName}}
               ${isRequired ? "required" : ""}
               disabled={submitLoading}
-              ${fieldType === "date" ? 'slotProps={{ inputLabel: { shrink: true } }}' : ""}
             />`;
 }
 
@@ -708,16 +711,16 @@ function generateStateViewValidationFunction(fields: Field[]): string {
     .map((field) => {
       if (isArrayStateValueField(field)) {
         return `    if (!formData.crm_state?.trim()) {
-      newErrors.crm_state = 'Estado do CRM é obrigatório';
+      newErrors.crm_state = 'CRM state is required';
     }
     if (!formData.crm_value?.trim()) {
-      newErrors.crm_value = 'Número do CRM é obrigatório';
+      newErrors.crm_value = 'CRM number is required';
     }`;
       }
       const fieldName = toCamelCase(field.name);
       const label = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace(/([A-Z])/g, " $1");
       return `    if (!formData.${fieldName} || (typeof formData.${fieldName} === 'string' && !formData.${fieldName}.trim())) {
-      newErrors.${fieldName} = '${label} é obrigatório';
+      newErrors.${fieldName} = '${label} is required';
     }`;
     })
     .join("\n\n");
@@ -757,11 +760,11 @@ function generateFormField(field: Field): string {
   if (field.type === "Custom" && field.subfields) {
     // Handle nested fields
     const nestedFields = field.subfields.map((subfield) => generateFormField(subfield)).join("\n");
-    return `            <Box className="ui-paper ui-p-4">
+    return `            <Box className="rounded-xl border border-border bg-muted/30 p-4">
               <Typography variant="subtitle2" gutterBottom>
                 ${label}
               </Typography>
-              <Box className="ui-stack-col ui-gap-2 ui-mt-3">
+              <Box className="mt-3 flex flex-col gap-2">
 ${nestedFields}
               </Box>
             </Box>`;
@@ -769,6 +772,7 @@ ${nestedFields}
 
   return `            <TextField
               fullWidth
+              className="w-full"
               type="${fieldType}"
               label="${label}"
               value={formData.${fieldName}}
@@ -777,7 +781,6 @@ ${nestedFields}
               helperText={errors.${fieldName}}
               ${isRequired ? "required" : ""}
               disabled={loading}
-              ${fieldType === "date" ? 'slotProps={{ inputLabel: { shrink: true } }}' : ""}
             />`;
 }
 
@@ -816,7 +819,7 @@ function generateValidationFunction(fields: Field[]): string {
       const fieldName = toCamelCase(field.name);
       const label = field.name.charAt(0).toUpperCase() + field.name.slice(1).replace(/([A-Z])/g, ' $1');
       return `    if (!formData.${fieldName} || (typeof formData.${fieldName} === 'string' && !formData.${fieldName}.trim())) {
-      newErrors.${fieldName} = '${label} é obrigatório';
+      newErrors.${fieldName} = '${label} is required';
     }`;
     })
     .join("\n\n");
@@ -854,11 +857,11 @@ function generateTableCell(field: Field, fieldName: string): string {
     }
     // Date type fields are strings (YYYY-MM-DD format), can be displayed directly
     if (field.type === "Date") {
-      return `                  <TableCell>{item.${fieldName} ?? 'N/D'}</TableCell>`;
+      return `                  <TableCell>{item.${fieldName} ?? 'N/A'}</TableCell>`;
     }
     return `                  <TableCell>{formatDate(item.${fieldName})}</TableCell>`;
   }
-  return `                  <TableCell>{item.${fieldName} ?? 'N/D'}</TableCell>`;
+  return `                  <TableCell>{item.${fieldName} ?? 'N/A'}</TableCell>`;
 }
 
 /**
@@ -866,22 +869,22 @@ function generateTableCell(field: Field, fieldName: string): string {
  */
 function generateListDisplay(componentName: string, tableColumns: string, tableCells: string, idFieldName: string): string {
   return `return (
-    <Container maxWidth="lg" className="ui-page-shell">
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
+      <Typography variant="h4" component="h1" className="mb-4 font-display text-3xl font-bold tracking-tight text-foreground" gutterBottom>
         ${componentName}
       </Typography>
 
       {data.length === 0 ? (
-        <Paper className="ui-p-4 ui-text-center ui-mt-3">
+        <Paper className="mt-4 rounded-2xl border-2 border-border bg-muted/40 p-6 text-center text-muted-foreground">
           <Typography variant="h6" color="text.secondary" gutterBottom>
-            Nenhum dado encontrado
+            No data found
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Não há itens para exibir.
+            There are no items to display.
           </Typography>
         </Paper>
       ) : (
-        <TableContainer component={Paper} className="ui-mt-3">
+        <TableContainer component={Paper} className="mt-4">
           <Table>
             <TableHead>
               <TableRow>
@@ -926,28 +929,28 @@ function generateSingleDisplay(componentName: string, fields: Field[]): string {
                 ${label}
               </Typography>
               <Typography variant="body1">
-                {data?.${fieldName} ?? 'N/D'}
+                {data?.${fieldName} ?? 'N/A'}
               </Typography>
             </Box>`;
     })
     .join("\n");
 
   return `return (
-    <Container maxWidth="lg" className="ui-page-shell">
-      <Typography variant="h4" component="h1" gutterBottom>
+    <Container maxWidth="lg" className="mx-auto w-full max-w-5xl px-4 py-6 sm:px-6">
+      <Typography variant="h4" component="h1" className="mb-4 font-display text-3xl font-bold tracking-tight text-foreground" gutterBottom>
         ${componentName}
       </Typography>
 
       {data ? (
-        <Paper className="ui-p-4 ui-mt-3">
-          <Box className="ui-stack-col">
+        <Paper className="mt-4 rounded-2xl border-2 border-border bg-card p-6 text-card-foreground">
+          <Box className="flex flex-col gap-4">
 ${displayFields}
           </Box>
         </Paper>
       ) : (
-        <Paper className="ui-p-4 ui-text-center ui-mt-3">
+        <Paper className="mt-4 rounded-2xl border-2 border-border bg-muted/40 p-6 text-center text-muted-foreground">
           <Typography variant="h6" color="text.secondary">
-            Nenhum dado encontrado
+            No data found
           </Typography>
         </Paper>
       )}

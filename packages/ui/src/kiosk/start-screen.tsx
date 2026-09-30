@@ -17,7 +17,7 @@ const STEPS = ['Pick', 'Pay', 'Pick up at the counter']
 
 export function StartScreen({ onStart }: { onStart: () => void }) {
   return (
-    <main className="relative flex h-dvh flex-col overflow-hidden bg-background">
+    <main className="relative h-dvh overflow-y-auto overscroll-contain bg-background">
       <div className="absolute top-6 right-6 z-10">
         <ThemeToggle />
       </div>
@@ -25,7 +25,7 @@ export function StartScreen({ onStart }: { onStart: () => void }) {
       <button
         type="button"
         onClick={onStart}
-        className="flex flex-1 flex-col items-center justify-between gap-8 px-8 pt-16 pb-12 text-center outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-inset"
+        className="flex min-h-dvh w-full flex-col items-center justify-between gap-8 px-8 pt-16 pb-12 text-center outline-none focus-visible:ring-4 focus-visible:ring-ring focus-visible:ring-inset"
         aria-label="Tap to start your order"
       >
         <header className="flex flex-col items-center gap-4">
@@ -49,8 +49,8 @@ export function StartScreen({ onStart }: { onStart: () => void }) {
           ))}
         </div>
 
-        <div className="flex w-full flex-col items-center gap-8">
-          <span className="animate-kiosk-pulse flex w-full max-w-xl items-center justify-center gap-4 rounded-full bg-primary px-10 py-8 font-display text-4xl font-bold text-primary-foreground">
+        <div className="flex w-full max-w-xl flex-col items-center gap-8">
+          <span className="animate-kiosk-pulse flex w-full items-center justify-center gap-4 rounded-full bg-primary px-10 py-8 font-display text-4xl font-bold text-primary-foreground">
             <Hand className="size-10" aria-hidden="true" />
             Tap to start
           </span>

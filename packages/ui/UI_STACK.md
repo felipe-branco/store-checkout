@@ -102,7 +102,7 @@ Replace skeleton `Button`, `Card`, etc. with shadcn exports. Re-export from `ind
 
 ### 4. Generator
 
-Update `packages/em-slice-generator/src/templates/ui-component.template.ts` to use Tailwind `className` utilities instead of skeleton `ui-*` classes.
+Generated slice UI uses **Tailwind** utility classes and design tokens from `checkout-theme.css` (see `ui-component.template.ts`). Components import **`Button`** (shadcn) and layout primitives from `@store-checkout/ui`.
 
 ### 5. ESLint
 

@@ -3,7 +3,12 @@ export { Stack, type StackProps } from './primitives/Stack';
 export { Typography, type TypographyProps } from './primitives/Typography';
 export { Container, type ContainerProps } from './primitives/Container';
 
-export { Button, type ButtonProps, type ButtonVariant } from './components/Button/Button';
+export { Button, buttonVariants } from './components/shadcn/button';
+export {
+  Button as SkeletonButton,
+  type ButtonProps as SkeletonButtonProps,
+  type ButtonVariant as SkeletonButtonVariant,
+} from './components/Button/Button';
 export {
   Card,
   CardHeader,
